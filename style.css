@@ -1,0 +1,128 @@
+/* Общие стили */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background: radial-gradient(circle at top right, #1e2923, #0f1110); /* Тонкий темно-зеленый градиент на фоне */
+    background-attachment: fixed;
+    color: #e0e0e0;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Шапка */
+.main-header {
+    padding: 25px 0;
+    border-bottom: 1px solid rgba(0, 255, 65, 0.1);
+    background: rgba(15, 17, 16, 0.8);
+    backdrop-filter: blur(10px); /* Эффект матового стекла */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.flex-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    background: linear-gradient(90deg, #00FF41, #00CC33);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav-menu a {
+    color: #aaa;
+    text-decoration: none;
+    margin-left: 30px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.nav-menu a:hover {
+    color: #00FF41;
+}
+
+.btn-contact {
+    border: 1px solid #00FF41;
+    padding: 8px 20px;
+    border-radius: 50px;
+    color: #00FF41 !important;
+}
+
+/* Главный экран */
+.hero {
+    padding: 100px 0 60px;
+    text-align: center;
+}
+
+.gradient-text {
+    font-size: 64px;
+    font-weight: 900;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, #ffffff, #00FF41);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+    font-size: 20px;
+    color: #888;
+}
+
+/* Карточки контента */
+.card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(0, 255, 65, 0.1);
+    padding: 50px;
+    border-radius: 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-badge {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    font-size: 80px;
+    font-weight: 900;
+    color: rgba(0, 255, 65, 0.05); /* Огромная прозрачная цифра на фоне */
+}
+
+h2 {
+    font-size: 32px;
+    color: #00FF41;
+    margin-bottom: 20px;
+}
+
+.highlight-box {
+    margin-top: 30px;
+    padding: 25px;
+    background: linear-gradient(145deg, rgba(0, 255, 65, 0.05), rgba(0, 0, 0, 0));
+    border-radius: 15px;
+    border-left: 3px solid #00FF41;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li::before {
+    content: "→";
+    color: #00FF41;
+    margin-right: 10px;
+}
