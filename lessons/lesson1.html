@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Установка VS Code | ProstoPython</title>
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body class="lesson-page">
+
+    <div id="header-placeholder"></div>
+
+    <div class="container lesson-layout">
+        
+        <aside class="sidebar" id="sidebar-placeholder"></aside>
+
+        <main class="content">
+            <nav class="breadcrumb">Основы / Урок 1</nav>
+            
+            <section class="lesson-header">
+                <h1>Установка VS Code</h1>
+                <p class="lead">Прежде чем писать код, нам нужно настроить рабочее место. VS Code — это самый популярный редактор в мире.</p>
+            </section>
+
+            <div class="code-window">
+                <div class="window-header">hello.py</div>
+                <pre><code class="language-python">print("Привет, мир!")
+# Запусти этот код после установки</code></pre>
+            </div>
+
+            <div class="pro-tip">
+                <strong>💡 На заметку:</strong> Не забудь установить расширение "Python" от Microsoft внутри самого VS Code.
+            </div>
+
+            <div class="lesson-nav">
+                <a href="../index.html" class="btn-prev">← На главную</a>
+                <a href="lesson2.html" class="btn-next">Следующий урок →</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    
+    <script>
+        async function loadLayout() {
+    try {
+        // Загружаем шапку
+        const headerRes = await fetch('../includes/header.html');
+        const headerHtml = await headerRes.text();
+        document.getElementById('header-placeholder').innerHTML = headerHtml;
+
+        // Загружаем сайдбар
+        const sidebarRes = await fetch('../includes/sidebar.html');
+        const sidebarHtml = await sidebarRes.text();
+        document.getElementById('sidebar-placeholder').innerHTML = sidebarHtml;
+        
+        // Запускаем подсветку активного урока
+        highlightActive();
+        
+    } catch (err) {
+        console.error("Детали ошибки:", err);
+    }
+}
+
+function highlightActive() {
+    const currentPath = window.location.pathname.split('/').pop();
+    const links = document.querySelectorAll('.nav-item');
+    links.forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
+        }
+    });
+}
+
+loadLayout();
+    </script>
+</body>
+</html>

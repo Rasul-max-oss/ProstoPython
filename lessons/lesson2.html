@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Переменные и Типы данных | ProstoPython</title>
+    
+    <link rel="stylesheet" href="../css/style.css">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        /* Дополнительные стили для таблицы внутри справочника */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 255, 65, 0.1);
+        }
+        .data-table th, .data-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .data-table th {
+            background: rgba(0, 255, 65, 0.05);
+            color: #00FF41;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+        .type-badge {
+            color: #00FF41;
+            font-family: monospace;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="lesson-page">
+
+    <div id="header-placeholder"></div>
+
+    <div class="container lesson-layout">
+        
+        <aside class="sidebar" id="sidebar-placeholder"></aside>
+
+        <main class="content">
+            <nav class="breadcrumb">Основы / Урок 2</nav>
+            
+            <section class="lesson-header">
+                <h1>Переменные и ввод данных</h1>
+                <p class="lead">Справочник по работе с данными в Python: от создания первой переменной до получения ответов от пользователя.</p>
+            </section>
+
+            <section class="lesson-section">
+                <h2>1. Переменные (Variables)</h2>
+                <p>Переменная — это способ сохранить данные под определенным именем. В Python не нужно указывать тип данных заранее.</p>
+                <div class="code-window">
+                    <div class="window-header">variables.py</div>
+                    <pre><code class="language-python"># Имя = Значение
+user_name = "Петя"  # Текст (string)
+score = 100          # Число (integer)
+
+print(user_name)     # Выведет: Петя</code></pre>
+                </div>
+                 <div class="code-window">
+                    <div class="window-header">variables.py</div>
+                    <pre><code class="language-python"># Имя = Значение
+name = "Петя"  # Текст (string)
+age = 20          # Число (integer)
+city = "Москва"  # Текст (string)
+balance = 150.75  # Число с плавающей точкой (float)
+is_active = True  # Логический тип (boolean)
+
+print(f"Имя: {name}, Возраст: {age}, Город: {city}, Баланс: {balance}, Активен: {is_active}")
+# Выведет: Имя: Петя, Возраст: 20, Город: Москва, Баланс: 150.75, Активен: True</code></pre>
+                </div>
+                <div class="pro-tip">
+                    <strong>💡 Имена:</strong> Используй <code>snake_case</code> (маленькие буквы и нижнее подчеркивание). Нельзя начинать имя с цифры.
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>2. Основные типы данных</h2>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Тип</th>
+                            <th>Описание</th>
+                            <th>Пример</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="type-badge">str</span></td>
+                            <td>Строки (текст в кавычках)</td>
+                            <td><code>"Hello"</code></td>
+                        </tr>
+                        <tr>
+                            <td><span class="type-badge">int</span></td>
+                            <td>Целые числа</td>
+                            <td><code>25</code>, <code>-5</code></td>
+                        </tr>
+                        <tr>
+                            <td><span class="type-badge">float</span></td>
+                            <td>Числа с плавающей точкой</td>
+                            <td><code>3.14</code>, <code>0.5</code></td>
+                        </tr>
+                        <tr>
+                            <td><span class="type-badge">bool</span></td>
+                            <td>Логический тип (Истина/Ложь)</td>
+                            <td><code>True</code>, <code>False</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="lesson-section">
+                <h2>3. Ввод данных: <code>input()</code></h2>
+                <p>Функция <code>input()</code> позволяет программе "спрашивать" данные у пользователя.</p>
+                <div class="code-window">
+                    <div class="window-header">input.py</div>
+                    <pre><code class="language-python">name = input("Как тебя зовут? ")
+print("Привет, " + name)</code></pre>
+                </div>
+                <p>⚠️ <strong>Важно:</strong> <code>input()</code> всегда принимает данные как <strong>строку (str)</strong>, даже если введено число.</p>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Практика: Работа с вводом</h2>
+                <p>Давай разберем три типичные ситуации, где тебе понадобится ввод данных.</p>
+
+                <div class="method-item">
+                    <h3>1. Сбор текстовых данных (str)</h3>
+                    <p>Используется для имен, названий городов или паролей. Никаких дополнительных функций не нужно.</p>
+                </div>
+                <div class="code-window">
+                    <div class="window-header">profile.py</div>
+                    <pre><code class="language-python">city = input("В каком городе ты живешь? ")
+hobby = input("Твое любимое хобби? ")
+
+print("Круто! Я тоже люблю " + hobby + ", особенно в городе " + city)</code></pre>
+                </div>
+
+                <div class="method-item">
+                    <h3>2. Числовые расчеты (int + input)</h3>
+                    <p>Если ты хочешь умножать, складывать или вычитать введенные данные, обязательно используй <code>int()</code>.</p>
+                </div>
+                <div class="code-window">
+                    <div class="window-header">salary_calc.py</div>
+                    <pre><code class="language-python"># Считаем бюджет на неделю
+daily_budget = int(input("Сколько денег ты тратишь в день? "))
+weekly_total = daily_budget * 7
+
+print("За неделю тебе понадобится: " + str(weekly_total) + " рублей")
+# Обрати внимание: при выводе числа с текстом мы превратили его обратно в str()</code></pre>
+                </div>
+
+                <div class="method-item">
+                    <h3>3. Работа с ценами и весом (float + input)</h3>
+                    <p>Если пользователь может ввести число с точкой (например, 2.5), используй <code>float()</code>.</p>
+                </div>
+                <div class="code-window">
+                    <div class="window-header">shop.py</div>
+                    <pre><code class="language-python">price = float(input("Сколько стоит 1 кг яблок? "))
+weight = float(input("Сколько кг ты хочешь купить? "))
+
+total = price * weight
+print("К оплате: " + str(total))</code></pre>
+                </div>
+            </section>
+
+            <div class="pro-tip" style="background: rgba(0, 194, 255, 0.05); border-left-color: #00c2ff;">
+                <strong>⚡️ Быстрая проверка:</strong> 
+                <p>Если ты забыл поставить <code>int()</code> и попробовал сложить два ввода "10" и "5", Python не выдаст ошибку, он просто склеит их и получится <code>105</code>. Если видишь такой странный результат — значит, ты забыл про преобразование типов!</p>
+            </div>
+
+
+            <section class="lesson-section">
+                <h2>4. Преобразование типов (Casting)</h2>
+                <p>Если нужно проводить математические операции с вводом пользователя, используй функции преобразования:</p>
+                <div class="code-window">
+                    <div class="window-header">casting.py</div>
+                    <pre><code class="language-python"># Превращаем текст в целое число
+age = int(input("Введите ваш возраст: "))
+next_year = age + 1
+
+# Превращаем число в строку (для склейки с текстом)
+print("В следующем году вам будет " + str(next_year))</code></pre>
+                </div>
+                <div class="highlight-box">
+                    <strong>Основные функции:</strong>
+                    <ul>
+                        <li><code>int()</code> — в целое число</li>
+                        <li><code>float()</code> — в дробное число</li>
+                        <li><code>str()</code> — в строку</li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="lesson-nav">
+                <a href="lesson1.html" class="btn-prev">← Назад</a>
+                <a href="lesson3.html" class="btn-next">Следующий урок →</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    
+    <script src="../js/app.js"></script>
+</body>
+</html>
