@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Задачи: Pandas и Numpy | ProstoPython</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { background: radial-gradient(circle at top right, #1a2a22, #0a0c0b); min-height: 100vh; margin: 0; font-family: 'Inter', sans-serif; padding-bottom: 60px; }
+        .practice-header-fixed { position: fixed; top: 0; left: 0; right: 0; background: rgba(10, 12, 11, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0, 255, 65, 0.1); padding: 15px 25px; z-index: 1000; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .header-logo { font-size: 18px; font-weight: 800; color: #00FF41; text-decoration: none; letter-spacing: -0.5px; }
+        .header-logo:hover { color: #00c2ff; }
+        .header-nav { display: flex; gap: 10px; flex-wrap: wrap; }
+        .header-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; background: rgba(255, 255, 255, 0.05); color: #ccc; }
+        .header-btn:hover { background: rgba(0, 255, 65, 0.15); color: #00FF41; }
+        .header-btn.primary { background: rgba(0, 255, 65, 0.15); color: #00FF41; }
+        .header-btn.primary:hover { background: rgba(0, 255, 65, 0.25); }
+        .practice-container { max-width: 900px; margin: 0 auto; padding: 100px 20px 60px 20px; }
+        h1 { font-size: clamp(36px, 7vw, 52px); margin: 0 0 15px 0; color: #00FF41; font-weight: 800; letter-spacing: -0.5px; }
+        .topic-desc { font-size: clamp(18px, 4.5vw, 22px); color: #999; margin-bottom: 40px; line-height: 1.6; }
+        .task-level { font-size: clamp(22px, 5vw, 28px); font-weight: 800; color: #00c2ff; margin: 50px 0 25px 0; padding-bottom: 12px; border-bottom: 2px solid rgba(0, 194, 255, 0.25); letter-spacing: -0.3px; }
+        .task-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 255, 65, 0.12); border-radius: 18px; padding: 30px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); }
+        .task-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+        .task-num { font-size: clamp(18px, 4.5vw, 21px); font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+        .task-difficulty { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+        .task-difficulty.easy { background: rgba(0, 255, 65, 0.18); color: #00FF41; }
+        .task-difficulty.medium { background: rgba(255, 194, 0, 0.18); color: #ffc200; }
+        .task-difficulty.hard { background: rgba(255, 82, 82, 0.18); color: #ff5252; }
+        .task-description { font-size: clamp(17px, 4vw, 19px); line-height: 1.7; color: #ddd; margin-bottom: 22px; }
+        .task-hint { background: rgba(0, 194, 255, 0.08); border-left: 3px solid #00c2ff; padding: 15px; margin: 20px 0; border-radius: 0 10px 10px 0; }
+        .task-hint-title { color: #00c2ff; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
+        .task-hint-text { color: #888; font-size: 14px; margin: 0; }
+        .task-io { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-top: 22px; }
+        .io-example { background: rgba(0, 0, 0, 0.35); border-radius: 12px; padding: 18px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .io-label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: block; }
+        .io-label.input { color: #00c2ff; }
+        .io-label.output { color: #00FF41; }
+        .io-code { font-family: 'JetBrains Mono', monospace; font-size: clamp(14px, 3.5vw, 16px); color: #fff; display: block; white-space: pre-wrap; word-break: break-all; line-height: 1.5; }
+        .task-solution { margin-top: 25px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+        .solution-toggle { background: none; border: 1px solid rgba(0, 255, 65, 0.3); color: #00FF41; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-size: 15px; font-weight: 600; transition: 0.3s; }
+        .solution-toggle:hover { background: rgba(0, 255, 65, 0.12); border-color: #00FF41; }
+        .solution-code { display: none; margin-top: 18px; background: rgba(0, 0, 0, 0.5); border-radius: 12px; padding: 22px; overflow-x: auto; border: 1px solid rgba(0, 255, 65, 0.1); }
+        .solution-code pre { margin: 0; }
+        .solution-code code { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: #a5d6ff; line-height: 1.6; }
+        @media (max-width: 640px) { .practice-header-fixed { padding: 12px 15px; } .header-nav { justify-content: flex-end; } .practice-container { padding: 90px 15px 50px 15px; } .task-header { flex-direction: column; align-items: flex-start; } .task-io { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header class="practice-header-fixed">
+        <div class="header-left">
+            <a href="../index.html" class="header-logo">ProstoPython</a>
+            <a href="index.html" class="header-btn">← Все темы</a>
+        </div>
+        <div class="header-nav">
+            <a href="../advanced/index.html" class="header-btn">📚 Уроки</a>
+            <a href="practice-pandas.html" class="header-btn primary">📝 Pandas</a>
+        </div>
+    </header>
+
+    <div class="practice-container">
+        <h1>Pandas и Numpy</h1>
+        <p class="topic-desc">14 задач для отработки анализа данных</p>
+
+        <h2 class="task-level">📌 Уровень 1: Основы Numpy</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 1: Создание массива</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Создайте Numpy массив из списка [1, 2, 3, 4, 5]. Выведите тип массива и его форму.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Тип: &lt;class 'numpy.ndarray'&gt;
+Форма: (5,)</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import numpy as np
+
+arr = np.array([1, 2, 3, 4, 5])
+print(f"Тип: {type(arr)}")
+print(f"Форма: {arr.shape}")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 2: Матрица 3x3</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Создайте матрицу 3x3 из чисел от 1 до 9. Выведите диагональ матрицы.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Матрица:
+[[1 2 3]
+ [4 5 6]
+ [7 8 9]]
+Диагональ: [1 5 9]</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import numpy as np
+
+matrix = np.array([[1, 2, 3],
+                   [4, 5, 6],
+                   [7, 8, 9]])
+
+print("Матрица:")
+print(matrix)
+print("Диагональ:", matrix.diagonal())</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 3: Статистика массива</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Для массива [10, 20, 30, 40, 50] вычислите: сумму, среднее, минимум, максимум, стандартное отклонение.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Сумма: 150
+Среднее: 30.0
+Мин: 10, Макс: 50
+Стд. отклонение: 14.14</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import numpy as np
+
+arr = np.array([10, 20, 30, 40, 50])
+
+print(f"Сумма: {arr.sum()}")
+print(f"Среднее: {arr.mean()}")
+print(f"Мин: {arr.min()}, Макс: {arr.max()}")
+print(f"Стд. отклонение: {arr.std():.2f}")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 4: Операции с массивами</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Даны массивы a = [1, 2, 3] и b = [4, 5, 6]. Выполните: сложение, вычитание, поэлементное умножение, деление.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">a + b = [5 7 9]
+a - b = [-3 -3 -3]
+a * b = [4 10 18]
+a / b = [0.25 0.4 0.5]</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import numpy as np
+
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+
+print(f"a + b = {a + b}")
+print(f"a - b = {a - b}")
+print(f"a * b = {a * b}")
+print(f"a / b = {a / b}")</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">📌 Уровень 2: Основы Pandas</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 5: Создание DataFrame</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Создайте DataFrame с данными о сотрудниках: имя, возраст, город, зарплата (5 записей).</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">      Имя  Возраст     Город  Зарплата
+0    Анна       25    Москва     75000
+1   Борис       32       СПб     90000
+...</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import pandas as pd
+
+data = {
+    'Имя': ['Анна', 'Борис', 'Виктор', 'Галина', 'Дмитрий'],
+    'Возраст': [25, 32, 28, 35, 42],
+    'Город': ['Москва', 'СПб', 'Москва', 'Казань', 'СПб'],
+    'Зарплата': [75000, 90000, 80000, 65000, 120000]
+}
+
+df = pd.DataFrame(data)
+print(df)</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 6: Выборка данных</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Выведите сотрудников из Москвы с зарплатой больше 70000.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">      Имя  Возраст   Город  Зарплата
+0    Анна       25  Москва     75000
+2  Виктор       28  Москва     80000</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import pandas as pd
+
+data = {
+    'Имя': ['Анна', 'Борис', 'Виктор', 'Галина', 'Дмитрий'],
+    'Возраст': [25, 32, 28, 35, 42],
+    'Город': ['Москва', 'СПб', 'Москва', 'Казань', 'СПб'],
+    'Зарплата': [75000, 90000, 80000, 65000, 120000]
+}
+df = pd.DataFrame(data)
+
+moscow_high = df[(df['Город'] == 'Москва') & (df['Зарплата'] > 70000)]
+print(moscow_high)</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 7: Статистика DataFrame</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Выведите общую статистику по DataFrame: describe(), info(), среднюю зарплату.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Средняя зарплата: 86000.0 руб.</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import pandas as pd
+
+data = {
+    'Имя': ['Анна', 'Борис', 'Виктор', 'Галина', 'Дмитрий'],
+    'Возраст': [25, 32, 28, 35, 42],
+    'Город': ['Москва', 'СПб', 'Москва', 'Казань', 'СПб'],
+    'Зарплата': [75000, 90000, 80000, 65000, 120000]
+}
+df = pd.DataFrame(data)
+
+print(df.describe())
+print(f"\nСредняя зарплата: {df['Зарплата'].mean()} руб.")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 8: Группировка по городу</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Сгруппируйте данные по городу и выведите среднюю зарплату в каждом городе.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Город
+Казань     65000
+Москва     77500
+СПб       105000</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import pandas as pd
+
+data = {
+    'Имя': ['Анна', 'Борис', 'Виктор', 'Галина', 'Дмитрий'],
+    'Возраст': [25, 32, 28, 35, 42],
+    'Город': ['Москва', 'СПб', 'Москва', 'Казань', 'СПб'],
+    'Зарплата': [75000, 90000, 80000, 65000, 120000]
+}
+df = pd.DataFrame(data)
+
+city_salary = df.groupby('Город')['Зарплата'].mean()
+print(city_salary)</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 9: Добавление столбца</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Добавьте столбец "Премия" (10% от зарплаты) и "Общий доход" (зарплата + премия).</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">      Имя  Зарплата   Премия  Общий доход
+0    Анна     75000   7500.0      82500.0
+1   Борис     90000   9000.0      99000.0</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import pandas as pd
+
+data = {
+    'Имя': ['Анна', 'Борис', 'Виктор'],
+    'Зарплата': [75000, 90000, 80000]
+}
+df = pd.DataFrame(data)
+
+df['Премия'] = df['Зарплата'] * 0.1
+df['Общий доход'] = df['Зарплата'] + df['Премия']
+
+print(df)</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">📌 Уровень 3: Продвинутые задачи</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 10: Чтение CSV</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Создайте CSV-файл с данными о продажах, прочитайте его и выведите первые 5 строк.</p>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import pandas as pd
+
+# Создаём тестовый CSV
+data = {
+    'Дата': ['2024-01-01', '2024-01-02', '2024-01-03', '2024-01-04', '2024-01-05'],
+    'Товар': ['Ноутбук', 'Мышь', 'Клавиатура', 'Монитор', 'Наушники'],
+    'Продано': [5, 20, 15, 8, 25],
+    'Цена': [50000, 1500, 3500, 15000, 5000]
+}
+pd.DataFrame(data).to_csv('sales.csv', index=False)
+
+# Читаем обратно
+df = pd.read_csv('sales.csv')
+print("Первые 5 строк:")
+print(df.head())
+
+# Добавляем выручку
+df['Выручка'] = df['Продано'] * df['Цена']
+print(f"\nОбщая выручка: {df['Выручка'].sum():,.0f} руб.")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 11: Сводная таблица</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Создайте сводную таблицу: строки — категории, столбцы — месяцы, значения — сумма продаж.</p>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import pandas as pd
+import numpy as np
+
+np.random.seed(42)
+data = {
+    'Месяц': np.random.choice(['Янв', 'Фев', 'Мар'], 50),
+    'Категория': np.random.choice(['Электроника', 'Одежда', 'Дом'], 50),
+    'Продажи': np.random.randint(1000, 50000, 50)
+}
+df = pd.DataFrame(data)
+
+pivot = df.pivot_table(
+    values='Продажи',
+    index='Категория',
+    columns='Месяц',
+    aggfunc='sum',
+    fill_value=0
+)
+
+print("Сводная таблица продаж:")
+print(pivot)</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 12: Фильтрация по условию</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Найдите топ-3 товара по выручке и отсортируйте по убыванию.</p>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import pandas as pd
+
+data = {
+    'Товар': ['Ноутбук', 'Мышь', 'Клавиатура', 'Монитор', 'Наушники', 'Принтер'],
+    'Продано': [10, 50, 30, 15, 40, 8],
+    'Цена': [50000, 1500, 3500, 15000, 5000, 12000]
+}
+df = pd.DataFrame(data)
+df['Выручка'] = df['Продано'] * df['Цена']
+
+top3 = df.nlargest(3, 'Выручка')[['Товар', 'Выручка']]
+print("Топ-3 товара по выручке:")
+print(top3.to_string(index=False))</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 13: Анализ временных рядов</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Создайте данные о ежедневных продажах за месяц. Выведите день с максимальной выручкой и среднюю выручку по неделям.</p>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import pandas as pd
+import numpy as np
+
+# Данные за 30 дней
+dates = pd.date_range('2024-01-01', periods=30, freq='D')
+sales = np.random.randint(10000, 100000, 30)
+
+df = pd.DataFrame({'Дата': dates, 'Выручка': sales})
+df['Неделя'] = df['Дата'].dt.isocalendar().week
+
+# День с максимальной выручкой
+max_day = df.loc[df['Выручка'].idxmax()]
+print(f"Максимальная выручка: {max_day['Выручка']:,} руб.")
+print(f"Дата: {max_day['Дата'].strftime('%d.%m.%Y')}")
+
+# Средняя по неделям
+weekly = df.groupby('Неделя')['Выручка'].mean()
+print("\nСредняя выручка по неделям:")
+print(weekly)</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 14: Полный анализ</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Создайте отчёт по продажам: общая выручка, топ категории, динамика по месяцам, экспорт в Excel.</p>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import pandas as pd
+import numpy as np
+
+# Генерация данных
+np.random.seed(42)
+n = 200
+data = {
+    'Дата': pd.date_range('2024-01-01', periods=n, freq='D'),
+    'Категория': np.random.choice(['Электроника', 'Одежда', 'Дом', 'Спорт'], n),
+    'Товар': np.random.choice(['Товар'+str(i) for i in range(1, 21)], n),
+    'Продано': np.random.randint(1, 20, n),
+    'Цена': np.random.randint(500, 50000, n)
+}
+df = pd.DataFrame(data)
+df['Выручка'] = df['Продано'] * df['Цена']
+df['Месяц'] = df['Дата'].dt.month
+
+print("=" * 50)
+print("ОТЧЁТ ПО ПРОДАЖАМ")
+print("=" * 50)
+
+# Общая выручка
+total = df['Выручка'].sum()
+print(f"\nОбщая выручка: {total:,.0f} руб.")
+
+# Топ категория
+top_cat = df.groupby('Категория')['Выручка'].sum().idxmax()
+print(f"Топ категория: {top_cat}")
+
+# Динамика по месяцам
+print("\nДинамика по месяцам:")
+monthly = df.groupby('Месяц')['Выручка'].sum()
+for month, rev in monthly.items():
+    print(f"  Месяц {month}: {rev:,.0f} руб.")
+
+# Экспорт в Excel
+with pd.ExcelWriter('sales_report.xlsx') as writer:
+    df.to_excel(writer, sheet_name='Данные', index=False)
+    monthly.to_excel(writer, sheet_name='По месяцам')
+    pd.pivot_table(df, values='Выручка', index='Категория', 
+                   columns='Месяц', aggfunc='sum').to_excel(
+                       writer, sheet_name='Сводная')
+
+print("\nОтчёт сохранён в sales_report.xlsx")</code></pre></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

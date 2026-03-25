@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Обработка CSV таблиц | ProstoPython</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        * { box-sizing: border-box; }
+        .lesson-section { margin-bottom: clamp(35px, 5vw, 55px); }
+        .lesson-header h1 {
+            font-size: clamp(32px, 7vw, 48px);
+            margin: 0 0 clamp(20px, 3vw, 25px) 0;
+            background: linear-gradient(90deg, #fff, #00FF41);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .lead {
+            font-size: clamp(18px, 4.5vw, 22px);
+            color: #888;
+            line-height: 1.7;
+            margin-bottom: clamp(35px, 5vw, 45px);
+        }
+        h2 {
+            font-size: clamp(26px, 6vw, 36px);
+            color: #00FF41;
+            margin-bottom: clamp(20px, 3vw, 25px);
+        }
+        h3 {
+            font-size: clamp(22px, 5vw, 28px);
+            color: #fff;
+            margin-top: clamp(30px, 4vw, 40px);
+            margin-bottom: clamp(15px, 3vw, 20px);
+        }
+        p, li {
+            font-size: clamp(16px, 4vw, 18px);
+            line-height: 1.7;
+        }
+        ul, ol { padding-left: clamp(25px, 5vw, 35px); }
+        .code-window {
+            background: #0a0c0b;
+            border: 1px solid rgba(0, 255, 65, 0.15);
+            border-radius: clamp(14px, 3vw, 18px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            overflow: hidden;
+        }
+        .window-header {
+            background: rgba(255, 255, 255, 0.05);
+            padding: clamp(12px, 2vw, 15px) clamp(18px, 3vw, 25px);
+            font-family: monospace;
+            font-size: clamp(13px, 3vw, 15px);
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .output-label {
+            color: #00FF41;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        pre { margin: 0; padding: clamp(20px, 4vw, 30px); overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        code { font-family: 'Fira Code', monospace; font-size: clamp(14px, 3vw, 16px); line-height: 1.6; }
+        .pro-tip {
+            background: rgba(0, 255, 65, 0.06);
+            border-left: 4px solid #00FF41;
+            padding: clamp(18px, 4vw, 22px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            border-radius: 10px;
+        }
+        .pro-tip strong { color: #00FF41; font-size: clamp(16px, 4vw, 18px); }
+        .pro-tip p { margin: 10px 0 0 0; font-size: clamp(15px, 3.5vw, 17px); }
+        .progress-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 18px 24px;
+            margin: 25px 0 35px 0;
+        }
+        .progress-labels { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #999; }
+        .progress-bar { height: 10px; background: rgba(0, 0, 0, 0.4); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #00FF41, #00cc33); border-radius: 10px; transition: width 0.3s ease; }
+        .lesson-nav {
+            margin-top: auto;
+            padding-top: clamp(35px, 6vw, 55px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: clamp(20px, 4vw, 30px);
+            flex-wrap: wrap;
+        }
+        .btn-prev, .btn-next {
+            display: inline-flex;
+            align-items: center;
+            padding: clamp(14px, 3vw, 18px) clamp(25px, 5vw, 40px);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+            font-size: clamp(15px, 3.5vw, 17px);
+            white-space: nowrap;
+        }
+        .btn-prev { color: #666; background: rgba(255, 255, 255, 0.05); }
+        .btn-prev:hover { color: #00FF41; background: rgba(0, 255, 65, 0.1); }
+        .btn-next { background: #00FF41; color: #000; box-shadow: 0 10px 25px rgba(0, 255, 65, 0.15); }
+        .btn-next:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0, 255, 65, 0.25); }
+        .concept-box {
+            background: rgba(0, 194, 255, 0.05);
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            border-radius: 12px;
+            padding: clamp(20px, 4vw, 25px);
+            margin: clamp(25px, 5vw, 35px) 0;
+        }
+        .concept-box h4 {
+            color: #00c2ff;
+            margin: 0 0 15px 0;
+            font-size: clamp(18px, 4vw, 20px);
+        }
+        .concept-box p { margin: 0; }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: clamp(25px, 5vw, 35px) 0;
+            font-size: clamp(14px, 3vw, 16px);
+        }
+        .data-table th, .data-table td {
+            border: 1px solid rgba(0, 255, 65, 0.2);
+            padding: 12px 15px;
+            text-align: left;
+        }
+        .data-table th {
+            background: rgba(0, 255, 65, 0.1);
+            color: #00FF41;
+        }
+        .data-table tr:hover {
+            background: rgba(0, 255, 65, 0.03);
+        }
+        @media (max-width: 640px) {
+            .lesson-nav { flex-direction: column-reverse; gap: 18px; }
+            .btn-prev, .btn-next { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body class="lesson-page">
+
+    <div id="header-placeholder"></div>
+
+    <div class="container lesson-layout">
+        <aside class="sidebar" id="sidebar-placeholder"></aside>
+
+        <main class="content">
+            <nav class="breadcrumb">Продвинутый курс / Урок 3</nav>
+
+            <div class="progress-container">
+                <div class="progress-labels">
+                    <span>Прогресс курса</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <section class="lesson-header">
+                <h1>Обработка CSV таблиц</h1>
+                <p class="lead">CSV (Comma-Separated Values) — универсальный формат для хранения табличных данных. Научимся читать, записывать и обрабатывать CSV-файлы в Python.</p>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Что такое CSV</h2>
+                <p>CSV — это текстовый файл, где данные разделены запятыми (или другими разделителями). Каждая строка — это запись таблицы.</p>
+
+                <div class="concept-box">
+                    <h4>Пример CSV-файла</h4>
+                    <p>Так выглядит файл <code>employees.csv</code> в текстовом редакторе:</p>
+                </div>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>employees.csv</span>
+                        <span class="output-label">Исходные данные</span>
+                    </div>
+                    <pre><code>id,name,age,department,salary
+1,Иван Петров,28,IT,75000
+2,Анна Смирнова,34,HR,65000
+3,Дмитрий Козлов,45,Finance,95000
+4,Ольга Новикова,29,IT,80000
+5,Сергей Морозов,38,Marketing,70000</code></pre>
+                </div>
+
+                <p>Первая строка — заголовки столбцов. Остальные строки — данные сотрудников.</p>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Чтение CSV файла</h2>
+                <p>В Python есть встроенный модуль <code>csv</code> для работы с такими файлами.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 1: Чтение CSV</span>
+                    </div>
+                    <pre><code class="language-python">import csv
+
+# Открываем CSV файл
+with open('employees.csv', 'r', encoding='utf-8') as file:
+    # Создаём читатель CSV
+    reader = csv.reader(file)
+    
+    # Получаем заголовок
+    header = next(reader)
+    print("Заголовки:", header)
+    print()
+    
+    # Читаем остальные строки
+    for row in reader:
+        print(row)</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Заголовки: ['id', 'name', 'age', 'department', 'salary']
+
+['1', 'Иван Петров', '28', 'IT', '75000']
+['2', 'Анна Смирнова', '34', 'HR', '65000']
+['3', 'Дмитрий Козлов', '45', 'Finance', '95000']
+['4', 'Ольга Новикова', '29', 'IT', '80000']
+['5', 'Сергей Морозов', '38', 'Marketing', '70000']</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    <code>next(reader)</code> — возвращает следующую строку из файла. Первый вызов получает заголовок.
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Чтение как словарь (DictReader)</h2>
+                <p>Удобнее работать с данными, когда каждая строка — словарь с ключами-заголовками.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 2: CSV как словари</span>
+                    </div>
+                    <pre><code class="language-python">import csv
+
+with open('employees.csv', 'r', encoding='utf-8') as file:
+    # DictReader автоматически использует первую строку как ключи
+    reader = csv.DictReader(file)
+    
+    for row in reader:
+        print(f"Сотрудник: {row['name']}")
+        print(f"  Возраст: {row['age']} лет")
+        print(f"  Отдел: {row['department']}")
+        print(f"  Зарплата: {row['salary']} руб.")
+        print("-" * 30)</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Сотрудник: Иван Петров
+  Возраст: 28 лет
+  Отдел: IT
+  Зарплата: 75000 руб.
+------------------------------
+Сотрудник: Анна Смирнова
+  Возраст: 34 лет
+  Отдел: HR
+  Зарплата: 65000 руб.
+------------------------------
+Сотрудник: Дмитрий Козлов
+  Возраст: 45 лет
+  Отдел: Finance
+  Зарплата: 95000 руб.
+------------------------------
+Сотрудник: Ольга Новикова
+  Возраст: 29 лет
+  Отдел: IT
+  Зарплата: 80000 руб.
+------------------------------
+Сотрудник: Сергей Морозов
+  Возраст: 38 лет
+  Отдел: Marketing
+  Зарплата: 70000 руб.
+------------------------------</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Анализ данных из CSV</h2>
+                <p>Теперь научимся выполнять вычисления с данными из файла.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 3: Анализ данных</span>
+                    </div>
+                    <pre><code class="language-python">import csv
+
+employees = []
+
+# Читаем все данные
+with open('employees.csv', 'r', encoding='utf-8') as file:
+    reader = csv.DictReader(file)
+    for row in reader:
+        employees.append(row)
+
+# 1. Общее количество сотрудников
+print(f"Всего сотрудников: {len(employees)}")
+
+# 2. Средняя зарплата
+salaries = [int(emp['salary']) for emp in employees]
+avg_salary = sum(salaries) / len(salaries)
+print(f"Средняя зарплата: {avg_salary:,.0f} руб.")
+
+# 3. Сотрудник с максимальной зарплатой
+max_emp = max(employees, key=lambda x: int(x['salary']))
+print(f"\nСамая высокая зарплата у: {max_emp['name']}")
+print(f"Зарплата: {max_emp['salary']} руб.")
+
+# 4. Средний возраст по отделам
+departments = {}
+for emp in employees:
+    dept = emp['department']
+    if dept not in departments:
+        departments[dept] = []
+    departments[dept].append(int(emp['age']))
+
+print("\nСредний возраст по отделам:")
+for dept, ages in departments.items():
+    avg_age = sum(ages) / len(ages)
+    print(f"  {dept}: {avg_age:.1f} лет")</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Всего сотрудников: 5
+Средняя зарплата: 77,000 руб.
+
+Самая высокая зарплата у: Дмитрий Козлов
+Зарплата: 95000 руб.
+
+Средний возраст по отделам:
+  IT: 28.5 лет
+  HR: 34.0 лет
+  Finance: 45.0 лет
+  Marketing: 38.0 лет</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Запись данных в CSV</h2>
+                <p>Создадим новый CSV файл с результатами анализа.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 4: Запись CSV</span>
+                    </div>
+                    <pre><code class="language-python">import csv
+
+# Данные для записи
+new_employees = [
+    {'id': 6, 'name': 'Павел Лебедев', 'age': 31, 'department': 'IT', 'salary': 85000},
+    {'id': 7, 'name': 'Елена Соколова', 'age': 27, 'department': 'HR', 'salary': 60000},
+    {'id': 8, 'name': 'Максим Павлов', 'age': 42, 'department': 'Finance', 'salary': 100000}
+]
+
+# Заголовки
+fieldnames = ['id', 'name', 'age', 'department', 'salary']
+
+# Записываем в файл
+with open('employees_updated.csv', 'w', encoding='utf-8', newline='') as file:
+    writer = csv.DictWriter(file, fieldnames=fieldnames)
+    
+    # Записываем заголовок
+    writer.writeheader()
+    
+    # Записываем данные
+    writer.writerows(new_employees)
+
+print("Данные успешно сохранены в employees_updated.csv")
+
+# Проверка - читаем обратно
+print("\nСодержимое файла:")
+with open('employees_updated.csv', 'r', encoding='utf-8') as file:
+    print(file.read())</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Данные успешно сохранены в employees_updated.csv
+
+Содержимое файла:
+id,name,age,department,salary
+6,Павел Лебедев,31,IT,85000
+7,Елена Соколова,27,HR,60000
+8,Максим Павлов,42,Finance,100000</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    <code>newline=''</code> — важный параметр для Windows, предотвращает пустые строки в CSV.
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Добавление данных в существующий файл</h2>
+                <p>Часто нужно не перезаписать, а дополнить файл.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 5: Добавление записей</span>
+                    </div>
+                    <pre><code class="language-python">import csv
+
+# Новые сотрудники для добавления
+new_employees = [
+    {'id': 9, 'name': 'Кристина Орлова', 'age': 25, 'department': 'Marketing', 'salary': 55000},
+    {'id': 10, 'name': 'Артем Жуков', 'age': 36, 'department': 'IT', 'salary': 90000}
+]
+
+fieldnames = ['id', 'name', 'age', 'department', 'salary']
+
+# Открываем файл на дозапись
+with open('employees_updated.csv', 'a', encoding='utf-8', newline='') as file:
+    writer = csv.DictWriter(file, fieldnames=fieldnames)
+    writer.writerows(new_employees)
+
+print("Добавлено 2 новых сотрудника")
+
+# Читаем итоговый файл
+with open('employees_updated.csv', 'r', encoding='utf-8') as file:
+    reader = csv.DictReader(file)
+    for row in reader:
+        print(f"{row['id']}. {row['name']} - {row['department']}")</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Добавлено 2 новых сотрудника
+6. Павел Лебедев - IT
+7. Елена Соколова - HR
+8. Максим Павлов - Finance
+9. Кристина Орлова - Marketing
+10. Артем Жуков - IT</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Другие разделители</h2>
+                <p>CSV может использовать не только запятые, но и другие разделители: точку с запятой, табуляцию, вертикальную черту.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>data_semicolon.csv</span>
+                        <span class="output-label">Файл с точкой с запятой</span>
+                    </div>
+                    <pre><code>name;city;score
+Алексей;Москва;85
+Мария;СПб;92
+Николай;Казань;78</code></pre>
+                </div>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 6: Чтение с разделителем</span>
+                    </div>
+                    <pre><code class="language-python">import csv
+
+with open('data_semicolon.csv', 'r', encoding='utf-8') as file:
+    # Указываем разделитель точка с запятой
+    reader = csv.reader(file, delimiter=';')
+    
+    for row in reader:
+        print(row)</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>['name', 'city', 'score']
+['Алексей', 'Москва', '85']
+['Мария', 'СПб', '92']
+['Николай', 'Казань', '78']</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Практический проект: Анализ продаж</h2>
+                <p>Создадим программу для анализа данных о продажах магазина.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>sales.csv</span>
+                        <span class="output-label">Исходные данные</span>
+                    </div>
+                    <pre><code>date,product,category,quantity,price
+2024-01-05,Ноутбук,Электроника,2,85000
+2024-01-07,Мышь,Электроника,15,1500
+2024-01-10,Стол,Мебель,3,12000
+2024-01-12,Клавиатура,Электроника,10,3500
+2024-01-15,Стул,Мебель,8,4500
+2024-01-18,Монитор,Электроника,5,25000
+2024-01-20,Шкаф,Мебель,2,18000
+2024-01-25,Наушники,Электроника,20,2500</code></pre>
+                </div>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>analysis.py</span>
+                        <span class="output-label">Пример 7: Анализ продаж</span>
+                    </div>
+                    <pre><code class="language-python">import csv
+from datetime import datetime
+
+# Читаем данные
+sales = []
+with open('sales.csv', 'r', encoding='utf-8') as file:
+    reader = csv.DictReader(file)
+    for row in reader:
+        row['quantity'] = int(row['quantity'])
+        row['price'] = int(row['price'])
+        row['total'] = row['quantity'] * row['price']
+        sales.append(row)
+
+print("=" * 50)
+print("ОТЧЁТ ПО ПРОДАЖАМ")
+print("=" * 50)
+
+# 1. Общая выручка
+total_revenue = sum(s['total'] for s in sales)
+print(f"\nОбщая выручка: {total_revenue:,.0f} руб.")
+
+# 2. Продано товаров
+total_items = sum(s['quantity'] for s in sales)
+print(f"Всего продано товаров: {total_items} шт.")
+
+# 3. Выручка по категориям
+print("\nВыручка по категориям:")
+categories = {}
+for s in sales:
+    cat = s['category']
+    if cat not in categories:
+        categories[cat] = 0
+    categories[cat] += s['total']
+
+for cat, revenue in categories.items():
+    print(f"  {cat}: {revenue:,.0f} руб.")
+
+# 4. Топ-3 товара по выручке
+print("\nТоп-3 товара по выручке:")
+sorted_sales = sorted(sales, key=lambda x: x['total'], reverse=True)
+for i, s in enumerate(sorted_sales[:3], 1):
+    print(f"  {i}. {s['product']}: {s['total']:,.0f} руб. ({s['quantity']} шт.)")
+
+# 5. Средний чек
+avg_check = total_revenue / len(sales)
+print(f"\nСредний чек: {avg_check:,.0f} руб.")</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>==================================================
+ОТЧЁТ ПО ПРОДАЖАМ
+==================================================
+
+Общая выручка: 432,000 руб.
+Всего продано товаров: 65 шт.
+
+Выручка по категориям:
+  Электроника: 302,500 руб.
+  Мебель: 129,500 руб.
+
+Топ-3 товара по выручке:
+  1. Ноутбук: 170,000 руб. (2 шт.)
+  2. Монитор: 125,000 руб. (5 шт.)
+  3. Шкаф: 36,000 руб. (2 шт.)
+
+Средний чек: 54,000 руб.</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Экспорт отчёта в CSV</h2>
+                <p>Сохраним результаты анализа в новый файл.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>report.py</span>
+                        <span class="output-label">Пример 8: Создание отчёта</span>
+                    </div>
+                    <pre><code class="language-python">import csv
+
+# Читаем исходные данные
+sales = []
+with open('sales.csv', 'r', encoding='utf-8') as file:
+    reader = csv.DictReader(file)
+    for row in reader:
+        row['quantity'] = int(row['quantity'])
+        row['price'] = int(row['price'])
+        sales.append(row)
+
+# Группируем по товарам
+product_stats = {}
+for s in sales:
+    product = s['product']
+    if product not in product_stats:
+        product_stats[product] = {
+            'category': s['category'],
+            'quantity': 0,
+            'revenue': 0
+        }
+    product_stats[product]['quantity'] += s['quantity']
+    product_stats[product]['revenue'] += s['quantity'] * s['price']
+
+# Записываем отчёт
+with open('product_report.csv', 'w', encoding='utf-8', newline='') as file:
+    fieldnames = ['product', 'category', 'total_quantity', 'total_revenue']
+    writer = csv.DictWriter(file, fieldnames=fieldnames)
+    
+    writer.writeheader()
+    for product, stats in product_stats.items():
+        writer.writerow({
+            'product': product,
+            'category': stats['category'],
+            'total_quantity': stats['quantity'],
+            'total_revenue': stats['revenue']
+        })
+
+print("Отчёт сохранён в product_report.csv")
+
+# Показываем содержимое
+print("\nСодержимое отчёта:")
+with open('product_report.csv', 'r', encoding='utf-8') as file:
+    print(file.read())</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Отчёт сохранён в product_report.csv
+
+Содержимое отчёта:
+product,category,total_quantity,total_revenue
+Ноутбук,Электроника,2,170000
+Мышь,Электроника,15,22500
+Стол,Мебель,3,36000
+Клавиатура,Электроника,10,35000
+Стул,Мебель,8,36000
+Монитор,Электроника,5,125000
+Шкаф,Мебель,2,36000
+Наушники,Электроника,20,50000</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Итоги урока</h2>
+                <div class="concept-box">
+                    <h4>Что вы изучили</h4>
+                    <ul>
+                        <li><strong>CSV</strong> — текстовый формат для табличных данных</li>
+                        <li><code>csv.reader</code> — чтение CSV как списков</li>
+                        <li><code>csv.DictReader</code> — чтение CSV как словарей</li>
+                        <li><code>csv.writer</code> — запись данных в CSV</li>
+                        <li><code>csv.DictWriter</code> — запись словарей в CSV</li>
+                        <li><code>delimiter</code> — параметр для других разделителей</li>
+                        <li>Анализ данных: сумма, среднее, группировка</li>
+                        <li>Создание отчётов с сохранением результатов</li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="lesson-nav">
+                <a href="lesson2.html" class="btn-prev">← Предыдущий урок</a>
+                <a href="lesson4.html" class="btn-next">Следующий урок →</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="../js/app.js"></script>
+</body>
+</html>

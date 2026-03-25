@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Работа с API и JSON | ProstoPython</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        * { box-sizing: border-box; }
+        .lesson-section { margin-bottom: clamp(35px, 5vw, 55px); }
+        .lesson-header h1 {
+            font-size: clamp(32px, 7vw, 48px);
+            margin: 0 0 clamp(20px, 3vw, 25px) 0;
+            background: linear-gradient(90deg, #fff, #00FF41);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .lead {
+            font-size: clamp(18px, 4.5vw, 22px);
+            color: #888;
+            line-height: 1.7;
+            margin-bottom: clamp(35px, 5vw, 45px);
+        }
+        h2 {
+            font-size: clamp(26px, 6vw, 36px);
+            color: #00FF41;
+            margin-bottom: clamp(20px, 3vw, 25px);
+        }
+        h3 {
+            font-size: clamp(22px, 5vw, 28px);
+            color: #fff;
+            margin-top: clamp(30px, 4vw, 40px);
+            margin-bottom: clamp(15px, 3vw, 20px);
+        }
+        p, li {
+            font-size: clamp(16px, 4vw, 18px);
+            line-height: 1.7;
+        }
+        ul, ol { padding-left: clamp(25px, 5vw, 35px); }
+        .code-window {
+            background: #0a0c0b;
+            border: 1px solid rgba(0, 255, 65, 0.15);
+            border-radius: clamp(14px, 3vw, 18px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            overflow: hidden;
+        }
+        .window-header {
+            background: rgba(255, 255, 255, 0.05);
+            padding: clamp(12px, 2vw, 15px) clamp(18px, 3vw, 25px);
+            font-family: monospace;
+            font-size: clamp(13px, 3vw, 15px);
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .output-label {
+            color: #00FF41;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        pre { margin: 0; padding: clamp(20px, 4vw, 30px); overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        code { font-family: 'Fira Code', monospace; font-size: clamp(14px, 3vw, 16px); line-height: 1.6; }
+        .pro-tip {
+            background: rgba(0, 255, 65, 0.06);
+            border-left: 4px solid #00FF41;
+            padding: clamp(18px, 4vw, 22px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            border-radius: 10px;
+        }
+        .pro-tip strong { color: #00FF41; font-size: clamp(16px, 4vw, 18px); }
+        .pro-tip p { margin: 10px 0 0 0; font-size: clamp(15px, 3.5vw, 17px); }
+        .progress-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 18px 24px;
+            margin: 25px 0 35px 0;
+        }
+        .progress-labels { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #999; }
+        .progress-bar { height: 10px; background: rgba(0, 0, 0, 0.4); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #00FF41, #00cc33); border-radius: 10px; transition: width 0.3s ease; }
+        .lesson-nav {
+            margin-top: auto;
+            padding-top: clamp(35px, 6vw, 55px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: clamp(20px, 4vw, 30px);
+            flex-wrap: wrap;
+        }
+        .btn-prev, .btn-next {
+            display: inline-flex;
+            align-items: center;
+            padding: clamp(14px, 3vw, 18px) clamp(25px, 5vw, 40px);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+            font-size: clamp(15px, 3.5vw, 17px);
+            white-space: nowrap;
+        }
+        .btn-prev { color: #666; background: rgba(255, 255, 255, 0.05); }
+        .btn-prev:hover { color: #00FF41; background: rgba(0, 255, 65, 0.1); }
+        .btn-next { background: #00FF41; color: #000; box-shadow: 0 10px 25px rgba(0, 255, 65, 0.15); }
+        .btn-next:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0, 255, 65, 0.25); }
+        .concept-box {
+            background: rgba(0, 194, 255, 0.05);
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            border-radius: 12px;
+            padding: clamp(20px, 4vw, 25px);
+            margin: clamp(25px, 5vw, 35px) 0;
+        }
+        .concept-box h4 {
+            color: #00c2ff;
+            margin: 0 0 15px 0;
+            font-size: clamp(18px, 4vw, 20px);
+        }
+        .concept-box p { margin: 0; }
+        @media (max-width: 640px) {
+            .lesson-nav { flex-direction: column-reverse; gap: 18px; }
+            .btn-prev, .btn-next { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body class="lesson-page">
+
+    <div id="header-placeholder"></div>
+
+    <div class="container lesson-layout">
+        <aside class="sidebar" id="sidebar-placeholder"></aside>
+
+        <main class="content">
+            <nav class="breadcrumb">Продвинутый курс / Урок 2</nav>
+
+            <div class="progress-container">
+                <div class="progress-labels">
+                    <span>Прогресс курса</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <section class="lesson-header">
+                <h1>Работа с API и JSON</h1>
+                <p class="lead">API позволяет программам общаться друг с другом. JSON — формат данных, который используют почти все современные API. Научимся получать данные из интернета и работать с ними.</p>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Что такое JSON</h2>
+                <p>JSON (JavaScript Object Notation) — текстовый формат обмена данными. Он лёгкий для чтения и понятен как человеку, так и машине.</p>
+
+                <div class="concept-box">
+                    <h4>Структура JSON</h4>
+                    <p>JSON состоит из пар "ключ: значение" и массивов.<br>
+                    <strong>Объект</strong> — фигурные скобки <code>{}</code><br>
+                    <strong>Массив</strong> — квадратные скобки <code>[]</code></p>
+                </div>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>data.json</span>
+                        <span class="output-label">Пример JSON</span>
+                    </div>
+                    <pre><code>{
+  "name": "Иван Петров",
+  "age": 28,
+  "city": "Москва",
+  "isDeveloper": true,
+  "skills": ["Python", "JavaScript", "SQL"],
+  "projects": [
+    {
+      "title": "Веб-сайт",
+      "year": 2023
+    },
+    {
+      "title": "Telegram-бот",
+      "year": 2024
+    }
+  ]
+}</code></pre>
+                </div>
+
+                <h3>Работа с JSON в Python</h3>
+                <p>В Python есть встроенный модуль <code>json</code> для работы с этим форматом.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 1: Чтение JSON</span>
+                    </div>
+                    <pre><code class="language-python">import json
+
+# JSON-строка (как будто получили от API)
+json_string = '''
+{
+  "name": "Анна Смирнова",
+  "age": 25,
+  "city": "Санкт-Петербург",
+  "skills": ["Python", "Django", "PostgreSQL"]
+}
+'''
+
+# Преобразуем JSON в словарь Python
+data = json.loads(json_string)
+
+# Теперь работаем как с обычным словарём
+print(f"Имя: {data['name']}")
+print(f"Возраст: {data['age']}")
+print(f"Город: {data['city']}")
+print("Навыки:", ", ".join(data['skills']))</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Имя: Анна Смирнова
+Возраст: 25
+Город: Санкт-Петербург
+Навыки: Python, Django, PostgreSQL</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    <strong>json.loads()</strong> — преобразует JSON-строку в объект Python (словарь).<br>
+                    <strong>json.load()</strong> — читает JSON из файла.
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Преобразование Python в JSON</h2>
+                <p>Часто нужно отправить данные в формате JSON. Для этого используется <code>json.dumps()</code>.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 2: Создание JSON</span>
+                    </div>
+                    <pre><code class="language-python">import json
+
+# Словарь Python
+user = {
+    "id": 1,
+    "name": "Дмитрий Козлов",
+    "email": "dmitry@example.com",
+    "active": True,
+    "roles": ["admin", "user"]
+}
+
+# Преобразуем в JSON-строку
+json_string = json.dumps(user, ensure_ascii=False, indent=2)
+
+print("JSON-строка:")
+print(json_string)
+
+# Сохраняем в файл
+with open("user.json", "w", encoding="utf-8") as f:
+    json.dump(user, f, ensure_ascii=False, indent=2)
+
+print("\nДанные сохранены в user.json")</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>JSON-строка:
+{
+  "id": 1,
+  "name": "Дмитрий Козлов",
+  "email": "dmitry@example.com",
+  "active": true,
+  "roles": ["admin", "user"]
+}
+
+Данные сохранены в user.json</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    <code>ensure_ascii=False</code> — сохраняет кириллицу в исходном виде, а не преобразует в \u0435<br>
+                    <code>indent=2</code> — делает вывод красивым с отступами
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Что такое API</h2>
+                <p>API (Application Programming Interface) — набор правил, позволяющий программам получать данные от других сервисов.</p>
+
+                <div class="concept-box">
+                    <h4>REST API</h4>
+                    <p>Самый популярный тип API. Использует HTTP-запросы:<br>
+                    <strong>GET</strong> — получить данные<br>
+                    <strong>POST</strong> — создать данные<br>
+                    <strong>PUT/PATCH</strong> — обновить данные<br>
+                    <strong>DELETE</strong> — удалить данные</p>
+                </div>
+
+                <p>Рассмотрим работу с API на примере бесплатного сервиса JSONPlaceholder (тестовое API).</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 3: GET-запрос к API</span>
+                    </div>
+                    <pre><code class="language-python">import requests
+
+# Получаем данные о пользователе
+response = requests.get("https://jsonplaceholder.typicode.com/users/1")
+
+# Проверяем статус ответа
+if response.status_code == 200:
+    # Преобразуем ответ в JSON
+    user = response.json()
+    
+    print("Данные пользователя:")
+    print(f"Имя: {user['name']}")
+    print(f"Email: {user['email']}")
+    print(f"Город: {user['address']['city']}")
+    print(f"Компания: {user['company']['name']}")
+else:
+    print(f"Ошибка: {response.status_code}")</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Данные пользователя:
+Имя: Leanne Graham
+Email: Sincere@april.biz
+Город: Gulfton
+Компания: Romaguera-Crona</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    Для работы нужен модуль requests. Установите:<br>
+                    <code>pip install requests</code>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Получение списка данных</h2>
+                <p>API часто возвращает массивы объектов. Научимся их обрабатывать.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 4: Список постов</span>
+                    </div>
+                    <pre><code class="language-python">import requests
+
+# Получаем список постов (всего 100)
+response = requests.get("https://jsonplaceholder.typicode.com/posts")
+posts = response.json()
+
+# Показываем первые 5 постов
+print("Первые 5 постов:\n")
+for post in posts[:5]:
+    print(f"ID: {post['id']}")
+    print(f"Заголовок: {post['title'][:50]}...")
+    print(f"Текст: {post['body'][:60]}...")
+    print("-" * 50)
+
+print(f"\nВсего постов: {len(posts)}")</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Первые 5 постов:
+
+ID: 1
+Заголовок: sunt aut facere repellat provident occaecati...
+Текст: quia et suscipit suscipit recusandae consequuntur ...
+--------------------------------------------------
+ID: 2
+Заголовок: qui est esse...
+Текст: est rerum tempore vitae sequi sint nihil reprehens...
+--------------------------------------------------
+ID: 3
+Заголовок: ea molestias quasi exercitationem repellat qui...
+Текст: et iusto sed quo iure voluptatem occaecati omni eli...
+--------------------------------------------------
+ID: 4
+Заголовок: eum et est occaecati...
+Текст: blanditiis voluptas odit ex eos ea sed pariatur mo...
+--------------------------------------------------
+ID: 5
+Заголовок: vero eaque aliquid doloribus et culpa fugiat ha...
+Текст: nam harum corporis deserunt doloremque quae dolor ...
+--------------------------------------------------
+
+Всего постов: 100</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Отправка данных через POST</h2>
+                <p>POST-запрос создаёт новые данные на сервере.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 5: POST-запрос</span>
+                    </div>
+                    <pre><code class="language-python">import requests
+
+# Данные для отправки
+new_post = {
+    "title": "Мой первый пост",
+    "body": "Это текст поста, созданного через API",
+    "userId": 1
+}
+
+# Отправляем POST-запрос
+response = requests.post(
+    "https://jsonplaceholder.typicode.com/posts",
+    json=new_post
+)
+
+# Получаем ответ
+if response.status_code == 201:
+    created = response.json()
+    print("Пост создан!")
+    print(f"ID: {created['id']}")
+    print(f"Заголовок: {created['title']}")
+    print(f"Текст: {created['body']}")
+else:
+    print(f"Ошибка: {response.status_code}")</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Пост создан!
+ID: 101
+Заголовок: Мой первый пост
+Текст: Это текст поста, созданного через API</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    JSONPlaceholder — тестовое API, данные не сохраняются реально. Но ответ имитирует успешное создание.
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Работа с параметрами запроса</h2>
+                <p>API позволяют фильтровать данные через параметры.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 6: Параметры запроса</span>
+                    </div>
+                    <pre><code class="language-python">import requests
+
+# Параметры для фильтрации
+params = {
+    "userId": 1,      # только посты пользователя 1
+    "_limit": 3       # ограничить 3 результатами
+}
+
+# GET-запрос с параметрами
+response = requests.get(
+    "https://jsonplaceholder.typicode.com/posts",
+    params=params
+)
+
+posts = response.json()
+
+print(f"Посты пользователя #1 (первые 3):\n")
+for post in posts:
+    print(f"ID: {post['id']}")
+    print(f"Заголовок: {post['title']}")
+    print()</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Посты пользователя #1 (первые 3):
+
+ID: 1
+Заголовок: sunt aut facere repellat provident occaecati excepturi optio reprehenderit
+
+ID: 2
+Заголовок: qui est esse
+
+ID: 3
+Заголовок: ea molestias quasi exercitationem repellat qui ipsa sit aut</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Обработка ошибок</h2>
+                <p>При работе с API важно обрабатывать возможные ошибки.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 7: Обработка ошибок</span>
+                    </div>
+                    <pre><code class="language-python">import requests
+
+def get_user(user_id):
+    """Безопасное получение данных пользователя"""
+    url = f"https://jsonplaceholder.typicode.com/users/{user_id}"
+    
+    try:
+        response = requests.get(url, timeout=5)
+        
+        # Проверка статуса
+        if response.status_code == 404:
+            return f"Пользователь {user_id} не найден"
+        elif response.status_code != 200:
+            return f"Ошибка сервера: {response.status_code}"
+        
+        # Парсинг JSON
+        user = response.json()
+        return f"Пользователь: {user['name']}, Email: {user['email']}"
+    
+    except requests.exceptions.Timeout:
+        return "Превышено время ожидания ответа"
+    except requests.exceptions.ConnectionError:
+        return "Ошибка подключения к сети"
+    except json.JSONDecodeError:
+        return "Ошибка чтения JSON"
+
+# Тестируем
+print(get_user(1))      # Существующий
+print(get_user(999))    # Не существует
+print(get_user("abc"))  # Некорректный ID</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Пользователь: Leanne Graham, Email: Sincere@april.biz
+Пользователь 999 не найден
+Пользователь abc не найден</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Практический проект: Погодное приложение</h2>
+                <p>Создадим программу, которая получает погоду из API OpenWeatherMap.</p>
+
+                <div class="pro-tip">
+                    Для работы нужен API-ключ. Зарегистрируйтесь на openweathermap.org и получите бесплатный ключ.
+                </div>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>weather.py</span>
+                        <span class="output-label">Пример 8: Погодное приложение</span>
+                    </div>
+                    <pre><code class="language-python">import requests
+
+API_KEY = "ваш_api_ключ"  # Замените на свой ключ
+BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
+
+def get_weather(city):
+    """Получить погоду для города"""
+    params = {
+        "q": city,
+        "appid": API_KEY,
+        "units": "metric",      # Цельсии
+        "lang": "ru"            # Русский язык
+    }
+    
+    try:
+        response = requests.get(BASE_URL, params=params)
+        response.raise_for_status()  # Вызовет ошибку при статусе != 200
+        
+        data = response.json()
+        
+        # Извлекаем данные
+        temp = data["main"]["temp"]
+        feels_like = data["main"]["feels_like"]
+        humidity = data["main"]["humidity"]
+        description = data["weather"][0]["description"]
+        wind_speed = data["wind"]["speed"]
+        
+        print(f"\nПогода в городе {city}")
+        print("=" * 30)
+        print(f"Температура: {temp}°C (ощущается как {feels_like}°C)")
+        print(f"Описание: {description.capitalize()}")
+        print(f"Влажность: {humidity}%")
+        print(f"Ветер: {wind_speed} м/с")
+        
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 404:
+            print(f"Город '{city}' не найден")
+        else:
+            print(f"Ошибка API: {e}")
+    except Exception as e:
+        print(f"Произошла ошибка: {e}")
+
+# Запуск
+get_weather("Moscow")
+get_weather("London")
+get_weather("New York")</code></pre>
+                </div>
+
+                <p><strong>Пример вывода:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Погода в городе Moscow
+==============================
+Температура: -5°C (ощущается как -9°C)
+Описание: Ясно
+Влажность: 78%
+Ветер: 4 м/с
+
+Погода в городе London
+==============================
+Температура: 8°C (ощущается как 6°C)
+Описание: Облачно с прояснениями
+Влажность: 72%
+Ветер: 5 м/с</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Итоги урока</h2>
+                <div class="concept-box">
+                    <h4>Что вы изучили</h4>
+                    <ul>
+                        <li><strong>JSON</strong> — формат обмена данными (ключ: значение)</li>
+                        <li><code>json.loads()</code> — чтение JSON из строки</li>
+                        <li><code>json.dumps()</code> — преобразование в JSON</li>
+                        <li><strong>REST API</strong> — интерфейс для общения программ</li>
+                        <li><strong>HTTP-методы</strong> — GET (получить), POST (создать)</li>
+                        <li><code>requests.get()</code> — GET-запрос к API</li>
+                        <li><code>requests.post()</code> — POST-запрос с данными</li>
+                        <li><strong>Параметры запроса</strong> — фильтрация данных</li>
+                        <li><strong>Обработка ошибок</strong> — try/except для сетевых запросов</li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="lesson-nav">
+                <a href="lesson1.html" class="btn-prev">← Предыдущий урок</a>
+                <a href="lesson3.html" class="btn-next">Следующий урок →</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="../js/app.js"></script>
+</body>
+</html>

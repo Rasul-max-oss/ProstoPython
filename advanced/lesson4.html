@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Визуализация в Matplotlib | ProstoPython</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        * { box-sizing: border-box; }
+        .lesson-section { margin-bottom: clamp(35px, 5vw, 55px); }
+        .lesson-header h1 {
+            font-size: clamp(32px, 7vw, 48px);
+            margin: 0 0 clamp(20px, 3vw, 25px) 0;
+            background: linear-gradient(90deg, #fff, #00FF41);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .lead {
+            font-size: clamp(18px, 4.5vw, 22px);
+            color: #888;
+            line-height: 1.7;
+            margin-bottom: clamp(35px, 5vw, 45px);
+        }
+        h2 {
+            font-size: clamp(26px, 6vw, 36px);
+            color: #00FF41;
+            margin-bottom: clamp(20px, 3vw, 25px);
+        }
+        h3 {
+            font-size: clamp(22px, 5vw, 28px);
+            color: #fff;
+            margin-top: clamp(30px, 4vw, 40px);
+            margin-bottom: clamp(15px, 3vw, 20px);
+        }
+        p, li {
+            font-size: clamp(16px, 4vw, 18px);
+            line-height: 1.7;
+        }
+        ul, ol { padding-left: clamp(25px, 5vw, 35px); }
+        .code-window {
+            background: #0a0c0b;
+            border: 1px solid rgba(0, 255, 65, 0.15);
+            border-radius: clamp(14px, 3vw, 18px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            overflow: hidden;
+        }
+        .window-header {
+            background: rgba(255, 255, 255, 0.05);
+            padding: clamp(12px, 2vw, 15px) clamp(18px, 3vw, 25px);
+            font-family: monospace;
+            font-size: clamp(13px, 3vw, 15px);
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .output-label {
+            color: #00FF41;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        pre { margin: 0; padding: clamp(20px, 4vw, 30px); overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        code { font-family: 'Fira Code', monospace; font-size: clamp(14px, 3vw, 16px); line-height: 1.6; }
+        .pro-tip {
+            background: rgba(0, 255, 65, 0.06);
+            border-left: 4px solid #00FF41;
+            padding: clamp(18px, 4vw, 22px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            border-radius: 10px;
+        }
+        .pro-tip strong { color: #00FF41; font-size: clamp(16px, 4vw, 18px); }
+        .pro-tip p { margin: 10px 0 0 0; font-size: clamp(15px, 3.5vw, 17px); }
+        .progress-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 18px 24px;
+            margin: 25px 0 35px 0;
+        }
+        .progress-labels { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #999; }
+        .progress-bar { height: 10px; background: rgba(0, 0, 0, 0.4); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #00FF41, #00cc33); border-radius: 10px; transition: width 0.3s ease; }
+        .lesson-nav {
+            margin-top: auto;
+            padding-top: clamp(35px, 6vw, 55px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: clamp(20px, 4vw, 30px);
+            flex-wrap: wrap;
+        }
+        .btn-prev, .btn-next {
+            display: inline-flex;
+            align-items: center;
+            padding: clamp(14px, 3vw, 18px) clamp(25px, 5vw, 40px);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+            font-size: clamp(15px, 3.5vw, 17px);
+            white-space: nowrap;
+        }
+        .btn-prev { color: #666; background: rgba(255, 255, 255, 0.05); }
+        .btn-prev:hover { color: #00FF41; background: rgba(0, 255, 65, 0.1); }
+        .btn-next { background: #00FF41; color: #000; box-shadow: 0 10px 25px rgba(0, 255, 65, 0.15); }
+        .btn-next:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0, 255, 65, 0.25); }
+        .concept-box {
+            background: rgba(0, 194, 255, 0.05);
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            border-radius: 12px;
+            padding: clamp(20px, 4vw, 25px);
+            margin: clamp(25px, 5vw, 35px) 0;
+        }
+        .concept-box h4 {
+            color: #00c2ff;
+            margin: 0 0 15px 0;
+            font-size: clamp(18px, 4vw, 20px);
+        }
+        .concept-box p { margin: 0; }
+        .figure-caption {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        @media (max-width: 640px) {
+            .lesson-nav { flex-direction: column-reverse; gap: 18px; }
+            .btn-prev, .btn-next { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body class="lesson-page">
+
+    <div id="header-placeholder"></div>
+
+    <div class="container lesson-layout">
+        <aside class="sidebar" id="sidebar-placeholder"></aside>
+
+        <main class="content">
+            <nav class="breadcrumb">Продвинутый курс / Урок 4</nav>
+
+            <div class="progress-container">
+                <div class="progress-labels">
+                    <span>Прогресс курса</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <section class="lesson-header">
+                <h1>Визуализация данных в Matplotlib</h1>
+                <p class="lead">Matplotlib — самая популярная библиотека для построения графиков в Python. Научимся создавать линейные графики, столбчатые диаграммы, круговые диаграммы и многое другое.</p>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Установка и начало работы</h2>
+                <p>Matplotlib не входит в стандартную библиотеку Python, поэтому её нужно установить.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Установка</span>
+                    </div>
+                    <pre><code>pip install matplotlib</code></pre>
+                </div>
+
+                <div class="concept-box">
+                    <h4>Основные компоненты</h4>
+                    <p><strong>Figure</strong> —整个 фигура (окно или файл с графиком)<br>
+                    <strong>Axes</strong> — область с осями координат (сам график)<br>
+                    <strong>Plot</strong> — линия или точки на графике</p>
+                </div>
+
+                <h3>Простой линейный график</h3>
+                <p>Начнём с базового примера — график функции y = x².</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 1: Первый график</span>
+                    </div>
+                    <pre><code class="language-python">import matplotlib.pyplot as plt
+
+# Данные для графика
+x = [1, 2, 3, 4, 5]
+y = [1, 4, 9, 16, 25]  # x в квадрате
+
+# Создаём график
+plt.plot(x, y)
+
+# Добавляем подписи
+plt.xlabel('Ось X')
+plt.ylabel('Ось Y')
+plt.title('Простой линейный график')
+
+# Показываем график
+plt.show()</code></pre>
+                </div>
+
+                <p><strong>Что получится:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Результат</span>
+                        <span class="output-label">Визуализация</span>
+                    </div>
+                    <pre><code>
+    Y
+    |
+ 25 |               *
+    |
+ 16 |           *
+    |
+  9 |       *
+    |
+  4 |   *
+    |
+  1 |*
+    +---+---+---+---+--- X
+    1   2   3   4   5
+
+Линия соединяет точки (1,1), (2,4), (3,9), (4,16), (5,25)
+</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    <code>plt.plot()</code> — создаёт линейный график<br>
+                    <code>plt.show()</code> — отображает график в окне<br>
+                    <code>plt.savefig('graph.png')</code> — сохраняет график в файл
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Настройка стиля графика</h2>
+                <p>Можно изменить цвет, толщину линии, добавить маркеры точек.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 2: Стилизация</span>
+                    </div>
+                    <pre><code class="language-python">import matplotlib.pyplot as plt
+
+x = [1, 2, 3, 4, 5]
+y = [1, 4, 9, 16, 25]
+
+# 'o-' означает: точки (o) соединённые линией (-)
+# color='red' — цвет линии
+# linewidth=2 — толщина линии
+# markersize=8 — размер маркеров
+plt.plot(x, y, 'o-', color='green', linewidth=2, markersize=8)
+
+# Сетка для удобства
+plt.grid(True, alpha=0.3)
+
+plt.xlabel('Значения X')
+plt.ylabel('Значения Y')
+plt.title('График с настройкой стиля')
+
+plt.show()</code></pre>
+                </div>
+
+                <div class="concept-box">
+                    <h4>Форматы линии</h4>
+                    <p><code>'-'</code> — сплошная линия<br>
+                    <code>'--'</code> — пунктир<br>
+                    <code>'o'</code> — только точки<br>
+                    <code>'s'</code> — квадраты<br>
+                    <code>'^'</code> — треугольники<br>
+                    <code>'*'</code> — звёздочки</p>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Несколько линий на одном графике</h2>
+                <p>Часто нужно сравнить несколько наборов данных.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 3: Несколько линий</span>
+                    </div>
+                    <pre><code class="language-python">import matplotlib.pyplot as plt
+
+x = [1, 2, 3, 4, 5]
+y1 = [1, 4, 9, 16, 25]    # x²
+y2 = [1, 8, 27, 64, 125]  # x³
+
+# Строим два графика на одних осях
+plt.plot(x, y1, 'o-', label='x²', color='blue')
+plt.plot(x, y2, 's--', label='x³', color='red')
+
+# Добавляем легенду
+plt.legend()
+
+plt.grid(True, alpha=0.3)
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.title('Сравнение двух функций')
+
+plt.show()</code></pre>
+                </div>
+
+                <p><strong>Что получится:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Результат</span>
+                        <span class="output-label">Визуализация</span>
+                    </div>
+                    <pre><code>
+    Y
+    |
+125 |                   □ x³
+    |
+ 64 |               □
+    |           □
+ 25 |       *       □
+    |   *       *
+  9 | *       *
+    |
+  1 |*___*___*___*___*
+    +---+---+---+---+--- X
+    1   2   3   4   5
+
+Синяя линия с точками (o) — x²
+Красная пунктирная с квадратами (□) — x³
+</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Столбчатая диаграмма</h2>
+                <p>Столбчатые диаграммы (bar charts) используются для сравнения категорий.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 4: Столбчатая диаграмма</span>
+                    </div>
+                    <pre><code class="language-python">import matplotlib.pyplot as plt
+
+# Категории и значения
+categories = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май']
+sales = [120, 150, 95, 180, 210]
+
+# Создаём столбчатую диаграмму
+plt.bar(categories, sales, color='skyblue', edgecolor='blue')
+
+# Добавляем значения на столбцы
+for i, v in enumerate(sales):
+    plt.text(i, v + 5, str(v), ha='center', fontsize=10)
+
+plt.xlabel('Месяц')
+plt.ylabel('Продажи (тыс. руб.)')
+plt.title('Продажи по месяцам')
+
+# Поворачиваем подписи месяцев
+plt.xticks(rotation=45)
+
+plt.tight_layout()  # Автоматически подгоняет размеры
+plt.show()</code></pre>
+                </div>
+
+                <p><strong>Что получится:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Результат</span>
+                        <span class="output-label">Визуализация</span>
+                    </div>
+                    <pre><code>Продажи (тыс. руб.)
+    |
+210 |                   [210]
+    |               [180]
+180 |                   █
+    |       [150]       █
+150 |       █           █
+    |   [120] █     [95]█
+120 |   █     █       █
+    |   █     █       █
+ 90 |   █     █       █
+    +---+-----+-----+-----+-----
+       Янв   Фев   Мар   Апр   Май
+</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Горизонтальная столбчатая диаграмма</h2>
+                <p>Удобна, когда названия категорий длинные.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 5: Горизонтальные столбцы</span>
+                    </div>
+                    <pre><code class="language-python">import matplotlib.pyplot as plt
+
+# Данные
+products = ['Ноутбуки', 'Смартфоны', 'Планшеты', 'Наушники', 'Часы']
+revenue = [450, 380, 120, 95, 75]  # в тысячах рублей
+
+# Горизонтальная диаграмма (barh)
+plt.barh(products, revenue, color='coral')
+
+# Добавляем значения
+for i, v in enumerate(revenue):
+    plt.text(v + 10, i, f'{v} тыс.', va='center', fontsize=10)
+
+plt.xlabel('Выручка (тыс. руб.)')
+plt.title('Продажи по категориям товаров')
+
+plt.tight_layout()
+plt.show()</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Круговая диаграмма</h2>
+                <p>Показывает доли целого. Идеально для отображения процентов.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 6: Круговая диаграмма</span>
+                    </div>
+                    <pre><code class="language-python">import matplotlib.pyplot as plt
+
+# Данные
+categories = ['Продукты', 'Транспорт', 'Развлечения', 'Коммуналка', 'Другое']
+expenses = [15000, 5000, 8000, 6000, 4000]
+
+# Цвета для каждого сектора
+colors = ['#ff9999', '#66b3ff', '#99ff99', '#ffcc99', '#c2c2f0']
+
+# Создаём круговую диаграмму
+plt.figure(figsize=(8, 8))  # Размер фигуры
+plt.pie(
+    expenses,
+    labels=categories,
+    colors=colors,
+    autopct='%1.1f%%',  # Формат процентов
+    startangle=90,       # Начальный угол
+    explode=(0.1, 0, 0, 0, 0),  # Выделяем первый сектор
+    shadow=True
+)
+
+plt.title('Расходы семьи за месяц')
+plt.axis('equal')  # Круг будет кругом, а не овалом
+plt.show()</code></pre>
+                </div>
+
+                <p><strong>Что получится:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Результат</span>
+                        <span class="output-label">Визуализация</span>
+                    </div>
+                    <pre><code>
+        Расходы семьи за месяц
+        
+        ┌─────────────┐
+        │    ╱40.0%╲  │  Продукты (выделен)
+        │   ╱       ╲ │  15000 руб.
+        │  │  Развл. │ │
+        │  │ 21.1%  │ │
+        │   ╲       ╱ │
+        │    ╲_____╱  │
+        └─────────────┘
+        
+Всего расходов: 38 000 руб.
+</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    <code>explode</code> — "вытягивает" сектор из центра (кортеж с 0 и 0.1)<br>
+                    <code>autopct</code> — автоматически добавляет проценты<br>
+                    <code>startangle</code> — угол начала первого сектора
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Гистограмма</h2>
+                <p>Гистограмма показывает распределение данных по интервалам.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 7: Гистограмма</span>
+                    </div>
+                    <pre><code class="language-python">import matplotlib.pyplot as plt
+import random
+
+# Генерируем случайные данные (оценки студентов)
+random.seed(42)
+grades = [random.randint(2, 5) for _ in range(100)]
+
+# Создаём гистограмму
+plt.figure(figsize=(10, 6))
+plt.hist(grades, bins=4, color='steelblue', edgecolor='black', alpha=0.7)
+
+# bins=4 означает 4 интервала (2, 3, 4, 5)
+plt.xlabel('Оценка')
+plt.ylabel('Количество студентов')
+plt.title('Распределение оценок за экзамен')
+
+# Добавляем сетку
+plt.grid(axis='y', alpha=0.3)
+
+plt.show()
+
+# Печатаем статистику
+from collections import Counter
+counts = Counter(grades)
+print("Статистика оценок:")
+for grade in sorted(counts.keys()):
+    print(f"  Оценка {grade}: {counts[grade]} студентов")</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Статистика оценок:
+  Оценка 2: 8 студентов
+  Оценка 3: 22 студента
+  Оценка 4: 38 студентов
+  Оценка 5: 32 студента
+
+На гистограмме видно, что большинство получили 4 и 5
+</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Точечная диаграмма (Scatter plot)</h2>
+                <p>Показывает взаимосвязь между двумя переменными.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 8: Точечная диаграмма</span>
+                    </div>
+                    <pre><code class="language-python">import matplotlib.pyplot as plt
+
+# Данные: возраст и зарплата
+age = [22, 25, 28, 32, 35, 38, 42, 45, 48, 52]
+salary = [45, 52, 58, 65, 72, 80, 88, 95, 100, 110]  # в тысячах
+
+plt.figure(figsize=(10, 6))
+plt.scatter(age, salary, color='purple', s=100, alpha=0.6)
+
+# Добавляем подписи к точкам
+for i, txt in enumerate(age):
+    plt.annotate(f'{age[i]} лет', (age[i], salary[i]), 
+                 xytext=(5, 5), textcoords='offset points',
+                 fontsize=8, alpha=0.7)
+
+plt.xlabel('Возраст (лет)')
+plt.ylabel('Зарплата (тыс. руб.)')
+plt.title('Зависимость зарплаты от возраста')
+plt.grid(True, alpha=0.3)
+
+plt.show()</code></pre>
+                </div>
+
+                <p><strong>Что получится:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Результат</span>
+                        <span class="output-label">Визуализация</span>
+                    </div>
+                    <pre><code>Зарплата (тыс. руб.)
+    |
+110 |                       • 52 года
+    |                   •
+100 |               •
+    |           •
+ 80 |       •
+    |   •
+ 60 | •
+    | •
+ 40 |•
+    +---+---+---+---+---+---+---+---+---+--- Возраст
+     20  25  30  35  40  45  50  55  60
+
+Видна положительная корреляция: с возрастом зарплата растёт
+</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Сохранение графика в файл</h2>
+                <p>Графики можно сохранять для отчётов и презентаций.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 9: Сохранение</span>
+                    </div>
+                    <pre><code class="language-python">import matplotlib.pyplot as plt
+
+x = [1, 2, 3, 4, 5]
+y = [1, 4, 9, 16, 25]
+
+plt.figure(figsize=(10, 6))
+plt.plot(x, y, 'o-', linewidth=2, color='green')
+plt.grid(True, alpha=0.3)
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.title('График функции y = x²')
+
+# Сохраняем в файл
+# dpi=300 — высокое качество для печати
+# bbox_inches='tight' — обрезает лишние поля
+plt.savefig('graph.png', dpi=300, bbox_inches='tight')
+plt.savefig('graph.pdf', bbox_inches='tight')  # PDF для печати
+
+print("Графики сохранены:")
+print("  - graph.png (300 DPI)")
+print("  - graph.pdf (векторный)")
+
+# После savefig() можно показать график
+plt.show()</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Графики сохранены:
+  - graph.png (300 DPI)
+  - graph.pdf (векторный)</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    Форматы файлов:<br>
+                    <code>.png</code> — растровый, для веба<br>
+                    <code>.pdf</code> — векторный, для печати<br>
+                    <code>.svg</code> — векторный, для веба<br>
+                    <code>.jpg</code> — растровый, меньше размер
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Практический проект: Визуализация продаж</h2>
+                <p>Создадим полный отчёт с несколькими графиками.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>report.py</span>
+                        <span class="output-label">Пример 10: Полный отчёт</span>
+                    </div>
+                    <pre><code class="language-python">import matplotlib.pyplot as plt
+
+# Данные о продажах
+months = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн']
+online_sales = [120, 135, 150, 180, 200, 220]
+offline_sales = [80, 75, 70, 65, 60, 55]
+
+# Создаём фигуру с двумя графиками
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+
+# График 1: Линейный график сравнения
+ax1.plot(months, online_sales, 'o-', label='Онлайн', 
+         color='green', linewidth=2, markersize=8)
+ax1.plot(months, offline_sales, 's--', label='Офлайн', 
+         color='red', linewidth=2, markersize=8)
+ax1.set_xlabel('Месяц')
+ax1.set_ylabel('Продажи (тыс. руб.)')
+ax1.set_title('Динамика продаж')
+ax1.legend()
+ax1.grid(True, alpha=0.3)
+
+# График 2: Столбчатая диаграмма общей выручки
+total = [o + f for o, f in zip(online_sales, offline_sales)]
+colors = ['skyblue' if t < 200 else 'coral' for t in total]
+ax2.bar(months, total, color=colors, edgecolor='black')
+ax2.set_xlabel('Месяц')
+ax2.set_ylabel('Общая выручка (тыс. руб.)')
+ax2.set_title('Общая выручка по месяцам')
+
+# Добавляем значения на столбцы
+for i, v in enumerate(total):
+    ax2.text(i, v + 5, str(v), ha='center', fontsize=10)
+
+plt.tight_layout()
+plt.savefig('sales_report.png', dpi=150, bbox_inches='tight')
+print("Отчёт сохранён в sales_report.png")
+plt.show()</code></pre>
+                </div>
+
+                <p><strong>Результат:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Файл</span>
+                        <span class="output-label">sales_report.png</span>
+                    </div>
+                    <pre><code>
+┌─────────────────────────────────────────────────────────────┐
+│  Динамика продаж          │    Общая выручка по месяцам    │
+│                           │                                 │
+│     Онлайн ═══            │     [200] [215] [220]           │
+│     Офлайн ---            │      █     █     █  [275]       │
+│                           │      █     █     █     █        │
+│  220|         ●═══●       │      █     █     █     █        │
+│  200|     ●═══●   ╲       │  ____█_____█_____█_____█____    │
+│  150| ●═══●       ╲       │   Янв  Фев  Мар  Апр  Май  Июн  │
+│  100| ╲   ╲       ╲       │                                 │
+│   50|  ╲___╲___╱ ╲___╱   │                                 │
+│                           │                                 │
+│   Янв Фев Мар Апр Май Июн │                                 │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Итоги урока</h2>
+                <div class="concept-box">
+                    <h4>Что вы изучили</h4>
+                    <ul>
+                        <li><code>plt.plot()</code> — линейный график</li>
+                        <li><code>plt.bar()</code> — столбчатая диаграмма</li>
+                        <li><code>plt.barh()</code> — горизонтальная диаграмма</li>
+                        <li><code>plt.pie()</code> — круговая диаграмма</li>
+                        <li><code>plt.hist()</code> — гистограмма распределения</li>
+                        <li><code>plt.scatter()</code> — точечная диаграмма</li>
+                        <li><code>plt.savefig()</code> — сохранение в файл</li>
+                        <li>Настройка цветов, маркеров, стилей линий</li>
+                        <li>Создание нескольких графиков на одной фигуре</li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="lesson-nav">
+                <a href="lesson3.html" class="btn-prev">← Предыдущий урок</a>
+                <a href="lesson5.html" class="btn-next">Следующий урок →</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="../js/app.js"></script>
+</body>
+</html>

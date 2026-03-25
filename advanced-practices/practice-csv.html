@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Задачи: CSV | ProstoPython</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { background: radial-gradient(circle at top right, #1a2a22, #0a0c0b); min-height: 100vh; margin: 0; font-family: 'Inter', sans-serif; padding-bottom: 60px; }
+        .practice-header-fixed { position: fixed; top: 0; left: 0; right: 0; background: rgba(10, 12, 11, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0, 255, 65, 0.1); padding: 15px 25px; z-index: 1000; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .header-logo { font-size: 18px; font-weight: 800; color: #00FF41; text-decoration: none; letter-spacing: -0.5px; }
+        .header-logo:hover { color: #00c2ff; }
+        .header-nav { display: flex; gap: 10px; flex-wrap: wrap; }
+        .header-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; background: rgba(255, 255, 255, 0.05); color: #ccc; }
+        .header-btn:hover { background: rgba(0, 255, 65, 0.15); color: #00FF41; }
+        .header-btn.primary { background: rgba(0, 255, 65, 0.15); color: #00FF41; }
+        .header-btn.primary:hover { background: rgba(0, 255, 65, 0.25); }
+        .practice-container { max-width: 900px; margin: 0 auto; padding: 100px 20px 60px 20px; }
+        h1 { font-size: clamp(36px, 7vw, 52px); margin: 0 0 15px 0; color: #00FF41; font-weight: 800; letter-spacing: -0.5px; }
+        .topic-desc { font-size: clamp(18px, 4.5vw, 22px); color: #999; margin-bottom: 40px; line-height: 1.6; }
+        .task-level { font-size: clamp(22px, 5vw, 28px); font-weight: 800; color: #00c2ff; margin: 50px 0 25px 0; padding-bottom: 12px; border-bottom: 2px solid rgba(0, 194, 255, 0.25); letter-spacing: -0.3px; }
+        .task-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 255, 65, 0.12); border-radius: 18px; padding: 30px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); }
+        .task-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+        .task-num { font-size: clamp(18px, 4.5vw, 21px); font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+        .task-difficulty { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+        .task-difficulty.easy { background: rgba(0, 255, 65, 0.18); color: #00FF41; }
+        .task-difficulty.medium { background: rgba(255, 194, 0, 0.18); color: #ffc200; }
+        .task-difficulty.hard { background: rgba(255, 82, 82, 0.18); color: #ff5252; }
+        .task-description { font-size: clamp(17px, 4vw, 19px); line-height: 1.7; color: #ddd; margin-bottom: 22px; }
+        .task-hint { background: rgba(0, 194, 255, 0.08); border-left: 3px solid #00c2ff; padding: 15px; margin: 20px 0; border-radius: 0 10px 10px 0; }
+        .task-hint-title { color: #00c2ff; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
+        .task-hint-text { color: #888; font-size: 14px; margin: 0; }
+        .task-io { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-top: 22px; }
+        .io-example { background: rgba(0, 0, 0, 0.35); border-radius: 12px; padding: 18px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .io-label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: block; }
+        .io-label.input { color: #00c2ff; }
+        .io-label.output { color: #00FF41; }
+        .io-code { font-family: 'JetBrains Mono', monospace; font-size: clamp(14px, 3.5vw, 16px); color: #fff; display: block; white-space: pre-wrap; word-break: break-all; line-height: 1.5; }
+        .task-solution { margin-top: 25px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+        .solution-toggle { background: none; border: 1px solid rgba(0, 255, 65, 0.3); color: #00FF41; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-size: 15px; font-weight: 600; transition: 0.3s; }
+        .solution-toggle:hover { background: rgba(0, 255, 65, 0.12); border-color: #00FF41; }
+        .solution-code { display: none; margin-top: 18px; background: rgba(0, 0, 0, 0.5); border-radius: 12px; padding: 22px; overflow-x: auto; border: 1px solid rgba(0, 255, 65, 0.1); }
+        .solution-code pre { margin: 0; }
+        .solution-code code { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: #a5d6ff; line-height: 1.6; }
+        @media (max-width: 640px) { .practice-header-fixed { padding: 12px 15px; } .header-nav { justify-content: flex-end; } .practice-container { padding: 90px 15px 50px 15px; } .task-header { flex-direction: column; align-items: flex-start; } .task-io { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header class="practice-header-fixed">
+        <div class="header-left">
+            <a href="../index.html" class="header-logo">ProstoPython</a>
+            <a href="index.html" class="header-btn">← Все темы</a>
+        </div>
+        <div class="header-nav">
+            <a href="../advanced/index.html" class="header-btn">📚 Уроки</a>
+            <a href="practice-csv.html" class="header-btn primary">📝 CSV</a>
+        </div>
+    </header>
+
+    <div class="practice-container">
+        <h1>Обработка CSV</h1>
+        <p class="topic-desc">8 задач для отработки работы с CSV-файлами</p>
+
+        <h2 class="task-level">📌 Уровень 1: Основы CSV</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 1: Чтение CSV</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Создайте CSV-файл с данными о продуктах (название, цена, количество) и прочитайте его.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Продукт: Яблоки, Цена: 100, Кол-во: 50
+Продукт: Молоко, Цена: 80, Кол-во: 30</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import csv
+
+# Создаём CSV
+with open('products.csv', 'w', newline='', encoding='utf-8') as f:
+    writer = csv.writer(f)
+    writer.writerow(['Название', 'Цена', 'Количество'])
+    writer.writerow(['Яблоки', 100, 50])
+    writer.writerow(['Молоко', 80, 30])
+    writer.writerow(['Хлеб', 45, 100])
+
+# Читаем CSV
+with open('products.csv', 'r', encoding='utf-8') as f:
+    reader = csv.reader(f)
+    for row in reader:
+        if row:  # Пропускаем пустые строки
+            print(f"Продукт: {row[0]}, Цена: {row[1]}, Кол-во: {row[2]}")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 2: DictReader</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Прочитайте CSV файл используя DictReader и выведите продукты дороже 50 руб.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Яблоки: 100 руб.
+Молоко: 80 руб.</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import csv
+
+with open('products.csv', 'r', encoding='utf-8') as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        if int(row['Цена']) > 50:
+            print(f"{row['Название']}: {row['Цена']} руб.")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 3: Запись CSV</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Создайте CSV файл с данными о сотрудниках используя DictWriter.</p>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import csv
+
+employees = [
+    {'name': 'Анна', 'age': 25, 'city': 'Москва'},
+    {'name': 'Борис', 'age': 32, 'city': 'СПб'},
+    {'name': 'Виктор', 'age': 28, 'city': 'Казань'}
+]
+
+with open('employees.csv', 'w', newline='', encoding='utf-8') as f:
+    fieldnames = ['name', 'age', 'city']
+    writer = csv.DictWriter(f, fieldnames=fieldnames)
+    writer.writeheader()
+    writer.writerows(employees)
+
+print("Файл employees.csv создан!")</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">📌 Уровень 2: Анализ данных</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 4: Подсчёт суммы</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Прочитайте CSV с продуктами и посчитайте общую стоимость всех товаров (цена × количество).</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Общая стоимость: 11 900 руб.</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import csv
+
+total = 0
+with open('products.csv', 'r', encoding='utf-8') as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        price = int(row['Цена'])
+        quantity = int(row['Количество'])
+        total += price * quantity
+
+print(f"Общая стоимость: {total:,} руб.")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 5: Фильтрация данных</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Создайте новый CSV файл только с продуктами, у которых количество больше 40.</p>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import csv
+
+# Читаем исходный файл
+products = []
+with open('products.csv', 'r', encoding='utf-8') as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        if int(row['Количество']) > 40:
+            products.append(row)
+
+# Записываем отфильтрованные
+with open('filtered_products.csv', 'w', newline='', encoding='utf-8') as f:
+    fieldnames = ['Название', 'Цена', 'Количество']
+    writer = csv.DictWriter(f, fieldnames=fieldnames)
+    writer.writeheader()
+    writer.writerows(products)
+
+print(f"Сохранено {len(products)} продуктов с количеством > 40")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 6: Группировка по городу</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Дан CSV с сотрудниками. Посчитайте количество сотрудников в каждом городе.</p>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import csv
+from collections import Counter
+
+cities = Counter()
+with open('employees.csv', 'r', encoding='utf-8') as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        cities[row['city']] += 1
+
+print("Сотрудников по городам:")
+for city, count in cities.items():
+    print(f"  {city}: {count} чел.")</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">📌 Уровень 3: Практические задачи</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 7: Отчёт о продажах</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Создайте CSV с продажами за неделю. Выведите: общий доход, лучший день, средний чек.</p>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import csv
+
+# Создаём данные
+sales_data = [
+    {'date': '2024-01-01', 'amount': 15000, 'items': 5},
+    {'date': '2024-01-02', 'amount': 22000, 'items': 8},
+    {'date': '2024-01-03', 'amount': 18000, 'items': 6},
+    {'date': '2024-01-04', 'amount': 25000, 'items': 10},
+    {'date': '2024-01-05', 'amount': 30000, 'items': 12},
+    {'date': '2024-01-06', 'amount': 28000, 'items': 9},
+    {'date': '2024-01-07', 'amount': 20000, 'items': 7}
+]
+
+# Сохраняем в CSV
+with open('sales.csv', 'w', newline='', encoding='utf-8') as f:
+    writer = csv.DictWriter(f, fieldnames=['date', 'amount', 'items'])
+    writer.writeheader()
+    writer.writerows(sales_data)
+
+# Анализируем
+total_revenue = sum(s['amount'] for s in sales_data)
+best_day = max(sales_data, key=lambda x: x['amount'])
+avg_check = total_revenue / len(sales_data)
+
+print("=" * 30)
+print("ОТЧЁТ О ПРОДАЖАХ")
+print("=" * 30)
+print(f"Общий доход: {total_revenue:,} руб.")
+print(f"Лучший день: {best_day['date']} ({best_day['amount']:,} руб.)")
+print(f"Средний чек: {avg_check:,.0f} руб.")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 8: Конвертер CSV в JSON</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Напишите функцию, которая конвертирует CSV файл в JSON формат.</p>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import csv
+import json
+
+def csv_to_json(csv_file, json_file):
+    """Конвертирует CSV в JSON"""
+    data = []
+    with open(csv_file, 'r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            # Преобразуем числа
+            for key, value in row.items():
+                if value.isdigit():
+                    row[key] = int(value)
+            data.append(row)
+    
+    with open(json_file, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    
+    print(f"Конвертировано {len(data)} записей")
+
+# Использование
+csv_to_json('products.csv', 'products.json')
+
+# Проверка
+with open('products.json', 'r', encoding='utf-8') as f:
+    print(json.load(f))</code></pre></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Задачи: API и JSON | ProstoPython</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { background: radial-gradient(circle at top right, #1a2a22, #0a0c0b); min-height: 100vh; margin: 0; font-family: 'Inter', sans-serif; padding-bottom: 60px; }
+        .practice-header-fixed { position: fixed; top: 0; left: 0; right: 0; background: rgba(10, 12, 11, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0, 255, 65, 0.1); padding: 15px 25px; z-index: 1000; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .header-logo { font-size: 18px; font-weight: 800; color: #00FF41; text-decoration: none; letter-spacing: -0.5px; }
+        .header-logo:hover { color: #00c2ff; }
+        .header-nav { display: flex; gap: 10px; flex-wrap: wrap; }
+        .header-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; background: rgba(255, 255, 255, 0.05); color: #ccc; }
+        .header-btn:hover { background: rgba(0, 255, 65, 0.15); color: #00FF41; }
+        .header-btn.primary { background: rgba(0, 255, 65, 0.15); color: #00FF41; }
+        .header-btn.primary:hover { background: rgba(0, 255, 65, 0.25); }
+        .practice-container { max-width: 900px; margin: 0 auto; padding: 100px 20px 60px 20px; }
+        h1 { font-size: clamp(36px, 7vw, 52px); margin: 0 0 15px 0; color: #00FF41; font-weight: 800; letter-spacing: -0.5px; }
+        .topic-desc { font-size: clamp(18px, 4.5vw, 22px); color: #999; margin-bottom: 40px; line-height: 1.6; }
+        .task-level { font-size: clamp(22px, 5vw, 28px); font-weight: 800; color: #00c2ff; margin: 50px 0 25px 0; padding-bottom: 12px; border-bottom: 2px solid rgba(0, 194, 255, 0.25); letter-spacing: -0.3px; }
+        .task-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 255, 65, 0.12); border-radius: 18px; padding: 30px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); }
+        .task-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+        .task-num { font-size: clamp(18px, 4.5vw, 21px); font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+        .task-difficulty { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+        .task-difficulty.easy { background: rgba(0, 255, 65, 0.18); color: #00FF41; }
+        .task-difficulty.medium { background: rgba(255, 194, 0, 0.18); color: #ffc200; }
+        .task-difficulty.hard { background: rgba(255, 82, 82, 0.18); color: #ff5252; }
+        .task-description { font-size: clamp(17px, 4vw, 19px); line-height: 1.7; color: #ddd; margin-bottom: 22px; }
+        .task-hint { background: rgba(0, 194, 255, 0.08); border-left: 3px solid #00c2ff; padding: 15px; margin: 20px 0; border-radius: 0 10px 10px 0; }
+        .task-hint-title { color: #00c2ff; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
+        .task-hint-text { color: #888; font-size: 14px; margin: 0; }
+        .task-io { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-top: 22px; }
+        .io-example { background: rgba(0, 0, 0, 0.35); border-radius: 12px; padding: 18px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .io-label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: block; }
+        .io-label.input { color: #00c2ff; }
+        .io-label.output { color: #00FF41; }
+        .io-code { font-family: 'JetBrains Mono', monospace; font-size: clamp(14px, 3.5vw, 16px); color: #fff; display: block; white-space: pre-wrap; word-break: break-all; line-height: 1.5; }
+        .task-solution { margin-top: 25px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+        .solution-toggle { background: none; border: 1px solid rgba(0, 255, 65, 0.3); color: #00FF41; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-size: 15px; font-weight: 600; transition: 0.3s; }
+        .solution-toggle:hover { background: rgba(0, 255, 65, 0.12); border-color: #00FF41; }
+        .solution-code { display: none; margin-top: 18px; background: rgba(0, 0, 0, 0.5); border-radius: 12px; padding: 22px; overflow-x: auto; border: 1px solid rgba(0, 255, 65, 0.1); }
+        .solution-code pre { margin: 0; }
+        .solution-code code { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: #a5d6ff; line-height: 1.6; }
+        @media (max-width: 640px) { .practice-header-fixed { padding: 12px 15px; } .header-nav { justify-content: flex-end; } .practice-container { padding: 90px 15px 50px 15px; } .task-header { flex-direction: column; align-items: flex-start; } .task-io { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header class="practice-header-fixed">
+        <div class="header-left">
+            <a href="../index.html" class="header-logo">ProstoPython</a>
+            <a href="index.html" class="header-btn">← Все темы</a>
+        </div>
+        <div class="header-nav">
+            <a href="../advanced/index.html" class="header-btn">📚 Уроки</a>
+            <a href="practice-api-json.html" class="header-btn primary">📝 API и JSON</a>
+        </div>
+    </header>
+
+    <div class="practice-container">
+        <h1>API и JSON</h1>
+        <p class="topic-desc">10 задач для отработки работы с API и JSON-данными</p>
+
+        <h2 class="task-level">📌 Уровень 1: Основы JSON</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 1: Парсинг JSON</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Дана JSON-строка с данными пользователя. Распарсите её и выведите имя и email.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">JSON:</span><code class="io-code">{"name": "Алекс", "email": "alex@example.com", "age": 25}</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Алекс, alex@example.com</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import json
+
+json_string = '{"name": "Алекс", "email": "alex@example.com", "age": 25}'
+data = json.loads(json_string)
+
+print(f"{data['name']}, {data['email']}")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 2: Создание JSON</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Создайте словарь с данными о книге и преобразуйте его в JSON-строку с отступами.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">{
+  "title": "Война и мир",
+  "author": "Толстой",
+  "year": 1869
+}</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import json
+
+book = {
+    "title": "Война и мир",
+    "author": "Толстой",
+    "year": 1869
+}
+
+json_string = json.dumps(book, ensure_ascii=False, indent=2)
+print(json_string)</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 3: Список пользователей</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Дан JSON-массив пользователей. Выведите имена всех пользователей старше 30 лет.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">JSON:</span><code class="io-code">[{"name": "Анна", "age": 35}, {"name": "Борис", "age": 28}, {"name": "Виктор", "age": 42}]</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Анна (35)
+Виктор (42)</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import json
+
+json_string = '[{"name": "Анна", "age": 35}, {"name": "Борис", "age": 28}, {"name": "Виктор", "age": 42}]'
+users = json.loads(json_string)
+
+for user in users:
+    if user['age'] > 30:
+        print(f"{user['name']} ({user['age']})")</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">📌 Уровень 2: Работа с API</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 4: GET-запрос</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Сделайте GET-запрос к JSONPlaceholder API и выведите заголовки первых 3 постов.</p>
+            <div class="task-hint">
+                <div class="task-hint-title">💡 Подсказка</div>
+                <p class="task-hint-text">Используйте endpoint: https://jsonplaceholder.typicode.com/posts</p>
+            </div>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">1. sunt aut facere repellat...
+2. qui est esse...
+3. ea molestias quasi...</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import requests
+
+response = requests.get('https://jsonplaceholder.typicode.com/posts')
+posts = response.json()
+
+for post in posts[:3]:
+    print(f"{post['id']}. {post['title'][:30]}...")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 5: Данные пользователя</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Получите данные пользователя с ID=1 с JSONPlaceholder и выведите его имя, email и город.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Имя: Leanne Graham
+Email: Sincere@april.biz
+Город: Gulfton</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import requests
+
+response = requests.get('https://jsonplaceholder.typicode.com/users/1')
+user = response.json()
+
+print(f"Имя: {user['name']}")
+print(f"Email: {user['email']}")
+print(f"Город: {user['address']['city']}")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 6: Фильтрация постов</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Получите все посты пользователя с userId=1 и выведите их количество и заголовки.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Найдено постов: 10
+1. sunt aut facere...
+2. qui est esse...
+...</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import requests
+
+response = requests.get(
+    'https://jsonplaceholder.typicode.com/posts',
+    params={'userId': 1}
+)
+posts = response.json()
+
+print(f"Найдено постов: {len(posts)}")
+for post in posts:
+    print(f"{post['id']}. {post['title'][:30]}...")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 7: POST-запрос</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Отправьте POST-запрос для создания нового поста. Выведите ответ сервера.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Создан пост с ID: 101
+Заголовок: Мой новый пост</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import requests
+
+new_post = {
+    'title': 'Мой новый пост',
+    'body': 'Это текст поста',
+    'userId': 1
+}
+
+response = requests.post(
+    'https://jsonplaceholder.typicode.com/posts',
+    json=new_post
+)
+
+created = response.json()
+print(f"Создан пост с ID: {created['id']}")
+print(f"Заголовок: {created['title']}")</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">📌 Уровень 3: Практические задачи</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 8: Погодное приложение</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Создайте функцию get_weather(city), которая получает погоду из OpenWeatherMap API.</p>
+            <div class="task-hint">
+                <div class="task-hint-title">💡 Подсказка</div>
+                <p class="task-hint-text">Используйте бесплатный API ключ или тестовые данные. Endpoint: api.openweathermap.org/data/2.5/weather</p>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import requests
+
+API_KEY = "ваш_api_ключ"  # Замените на свой
+
+def get_weather(city):
+    url = "https://api.openweathermap.org/data/2.5/weather"
+    params = {
+        'q': city,
+        'appid': API_KEY,
+        'units': 'metric',
+        'lang': 'ru'
+    }
+    
+    response = requests.get(url, params=params)
+    data = response.json()
+    
+    temp = data['main']['temp']
+    feels_like = data['main']['feels_like']
+    desc = data['weather'][0]['description']
+    
+    print(f"Погода в городе {city}:")
+    print(f"  Температура: {temp}°C (ощущается как {feels_like}°C)")
+    print(f"  Описание: {desc.capitalize()}")
+
+# Пример
+get_weather("Moscow")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 9: Агрегация данных</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Получите все комментарии к постам с postId=1 и подсчитайте количество комментариев каждого пользователя.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Пользователь 1: 2 комм.
+Пользователь 3: 1 комм.
+Пользователь 2: 1 комм.
+Пользователь 5: 1 комм.</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import requests
+from collections import Counter
+
+response = requests.get(
+    'https://jsonplaceholder.typicode.com/comments',
+    params={'postId': 1}
+)
+comments = response.json()
+
+# Считаем комментарии по пользователям
+user_counts = Counter(c['email'] for c in comments)
+
+print("Комментарии по пользователям:")
+for email, count in user_counts.items():
+    print(f"  {email}: {count} комм.")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 10: JSON to CSV</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Получите данные о пользователях и сохраните их в CSV-файл.</p>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import requests
+import csv
+
+# Получаем пользователей
+response = requests.get('https://jsonplaceholder.typicode.com/users')
+users = response.json()
+
+# Сохраняем в CSV
+with open('users.csv', 'w', newline='', encoding='utf-8') as f:
+    writer = csv.DictWriter(f, fieldnames=['id', 'name', 'email', 'city'])
+    writer.writeheader()
+    
+    for user in users:
+        writer.writerow({
+            'id': user['id'],
+            'name': user['name'],
+            'email': user['email'],
+            'city': user['address']['city']
+        })
+
+print(f"Сохранено {len(users)} пользователей в users.csv")</code></pre></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

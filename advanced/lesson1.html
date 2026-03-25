@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>ООП — Классы и объекты | ProstoPython</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        * { box-sizing: border-box; }
+        .lesson-section { margin-bottom: clamp(35px, 5vw, 55px); }
+        .lesson-header h1 {
+            font-size: clamp(32px, 7vw, 48px);
+            margin: 0 0 clamp(20px, 3vw, 25px) 0;
+            background: linear-gradient(90deg, #fff, #00FF41);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .lead {
+            font-size: clamp(18px, 4.5vw, 22px);
+            color: #888;
+            line-height: 1.7;
+            margin-bottom: clamp(35px, 5vw, 45px);
+        }
+        h2 {
+            font-size: clamp(26px, 6vw, 36px);
+            color: #00FF41;
+            margin-bottom: clamp(20px, 3vw, 25px);
+        }
+        h3 {
+            font-size: clamp(22px, 5vw, 28px);
+            color: #fff;
+            margin-top: clamp(30px, 4vw, 40px);
+            margin-bottom: clamp(15px, 3vw, 20px);
+        }
+        p, li {
+            font-size: clamp(16px, 4vw, 18px);
+            line-height: 1.7;
+        }
+        ul, ol { padding-left: clamp(25px, 5vw, 35px); }
+        .code-window {
+            background: #0a0c0b;
+            border: 1px solid rgba(0, 255, 65, 0.15);
+            border-radius: clamp(14px, 3vw, 18px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            overflow: hidden;
+        }
+        .window-header {
+            background: rgba(255, 255, 255, 0.05);
+            padding: clamp(12px, 2vw, 15px) clamp(18px, 3vw, 25px);
+            font-family: monospace;
+            font-size: clamp(13px, 3vw, 15px);
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .output-label {
+            color: #00FF41;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        pre { margin: 0; padding: clamp(20px, 4vw, 30px); overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        code { font-family: 'Fira Code', monospace; font-size: clamp(14px, 3vw, 16px); line-height: 1.6; }
+        .pro-tip {
+            background: rgba(0, 255, 65, 0.06);
+            border-left: 4px solid #00FF41;
+            padding: clamp(18px, 4vw, 22px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            border-radius: 10px;
+        }
+        .pro-tip strong { color: #00FF41; font-size: clamp(16px, 4vw, 18px); }
+        .pro-tip p { margin: 10px 0 0 0; font-size: clamp(15px, 3.5vw, 17px); }
+        .progress-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 18px 24px;
+            margin: 25px 0 35px 0;
+        }
+        .progress-labels { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #999; }
+        .progress-bar { height: 10px; background: rgba(0, 0, 0, 0.4); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #00FF41, #00cc33); border-radius: 10px; transition: width 0.3s ease; }
+        .lesson-nav {
+            margin-top: auto;
+            padding-top: clamp(35px, 6vw, 55px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: clamp(20px, 4vw, 30px);
+            flex-wrap: wrap;
+        }
+        .btn-prev, .btn-next {
+            display: inline-flex;
+            align-items: center;
+            padding: clamp(14px, 3vw, 18px) clamp(25px, 5vw, 40px);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+            font-size: clamp(15px, 3.5vw, 17px);
+            white-space: nowrap;
+        }
+        .btn-prev { color: #666; background: rgba(255, 255, 255, 0.05); }
+        .btn-prev:hover { color: #00FF41; background: rgba(0, 255, 65, 0.1); }
+        .btn-next { background: #00FF41; color: #000; box-shadow: 0 10px 25px rgba(0, 255, 65, 0.15); }
+        .btn-next:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0, 255, 65, 0.25); }
+        .concept-box {
+            background: rgba(0, 194, 255, 0.05);
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            border-radius: 12px;
+            padding: clamp(20px, 4vw, 25px);
+            margin: clamp(25px, 5vw, 35px) 0;
+        }
+        .concept-box h4 {
+            color: #00c2ff;
+            margin: 0 0 15px 0;
+            font-size: clamp(18px, 4vw, 20px);
+        }
+        .concept-box p { margin: 0; }
+        @media (max-width: 640px) {
+            .lesson-nav { flex-direction: column-reverse; gap: 18px; }
+            .btn-prev, .btn-next { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body class="lesson-page">
+
+    <div id="header-placeholder"></div>
+
+    <div class="container lesson-layout">
+        <aside class="sidebar" id="sidebar-placeholder"></aside>
+
+        <main class="content">
+            <nav class="breadcrumb">Продвинутый курс / Урок 1</nav>
+
+            <div class="progress-container">
+                <div class="progress-labels">
+                    <span>Прогресс курса</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <section class="lesson-header">
+                <h1>Объектно-ориентированное программирование</h1>
+                <p class="lead">ООП — это paradigma программирования, где программа состоит из объектов. Это делает код структурированным, понятным и лёгким для расширения.</p>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Что такое класс и объект</h2>
+                <p>Представьте, что вы создаёте игру. В ней есть игрок, враги, предметы. У каждого есть свойства (здоровье, имя, цвет) и действия (атаковать, двигаться, собирать).</p>
+                
+                <div class="concept-box">
+                    <h4>Ключевые понятия</h4>
+                    <p><strong>Класс</strong> — это чертёж, шаблон. Например, чертёж "Автомобиль".<br>
+                    <strong>Объект</strong> — это конкретный экземпляр класса. Например, "красная Toyota Camry 2020 года".</p>
+                </div>
+
+                <p>Рассмотрим на простом примере:</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 1: Простой класс</span>
+                    </div>
+                    <pre><code class="language-python"># Создаём класс Dog (Собака)
+class Dog:
+    # Метод __init__ вызывается при создании объекта
+    def __init__(self, name, age):
+        self.name = name  # Атрибут объекта
+        self.age = age    # Атрибут объекта
+    
+    # Метод — функция внутри класса
+    def bark(self):
+        return f"{self.name} говорит: Гав-гав!"
+
+# Создаём объекты (экземпляры класса)
+dog1 = Dog("Бобик", 3)
+dog2 = Dog("Шарик", 5)
+
+# Обращаемся к атрибутам и методам
+print(f"Имя: {dog1.name}, Возраст: {dog1.age}")
+print(dog1.bark())
+print()
+print(f"Имя: {dog2.name}, Возраст: {dog2.age}")
+print(dog2.bark())</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Имя: Бобик, Возраст: 3
+Бобик говорит: Гав-гав!
+
+Имя: Шарик, Возраст: 5
+Шарик говорит: Гав-гав!</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    <strong>Важно запомнить:</strong>
+                    <ul>
+                        <li><code>__init__</code> — специальный метод, который вызывается автоматически при создании объекта</li>
+                        <li><code>self</code> — ссылка на текущий объект, позволяет обращаться к его атрибутам</li>
+                        <li>Атрибуты (<code>self.name</code>) — данные объекта</li>
+                        <li>Методы (<code>bark()</code>) — действия объекта</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Атрибуты класса и объекта</h2>
+                <p>Атрибуты могут быть общими для всех объектов (атрибуты класса) и уникальными для каждого (атрибуты экземпляра).</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 2: Атрибуты класса и объекта</span>
+                    </div>
+                    <pre><code class="language-python">class Car:
+    # Атрибут класса — общий для всех машин
+    wheels = 4
+    
+    def __init__(self, brand, model, color):
+        # Атрибуты экземпляра — уникальные для каждой машины
+        self.brand = brand
+        self.model = model
+        self.color = color
+    
+    def get_info(self):
+        return f"{self.color} {self.brand} {self.model}"
+
+# Создаём разные машины
+car1 = Car("Toyota", "Camry", "Красная")
+car2 = Car("BMW", "X5", "Чёрный")
+
+print(f"Атрибут класса (колёса у всех): {Car.wheels}")
+print(f"car1: {car1.get_info()}")
+print(f"car2: {car2.get_info()}")
+
+# Можно изменить атрибут класса для всех
+Car.wheels = 6
+print(f"\nПосле изменения: у car1 теперь {car1.wheels} колёс")</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Атрибут класса (колёса у всех): 4
+car1: Красная Toyota Camry
+car2: Чёрный BMW X5
+
+После изменения: у car1 теперь 6 колёс</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Инкапсуляция</h2>
+                <p>Инкапсуляция — это механизм, который скрывает внутреннее состояние объекта и требует изменения только через публичные методы.</p>
+
+                <div class="concept-box">
+                    <h4>Уровни доступа в Python</h4>
+                    <p><code>public</code> (публичный) — атрибут доступен везде<br>
+                    <code>_protected</code> (защищённый) — одно подчёркивание, доступ внутри класса и наследников<br>
+                    <code>__private</code> (приватный) — два подчёркивания, доступ только внутри класса</p>
+                </div>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 3: Инкапсуляция</span>
+                    </div>
+                    <pre><code class="language-python">class BankAccount:
+    def __init__(self, owner, balance):
+        self.owner = owner           # публичный
+        self._balance = balance      # защищённый
+        self.__password = "1234"     # приватный
+    
+    def deposit(self, amount):
+        """Пополнить счёт"""
+        if amount > 0:
+            self._balance += amount
+            return f"Пополнено на {amount}. Баланс: {self._balance}"
+        return "Некорректная сумма"
+    
+    def withdraw(self, amount):
+        """Снять деньги"""
+        if 0 < amount <= self._balance:
+            self._balance -= amount
+            return f"Снято {amount}. Остаток: {self._balance}"
+        return "Недостаточно средств"
+    
+    def get_balance(self):
+        """Публичный метод для получения баланса"""
+        return f"Баланс счёта: {self._balance}"
+
+# Создаём счёт
+account = BankAccount("Иван", 1000)
+
+print(account.deposit(500))
+print(account.withdraw(200))
+print(account.get_balance())
+
+# Попытка доступа к приватному атрибуту вызовет ошибку:
+# print(account.__password)  # AttributeError!</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Пополнено на 500. Баланс: 1500
+Снято 200. Остаток: 1300
+Баланс счёта: 1300</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Наследование</h2>
+                <p>Наследование позволяет создавать новый класс на основе существующего. Дочерний класс наследует все атрибуты и методы родительского.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 4: Наследование</span>
+                    </div>
+                    <pre><code class="language-python"># Родительский класс
+class Animal:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+    
+    def speak(self):
+        return "Какой-то звук"
+    
+    def info(self):
+        return f"{self.name}, {self.age} лет"
+
+# Дочерний класс наследует от Animal
+class Cat(Animal):
+    # Переопределяем метод родителя
+    def speak(self):
+        return "Мяу!"
+    
+    def scratch(self):
+        return f"{self.name} точит когти"
+
+# Ещё один дочерний класс
+class Dog(Animal):
+    def speak(self):
+        return "Гав!"
+    
+    def fetch(self):
+        return f"{self.name} приносит мяч"
+
+# Создаём объекты
+cat = Cat("Барсик", 2)
+dog = Dog("Бобик", 4)
+
+print(f"Кот: {cat.info()}")
+print(cat.speak())
+print(cat.scratch())
+print()
+print(f"Собака: {dog.info()}")
+print(dog.speak())
+print(dog.fetch())</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Кот: Барсик, 2 лет
+Мяу!
+Барсик точит когти
+
+Собака: Бобик, 4 лет
+Гав!
+Бобик приносит мяч</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    <strong>Полиморфизм</strong> — это возможность использовать объекты разных классов через общий интерфейс. В примере выше оба класса имеют метод <code>speak()</code>, но реализация разная.
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Практический пример: Система управления сотрудниками</h2>
+                <p>Создадим полноценную систему для компании с разными типами сотрудников.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 5: Реальный проект</span>
+                    </div>
+                    <pre><code class="language-python">class Employee:
+    """Базовый класс для всех сотрудников"""
+    
+    def __init__(self, name, employee_id, base_salary):
+        self.name = name
+        self.employee_id = employee_id
+        self._base_salary = base_salary
+    
+    def get_salary(self):
+        return self._base_salary
+    
+    def info(self):
+        return f"ID: {self.employee_id}, Имя: {self.name}"
+
+class Manager(Employee):
+    """Менеджер с бонусом"""
+    
+    def __init__(self, name, employee_id, base_salary, bonus):
+        super().__init__(name, employee_id, base_salary)
+        self.bonus = bonus
+    
+    def get_salary(self):
+        return self._base_salary + self.bonus
+
+class Developer(Employee):
+    """Разработчик с премией за проекты"""
+    
+    def __init__(self, name, employee_id, base_salary, projects_completed):
+        super().__init__(name, employee_id, base_salary)
+        self.projects_completed = projects_completed
+    
+    def get_salary(self):
+        # Премия 10% за каждый проект
+        return self._base_salary + (self._base_salary * 0.1 * self.projects_completed)
+
+# Создаём сотрудников
+manager = Manager("Анна Петрова", "M001", 80000, 20000)
+dev1 = Developer("Иван Иванов", "D001", 100000, 3)
+dev2 = Developer("Ольга Сидорова", "D002", 120000, 5)
+
+employees = [manager, dev1, dev2]
+
+# Выводим информацию
+print("=== Зарплатная ведомость ===\n")
+for emp in employees:
+    print(f"{emp.info()}")
+    print(f"Зарплата: {emp.get_salary():,.0f} руб.")
+    print("-" * 30)</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>=== Зарплатная ведомость ===
+
+ID: M001, Имя: Анна Петрова
+Зарплата: 100,000 руб.
+------------------------------
+ID: D001, Имя: Иван Иванов
+Зарплата: 130,000 руб.
+------------------------------
+ID: D002, Имя: Ольга Сидорова
+Зарплата: 180,000 руб.
+------------------------------</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    <strong>super()</strong> — функция для вызова методов родительского класса. В примере <code>super().__init__(...)</code> вызывает конструктор класса <code>Employee</code>.
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Магические методы</h2>
+                <p>Магические методы (dunder methods) начинаются и заканчиваются двойным подчёркиванием. Они позволяют изменить поведение объектов.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 6: Магические методы</span>
+                    </div>
+                    <pre><code class="language-python">class Book:
+    def __init__(self, title, author, pages):
+        self.title = title
+        self.author = author
+        self.pages = pages
+    
+    # Строковое представление для пользователя
+    def __str__(self):
+        return f"'{self.title}' by {self.author}"
+    
+    # Представление для разработчика
+    def __repr__(self):
+        return f"Book('{self.title}', '{self.author}', {self.pages})"
+    
+    # Количество страниц
+    def __len__(self):
+        return self.pages
+    
+    # Сравнение по количеству страниц
+    def __gt__(self, other):
+        return self.pages > other.pages
+
+book1 = Book("Python Basics", "John Smith", 250)
+book2 = Book("Advanced Python", "Jane Doe", 450)
+
+print(book1)              # Вызывает __str__
+print(repr(book2))        # Вызывает __repr__
+print(f"Страниц в книге 1: {len(book1)}")
+print(f"Книга 2 больше книги 1: {book2 > book1}")</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>'Python Basics' by John Smith
+Book('Advanced Python', 'Jane Doe', 450)
+Страниц в книге 1: 250
+Книга 2 больше книги 1: True</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Итоги урока</h2>
+                <div class="concept-box">
+                    <h4>Что вы изучили</h4>
+                    <ul>
+                        <li><strong>Класс</strong> — шаблон для создания объектов</li>
+                        <li><strong>Объект</strong> — экземпляр класса с конкретными значениями</li>
+                        <li><code>__init__</code> — конструктор, вызывается при создании объекта</li>
+                        <li><strong>self</strong> — ссылка на текущий объект</li>
+                        <li><strong>Инкапсуляция</strong> — скрытие внутренних данных</li>
+                        <li><strong>Наследование</strong> — создание классов на основе других классов</li>
+                        <li><strong>Полиморфизм</strong> — один интерфейс для разных типов объектов</li>
+                        <li><strong>Магические методы</strong> — изменение поведения объектов</li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="lesson-nav">
+                <a href="../index.html" class="btn-prev">← На главную</a>
+                <a href="lesson2.html" class="btn-next">Следующий урок →</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="../js/app.js"></script>
+</body>
+</html>

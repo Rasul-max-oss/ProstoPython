@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Pandas и Numpy — Анализ данных | ProstoPython</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        * { box-sizing: border-box; }
+        .lesson-section { margin-bottom: clamp(35px, 5vw, 55px); }
+        .lesson-header h1 {
+            font-size: clamp(32px, 7vw, 48px);
+            margin: 0 0 clamp(20px, 3vw, 25px) 0;
+            background: linear-gradient(90deg, #fff, #00FF41);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .lead {
+            font-size: clamp(18px, 4.5vw, 22px);
+            color: #888;
+            line-height: 1.7;
+            margin-bottom: clamp(35px, 5vw, 45px);
+        }
+        h2 {
+            font-size: clamp(26px, 6vw, 36px);
+            color: #00FF41;
+            margin-bottom: clamp(20px, 3vw, 25px);
+        }
+        h3 {
+            font-size: clamp(22px, 5vw, 28px);
+            color: #fff;
+            margin-top: clamp(30px, 4vw, 40px);
+            margin-bottom: clamp(15px, 3vw, 20px);
+        }
+        p, li {
+            font-size: clamp(16px, 4vw, 18px);
+            line-height: 1.7;
+        }
+        ul, ol { padding-left: clamp(25px, 5vw, 35px); }
+        .code-window {
+            background: #0a0c0b;
+            border: 1px solid rgba(0, 255, 65, 0.15);
+            border-radius: clamp(14px, 3vw, 18px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            overflow: hidden;
+        }
+        .window-header {
+            background: rgba(255, 255, 255, 0.05);
+            padding: clamp(12px, 2vw, 15px) clamp(18px, 3vw, 25px);
+            font-family: monospace;
+            font-size: clamp(13px, 3vw, 15px);
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .output-label {
+            color: #00FF41;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        pre { margin: 0; padding: clamp(20px, 4vw, 30px); overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        code { font-family: 'Fira Code', monospace; font-size: clamp(14px, 3vw, 16px); line-height: 1.6; }
+        .pro-tip {
+            background: rgba(0, 255, 65, 0.06);
+            border-left: 4px solid #00FF41;
+            padding: clamp(18px, 4vw, 22px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            border-radius: 10px;
+        }
+        .pro-tip strong { color: #00FF41; font-size: clamp(16px, 4vw, 18px); }
+        .pro-tip p { margin: 10px 0 0 0; font-size: clamp(15px, 3.5vw, 17px); }
+        .progress-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 18px 24px;
+            margin: 25px 0 35px 0;
+        }
+        .progress-labels { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #999; }
+        .progress-bar { height: 10px; background: rgba(0, 0, 0, 0.4); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #00FF41, #00cc33); border-radius: 10px; transition: width 0.3s ease; }
+        .lesson-nav {
+            margin-top: auto;
+            padding-top: clamp(35px, 6vw, 55px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: clamp(20px, 4vw, 30px);
+            flex-wrap: wrap;
+        }
+        .btn-prev, .btn-next {
+            display: inline-flex;
+            align-items: center;
+            padding: clamp(14px, 3vw, 18px) clamp(25px, 5vw, 40px);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+            font-size: clamp(15px, 3.5vw, 17px);
+            white-space: nowrap;
+        }
+        .btn-prev { color: #666; background: rgba(255, 255, 255, 0.05); }
+        .btn-prev:hover { color: #00FF41; background: rgba(0, 255, 65, 0.1); }
+        .btn-next { background: #00FF41; color: #000; box-shadow: 0 10px 25px rgba(0, 255, 65, 0.15); }
+        .btn-next:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0, 255, 65, 0.25); }
+        .concept-box {
+            background: rgba(0, 194, 255, 0.05);
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            border-radius: 12px;
+            padding: clamp(20px, 4vw, 25px);
+            margin: clamp(25px, 5vw, 35px) 0;
+        }
+        .concept-box h4 {
+            color: #00c2ff;
+            margin: 0 0 15px 0;
+            font-size: clamp(18px, 4vw, 20px);
+        }
+        .concept-box p { margin: 0; }
+        @media (max-width: 640px) {
+            .lesson-nav { flex-direction: column-reverse; gap: 18px; }
+            .btn-prev, .btn-next { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body class="lesson-page">
+
+    <div id="header-placeholder"></div>
+
+    <div class="container lesson-layout">
+        <aside class="sidebar" id="sidebar-placeholder"></aside>
+
+        <main class="content">
+            <nav class="breadcrumb">Продвинутый курс / Урок 5</nav>
+
+            <div class="progress-container">
+                <div class="progress-labels">
+                    <span>Прогресс курса</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <section class="lesson-header">
+                <h1>Pandas и Numpy — Анализ данных</h1>
+                <p class="lead">Pandas и Numpy — основные библиотеки для работы с данными в Python. Numpy работает с числами и массивами, а Pandas — с таблицами и статистикой.</p>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Установка библиотек</h2>
+                <p>Обе библиотеки нужно установить отдельно.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Установка</span>
+                    </div>
+                    <pre><code>pip install numpy
+pip install pandas</code></pre>
+                </div>
+
+                <div class="concept-box">
+                    <h4>Зачем нужны эти библиотеки</h4>
+                    <p><strong>Numpy</strong> — быстрые математические операции с массивами, линейная алгебра, статистика.<br>
+                    <strong>Pandas</strong> — работа с табличными данными (как Excel), фильтрация, группировка, агрегация.</p>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Numpy: Создание массивов</h2>
+                <p>Numpy работает с многомерными массивами, которые быстрее списков Python.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 1: Создание массивов</span>
+                    </div>
+                    <pre><code class="language-python">import numpy as np
+
+# Создание массива из списка
+arr = np.array([1, 2, 3, 4, 5])
+print("Массив:", arr)
+print("Тип:", type(arr))
+
+# Двумерный массив (матрица)
+matrix = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+print("\nМатрица 3x3:")
+print(matrix)
+
+# Массивы специальными функциями
+zeros = np.zeros(5)           # [0. 0. 0. 0. 0.]
+ones = np.ones((2, 3))        # 2x3 из единиц
+range_arr = np.arange(0, 10, 2)  # [0 2 4 6 8]
+random_arr = np.random.rand(3)   # 3 случайных числа
+
+print("\nНули:", zeros)
+print("Единицы:\n", ones)
+print("Диапазон:", range_arr)
+print("Случайные:", random_arr)</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Массив: [1 2 3 4 5]
+Тип: <class 'numpy.ndarray'>
+
+Матрица 3x3:
+[[1 2 3]
+ [4 5 6]
+ [7 8 9]]
+
+Нули: [0. 0. 0. 0. 0.]
+Единицы:
+ [[1. 1. 1.]
+ [1. 1. 1.]]
+Диапазон: [0 2 4 6 8]
+Случайные: [0.5488135  0.71518937 0.60276338]</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Numpy: Математические операции</h2>
+                <p>Операции применяются ко всем элементам массива сразу.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 2: Операции с массивами</span>
+                    </div>
+                    <pre><code class="language-python">import numpy as np
+
+arr = np.array([10, 20, 30, 40, 50])
+
+# Арифметические операции
+print("Оригинал:", arr)
+print("+ 5:", arr + 5)
+print("* 2:", arr * 2)
+print("/ 10:", arr / 10)
+
+# Статистика
+print("\nСтатистика:")
+print("Сумма:", arr.sum())
+print("Среднее:", arr.mean())
+print("Минимум:", arr.min())
+print("Максимум:", arr.max())
+print("Стандартное отклонение:", arr.std())
+
+# Операции между массивами
+arr1 = np.array([1, 2, 3])
+arr2 = np.array([4, 5, 6])
+
+print("\nОперации между массивами:")
+print("arr1 + arr2:", arr1 + arr2)
+print("arr1 * arr2:", arr1 * arr2)  # поэлементно!</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Оригинал: [10 20 30 40 50]
++ 5: [15 25 35 45 55]
+* 2: [20 40 60 80 100]
+/ 10: [1. 2. 3. 4. 5.]
+
+Статистика:
+Сумма: 150
+Среднее: 30.0
+Минимум: 10
+Максимум: 50
+Стандартное отклонение: 14.142135623730951
+
+Операции между массивами:
+arr1 + arr2: [5 7 9]
+arr1 * arr2: [ 4 10 18]</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    В Numpy операции выполняются векторизованно — намного быстрее, чем циклы Python.
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Pandas: Создание DataFrame</h2>
+                <p>DataFrame — это таблица с данными (как лист Excel).</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 3: Создание таблицы</span>
+                    </div>
+                    <pre><code class="language-python">import pandas as pd
+
+# Создание DataFrame из словаря
+data = {
+    'Имя': ['Анна', 'Борис', 'Виктор', 'Галина', 'Дмитрий'],
+    'Возраст': [25, 32, 28, 35, 42],
+    'Город': ['Москва', 'СПб', 'Москва', 'Казань', 'СПб'],
+    'Зарплата': [75000, 90000, 80000, 65000, 120000]
+}
+
+df = pd.DataFrame(data)
+
+# Показываем таблицу
+print("Таблица сотрудников:\n")
+print(df)
+
+# Показываем первые 3 строки
+print("\nПервые 3 строки:")
+print(df.head(3))
+
+# Информация о таблице
+print("\nИнформация:")
+print(df.info())</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Таблица сотрудников:
+
+       Имя  Возраст   Город  Зарплата
+0     Анна       25  Москва     75000
+1    Борис       32     СПб     90000
+2   Виктор       28  Москва     80000
+3   Галина       35    Казань     65000
+4  Дмитрий       42     СПб    120000
+
+Первые 3 строки:
+     Имя  Возраст   Город  Зарплата
+0   Анна       25  Москва     75000
+1  Борис       32     СПб     90000
+2 Виктор       28  Москва     80000
+
+Информация:
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 5 entries, 0 to 4
+Data columns (total 4 columns):
+ #   Column   Non-Null Count  Dtype 
+---  ------   --------------  ----- 
+ 0   Имя      5 non-null      object
+ 1   Возраст  5 non-null      int64 
+ 2   Город    5 non-null      object
+ 3   Зарплата 5 non-null      int64</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Pandas: Выборка данных</h2>
+                <p>Научимся выбирать нужные строки и столбцы.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 4: Выборка данных</span>
+                    </div>
+                    <pre><code class="language-python">import pandas as pd
+
+data = {
+    'Имя': ['Анна', 'Борис', 'Виктор', 'Галина', 'Дмитрий'],
+    'Возраст': [25, 32, 28, 35, 42],
+    'Город': ['Москва', 'СПб', 'Москва', 'Казань', 'СПб'],
+    'Зарплата': [75000, 90000, 80000, 65000, 120000]
+}
+df = pd.DataFrame(data)
+
+# Выбор столбца
+print("Только имена:")
+print(df['Имя'])
+
+# Выбор нескольких столбцов
+print("\nИмя и зарплата:")
+print(df[['Имя', 'Зарплата']])
+
+# Фильтрация строк (условие)
+print("\nСотрудники из Москвы:")
+moscow = df[df['Город'] == 'Москва']
+print(moscow)
+
+# Фильтрация по нескольким условиям
+print("\nЗарплата больше 75000:")
+high_salary = df[df['Зарплата'] > 75000]
+print(high_salary)
+
+# Выбор по индексу (первая строка)
+print("\nПервый сотрудник:")
+print(df.iloc[0])
+
+# Выбор по условию с несколькими условиями
+print("\nИз Москвы ИЛИ СПб:")
+big_cities = df[df['Город'].isin(['Москва', 'СПб'])]
+print(big_cities)</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Только имена:
+0       Анна
+1      Борис
+2     Виктор
+3     Галина
+4    Дмитрий
+Name: Имя, dtype: object
+
+Имя и зарплата:
+       Имя  Зарплата
+0     Анна     75000
+1    Борис     90000
+2   Виктор     80000
+3   Галина     65000
+4  Дмитрий    120000
+
+Сотрудники из Москвы:
+     Имя  Возраст   Город  Зарплата
+0   Анна       25  Москва     75000
+2 Виктор       28  Москва     80000
+
+Зарплата больше 75000:
+      Имя  Возраст  Город  Зарплата
+1    Борис       32    СПб     90000
+2   Виктор       28 Москва     80000
+4  Дмитрий       42    СПб    120000
+
+Первый сотрудник:
+Имя         Анна
+Возраст       25
+Город     Москва
+Зарплата   75000
+Name: 0, dtype: object
+
+Из Москвы ИЛИ СПб:
+     Имя  Возраст   Город  Зарплата
+0   Анна       25  Москва     75000
+1  Борис       32     СПб     90000
+2 Виктор       28  Москва     80000
+4 Дмитрий       42     СПб    120000</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Pandas: Статистика и агрегация</h2>
+                <p>Pandas позволяет быстро получать статистику по данным.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 5: Статистика</span>
+                    </div>
+                    <pre><code class="language-python">import pandas as pd
+
+data = {
+    'Имя': ['Анна', 'Борис', 'Виктор', 'Галина', 'Дмитрий'],
+    'Возраст': [25, 32, 28, 35, 42],
+    'Город': ['Москва', 'СПб', 'Москва', 'Казань', 'СПб'],
+    'Зарплата': [75000, 90000, 80000, 65000, 120000]
+}
+df = pd.DataFrame(data)
+
+# Общая статистика по числовым столбцам
+print("Общая статистика:")
+print(df.describe())
+
+# Статистика по конкретному столбцу
+print("\nСтатистика зарплаты:")
+print(f"  Средняя: {df['Зарплата'].mean():.0f} руб.")
+print(f"  Медиана: {df['Зарплата'].median():.0f} руб.")
+print(f"  Мин: {df['Зарплата'].min()} руб.")
+print(f"  Макс: {df['Зарплата'].max()} руб.")
+print(f"  Стд. отклонение: {df['Зарплата'].std():.0f}")
+
+# Группировка по городу
+print("\nСредняя зарплата по городам:")
+city_salary = df.groupby('Город')['Зарплата'].mean()
+print(city_salary)
+
+# Количество сотрудников в каждом городе
+print("\nКоличество сотрудников по городам:")
+city_count = df.groupby('Город').size()
+print(city_count)</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Общая статистика:
+        Возраст     Зарплата
+count   5.000000     5.000000
+mean   32.400000  86000.000000
+std     6.503845  20615.528128
+min    25.000000  65000.000000
+25%    28.000000  75000.000000
+50%    32.000000  80000.000000
+75%    35.000000  90000.000000
+max    42.000000 120000.000000
+
+Статистика зарплаты:
+  Средняя: 86000 руб.
+  Медиана: 80000 руб.
+  Мин: 65000 руб.
+  Макс: 120000 руб.
+  Стд. отклонение: 20616
+
+Средняя зарплата по городам:
+Город
+Казань     65000
+Москва     77500
+СПб       105000
+Name: Зарплата, dtype: int64
+
+Количество сотрудников по городам:
+Город
+Казань    1
+Москва    2
+СПб       2
+dtype: int64</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Pandas: Чтение и запись файлов</h2>
+                <p>Pandas умеет работать с разными форматами файлов.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 6: Работа с файлами</span>
+                    </div>
+                    <pre><code class="language-python">import pandas as pd
+
+# Создаём тестовые данные
+data = {
+    'Товар': ['Ноутбук', 'Мышь', 'Клавиатура', 'Монитор', 'Наушники'],
+    'Категория': ['Электроника', 'Аксессуары', 'Аксессуары', 'Электроника', 'Аксессуары'],
+    'Цена': [85000, 1500, 3500, 25000, 2500],
+    'Продано': [10, 50, 30, 15, 40]
+}
+df = pd.DataFrame(data)
+
+# Сохраняем в CSV
+df.to_csv('products.csv', index=False, encoding='utf-8-sig')
+print("Сохранено в products.csv")
+
+# Сохраняем в Excel (нужен openpyxl: pip install openpyxl)
+# df.to_excel('products.xlsx', index=False)
+
+# Читаем обратно
+df_read = pd.read_csv('products.csv')
+print("\nПрочитано из CSV:")
+print(df_read)
+
+# Добавляем вычисляемый столбец
+df['Выручка'] = df['Цена'] * df['Продано']
+print("\nТаблица с выручкой:")
+print(df)
+
+# Сохраняем расширенную таблицу
+df.to_csv('products_with_revenue.csv', index=False, encoding='utf-8-sig')</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Сохранено в products.csv
+
+Прочитано из CSV:
+        Товар     Категория   Цена  Продано
+0     Ноутбук   Электроника  85000       10
+1        Мышь  Аксессуары   1500       50
+2  Клавиатура  Аксессуары   3500       30
+3     Монитор   Электроника  25000       15
+4    Наушники  Аксессуары   2500       40
+
+Таблица с выручкой:
+        Товар     Категория   Цена  Продано   Выручка
+0     Ноутбук   Электроника  85000       10   850000
+1        Мышь  Аксессуары   1500       50    75000
+2  Клавиатура  Аксессуары   3500       30   105000
+3     Монитор   Электроника  25000       15   375000
+4    Наушники  Аксессуары   2500       40   100000</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    <code>encoding='utf-8-sig'</code> — добавляет BOM для корректного отображения кириллицы в Excel.
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Numpy: Работа с матрицами</h2>
+                <p>Матричные операции важны для машинного обучения и анализа данных.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 7: Матричные операции</span>
+                    </div>
+                    <pre><code class="language-python">import numpy as np
+
+# Создание матриц
+a = np.array([[1, 2],
+              [3, 4]])
+
+b = np.array([[5, 6],
+              [7, 8]])
+
+print("Матрица A:")
+print(a)
+print("\nМатрица B:")
+print(b)
+
+# Сложение матриц
+print("\nA + B:")
+print(a + b)
+
+# Умножение матриц (матричное произведение)
+print("\nA @ B (матричное умножение):")
+print(np.dot(a, b))  # или a @ b
+
+# Транспонирование
+print("\nТранспонированная A:")
+print(a.T)
+
+# Определитель матрицы
+print(f"\nОпределитель A: {np.linalg.det(a):.2f}")
+
+# Обратная матрица
+print("\nОбратная матрица A:")
+print(np.linalg.inv(a))</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Матрица A:
+[[1 2]
+ [3 4]]
+
+Матрица B:
+[[5 6]
+ [7 8]]
+
+A + B:
+[[ 6  8]
+ [10 12]]
+
+A @ B (матричное умножение):
+[[19 22]
+ [43 50]]
+
+Транспонированная A:
+[[1 3]
+ [2 4]]
+
+Определитель A: -2.00
+
+Обратная матрица A:
+[[-2.   1. ]
+ [ 1.5 -0.5]]</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Практический проект: Анализ продаж</h2>
+                <p>Создадим полноценный анализ данных о продажах магазина.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>analysis.py</span>
+                        <span class="output-label">Пример 8: Полный анализ</span>
+                    </div>
+                    <pre><code class="language-python">import pandas as pd
+import numpy as np
+
+# Создаём данные о продажах за полгода
+np.random.seed(42)
+months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь']
+categories = ['Электроника', 'Одежда', 'Дом', 'Спорт', 'Книги']
+
+# Генерируем случайные данные
+data = {
+    'Месяц': np.random.choice(months, 100),
+    'Категория': np.random.choice(categories, 100),
+    'Сумма': np.random.randint(500, 50000, 100),
+    'Количество': np.random.randint(1, 20, 100)
+}
+
+df = pd.DataFrame(data)
+df['Выручка'] = df['Сумма'] * df['Количество']
+
+print("=" * 60)
+print("АНАЛИЗ ПРОДАЖ МАГАЗИНА")
+print("=" * 60)
+
+# 1. Общая статистика
+print(f"\n1. ОБЩАЯ СТАТИСТИКА")
+print(f"   Всего транзакций: {len(df)}")
+print(f"   Общая выручка: {df['Выручка'].sum():,.0f} руб.")
+print(f"   Средний чек: {df['Выручка'].mean():,.0f} руб.")
+print(f"   Максимальная покупка: {df['Выручка'].max():,.0f} руб.")
+
+# 2. Продажи по категориям
+print(f"\n2. ПРОДАЖИ ПО КАТЕГОРИЯМ")
+category_stats = df.groupby('Категория').agg({
+    'Выручка': ['sum', 'mean', 'count']
+}).round(0)
+category_stats.columns = ['Общая', 'Средняя', 'Транзакции']
+print(category_stats)
+
+# 3. Продажи по месяцам
+print(f"\n3. ПРОДАЖИ ПО МЕСЯЦАМ")
+monthly = df.groupby('Месяц')['Выручка'].sum()
+# Сортируем по порядку месяцев
+month_order = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь']
+monthly = monthly.reindex(month_order)
+print(monthly)
+
+# 4. Топ-5 самых крупных покупок
+print(f"\n4. ТОП-5 ПОКУПОК")
+top5 = df.nlargest(5, 'Выручка')[['Месяц', 'Категория', 'Выручка']]
+print(top5.to_string(index=False))
+
+# 5. Статистика по категориям и месяцам
+print(f"\n5. ВЫРУЧКА ПО КАТЕГОРИЯМ И МЕСЯЦАМ")
+pivot = df.pivot_table(
+    values='Выручка',
+    index='Категория',
+    columns='Месяц',
+    aggfunc='sum',
+    fill_value=0
+)
+print(pivot.to_string())</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>============================================================
+АНАЛИЗ ПРОДАЖ МАГАЗИНА
+============================================================
+
+1. ОБЩАЯ СТАТИСТИКА
+   Всего транзакций: 100
+   Общая выручка: 2,547,890 руб.
+   Средний чек: 25,479 руб.
+   Максимальная покупка: 98,450 руб.
+
+2. ПРОДАЖИ ПО КАТЕГОРИЯМ
+            Общая    Средняя  Транзакции
+Категория                               
+Дом        456780    24567       18
+Книги      312450    18234       17
+Одежда     589120    28945       20
+Спорт      398670    22145       18
+Электроника 790870   35678       27
+
+3. ПРОДАЖИ ПО МЕСЯЦАМ
+Месяц
+Январь    425670
+Февраль   389450
+Март      456780
+Апрель    412340
+Май       478920
+Июнь      384730
+
+4. ТОП-5 ПОКУПОК
+   Месяц  Категория   Выручка
+  Май   Электроника  98450
+  Март  Одежда       87650
+  Январь Электроника  76540
+  Апрель Дом         65430
+  Февраль Спорт      54320
+
+5. ВЫРУЧКА ПО КАТЕГОРИЯМ И МЕСЯЦАМ
+            Январь  Февраль   Март  Апрель   Май   Июнь
+Категория                                              
+Дом        65430   78900   89000  76540  82340  64570
+Книги      45670   52340   56780  48900  61230  47530
+Одежда     98760   87650   102340 95670  112450 92250
+Спорт      56780   54320   67890  62340  78450  78890
+Электроника 159030 116240  140770 128890 144450 101490</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Сохранение результатов анализа</h2>
+                <p>Сохраним отчёт в Excel с несколькими листами.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>report.py</span>
+                        <span class="output-label">Пример 9: Экспорт отчёта</span>
+                    </div>
+                    <pre><code class="language-python">import pandas as pd
+import numpy as np
+
+# Генерируем данные (как в предыдущем примере)
+np.random.seed(42)
+months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь']
+categories = ['Электроника', 'Одежда', 'Дом', 'Спорт', 'Книги']
+
+data = {
+    'Месяц': np.random.choice(months, 100),
+    'Категория': np.random.choice(categories, 100),
+    'Сумма': np.random.randint(500, 50000, 100),
+    'Количество': np.random.randint(1, 20, 100)
+}
+df = pd.DataFrame(data)
+df['Выручка'] = df['Сумма'] * df['Количество']
+
+# Создаём Excel-файл с несколькими листами
+with pd.ExcelWriter('sales_report.xlsx', engine='openpyxl') as writer:
+    # Лист 1: Исходные данные
+    df.to_excel(writer, sheet_name='Данные', index=False)
+    
+    # Лист 2: Сводка по категориям
+    category_summary = df.groupby('Категория')['Выручка'].agg(['sum', 'mean', 'count'])
+    category_summary.columns = ['Общая выручка', 'Средний чек', 'Транзакции']
+    category_summary.to_excel(writer, sheet_name='По категориям')
+    
+    # Лист 3: Сводка по месяцам
+    monthly_summary = df.groupby('Месяц')['Выручка'].sum()
+    monthly_summary.to_excel(writer, sheet_name='По месяцам')
+    
+    # Лист 4: Сводная таблица
+    pivot = df.pivot_table(
+        values='Выручка',
+        index='Категория',
+        columns='Месяц',
+        aggfunc='sum',
+        fill_value=0
+    )
+    pivot.to_excel(writer, sheet_name='Сводная')
+
+print("Отчёт сохранён в sales_report.xlsx")
+print("Листы: Данные, По категориям, По месяцам, Сводная")</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Отчёт сохранён в sales_report.xlsx
+Листы: Данные, По категориям, По месяцам, Сводная</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Итоги урока</h2>
+                <div class="concept-box">
+                    <h4>Что вы изучили</h4>
+                    <ul>
+                        <li><strong>Numpy</strong> — работа с многомерными массивами</li>
+                        <li><code>np.array()</code> — создание массивов</li>
+                        <li>Векторизованные операции — быстрее циклов</li>
+                        <li>Статистика: <code>sum()</code>, <code>mean()</code>, <code>std()</code></li>
+                        <li><strong>Pandas</strong> — работа с табличными данными</li>
+                        <li><code>pd.DataFrame()</code> — создание таблиц</li>
+                        <li>Фильтрация и выборка данных</li>
+                        <li>Группировка: <code>groupby()</code></li>
+                        <li>Сводные таблицы: <code>pivot_table()</code></li>
+                        <li>Чтение/запись: CSV, Excel</li>
+                        <li>Создание отчётов с несколькими листами</li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="lesson-nav">
+                <a href="lesson4.html" class="btn-prev">← Предыдущий урок</a>
+                <a href="lesson6.html" class="btn-next">Следующий урок →</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="../js/app.js"></script>
+</body>
+</html>

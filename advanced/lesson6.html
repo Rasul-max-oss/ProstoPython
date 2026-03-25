@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>SQLite — Базы данных | ProstoPython</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        * { box-sizing: border-box; }
+        .lesson-section { margin-bottom: clamp(35px, 5vw, 55px); }
+        .lesson-header h1 {
+            font-size: clamp(32px, 7vw, 48px);
+            margin: 0 0 clamp(20px, 3vw, 25px) 0;
+            background: linear-gradient(90deg, #fff, #00FF41);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .lead {
+            font-size: clamp(18px, 4.5vw, 22px);
+            color: #888;
+            line-height: 1.7;
+            margin-bottom: clamp(35px, 5vw, 45px);
+        }
+        h2 {
+            font-size: clamp(26px, 6vw, 36px);
+            color: #00FF41;
+            margin-bottom: clamp(20px, 3vw, 25px);
+        }
+        h3 {
+            font-size: clamp(22px, 5vw, 28px);
+            color: #fff;
+            margin-top: clamp(30px, 4vw, 40px);
+            margin-bottom: clamp(15px, 3vw, 20px);
+        }
+        p, li {
+            font-size: clamp(16px, 4vw, 18px);
+            line-height: 1.7;
+        }
+        ul, ol { padding-left: clamp(25px, 5vw, 35px); }
+        .code-window {
+            background: #0a0c0b;
+            border: 1px solid rgba(0, 255, 65, 0.15);
+            border-radius: clamp(14px, 3vw, 18px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            overflow: hidden;
+        }
+        .window-header {
+            background: rgba(255, 255, 255, 0.05);
+            padding: clamp(12px, 2vw, 15px) clamp(18px, 3vw, 25px);
+            font-family: monospace;
+            font-size: clamp(13px, 3vw, 15px);
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .output-label {
+            color: #00FF41;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        pre { margin: 0; padding: clamp(20px, 4vw, 30px); overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        code { font-family: 'Fira Code', monospace; font-size: clamp(14px, 3vw, 16px); line-height: 1.6; }
+        .pro-tip {
+            background: rgba(0, 255, 65, 0.06);
+            border-left: 4px solid #00FF41;
+            padding: clamp(18px, 4vw, 22px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            border-radius: 10px;
+        }
+        .pro-tip strong { color: #00FF41; font-size: clamp(16px, 4vw, 18px); }
+        .pro-tip p { margin: 10px 0 0 0; font-size: clamp(15px, 3.5vw, 17px); }
+        .progress-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 18px 24px;
+            margin: 25px 0 35px 0;
+        }
+        .progress-labels { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #999; }
+        .progress-bar { height: 10px; background: rgba(0, 0, 0, 0.4); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #00FF41, #00cc33); border-radius: 10px; transition: width 0.3s ease; }
+        .lesson-nav {
+            margin-top: auto;
+            padding-top: clamp(35px, 6vw, 55px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: clamp(20px, 4vw, 30px);
+            flex-wrap: wrap;
+        }
+        .btn-prev, .btn-next {
+            display: inline-flex;
+            align-items: center;
+            padding: clamp(14px, 3vw, 18px) clamp(25px, 5vw, 40px);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+            font-size: clamp(15px, 3.5vw, 17px);
+            white-space: nowrap;
+        }
+        .btn-prev { color: #666; background: rgba(255, 255, 255, 0.05); }
+        .btn-prev:hover { color: #00FF41; background: rgba(0, 255, 65, 0.1); }
+        .btn-next { background: #00FF41; color: #000; box-shadow: 0 10px 25px rgba(0, 255, 65, 0.15); }
+        .btn-next:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0, 255, 65, 0.25); }
+        .concept-box {
+            background: rgba(0, 194, 255, 0.05);
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            border-radius: 12px;
+            padding: clamp(20px, 4vw, 25px);
+            margin: clamp(25px, 5vw, 35px) 0;
+        }
+        .concept-box h4 {
+            color: #00c2ff;
+            margin: 0 0 15px 0;
+            font-size: clamp(18px, 4vw, 20px);
+        }
+        .concept-box p { margin: 0; }
+        @media (max-width: 640px) {
+            .lesson-nav { flex-direction: column-reverse; gap: 18px; }
+            .btn-prev, .btn-next { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body class="lesson-page">
+
+    <div id="header-placeholder"></div>
+
+    <div class="container lesson-layout">
+        <aside class="sidebar" id="sidebar-placeholder"></aside>
+
+        <main class="content">
+            <nav class="breadcrumb">Продвинутый курс / Урок 7</nav>
+
+            <div class="progress-container">
+                <div class="progress-labels">
+                    <span>Прогресс курса</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <section class="lesson-header">
+                <h1>SQLite — Базы данных</h1>
+                <p class="lead">База данных — это организованное хранилище информации. SQLite — лёгкая встраиваемая база данных, которая хранится в одном файле и не требует сервера.</p>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Что такое база данных</h2>
+                <p>Представьте таблицу Excel, но с возможностью быстро искать, сортировать и связывать данные между несколькими таблицами.</p>
+
+                <div class="concept-box">
+                    <h4>Основные понятия</h4>
+                    <p><strong>Таблица</strong> — хранит данные (как лист Excel)<br>
+                    <strong>Строка (запись)</strong> — одна запись в таблице<br>
+                    <strong>Столбец (поле)</strong> — атрибут данных (имя, возраст, цена)<br>
+                    <strong>Первичный ключ (PRIMARY KEY)</strong> — уникальное поле для идентификации строки<br>
+                    <strong>SQL</strong> — язык запросов к базе данных</p>
+                </div>
+
+                <h3>Типы данных в SQLite</h3>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Справка</span>
+                        <span class="output-label">Типы данных</span>
+                    </div>
+                    <pre><code>INTEGER     — целые числа (1, 42, -100)
+REAL        — числа с плавающей точкой (3.14, -0.5)
+TEXT        — текст (строки)
+BLOB        — бинарные данные (изображения, файлы)
+BOOLEAN     — логические значения (0 или 1)</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Подключение к базе данных</h2>
+                <p>В Python есть встроенный модуль <code>sqlite3</code> для работы с SQLite.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 1: Подключение</span>
+                    </div>
+                    <pre><code class="language-python">import sqlite3
+
+# Подключаемся к базе (файл создастся, если его нет)
+conn = sqlite3.connect('my_database.db')
+
+# Создаём курсор — объект для выполнения запросов
+cursor = conn.cursor()
+
+print("База данных подключена!")
+
+# Закрываем соединение
+conn.close()</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>База данных подключена!</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    <code>.db</code> — стандартное расширение для файлов SQLite.<br>
+                    Всегда закрывайте соединение через <code>conn.close()</code> или используйте <code>with</code>.
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Создание таблицы</h2>
+                <p>Перед добавлением данных нужно создать таблицу с нужными полями.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 2: Создание таблицы</span>
+                    </div>
+                    <pre><code class="language-python">import sqlite3
+
+# Используем контекстный менеджер — соединение закроется автоматически
+with sqlite3.connect('company.db') as conn:
+    cursor = conn.cursor()
+    
+    # Создаём таблицу employees
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS employees (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            age INTEGER,
+            city TEXT,
+            salary REAL
+        )
+    ''')
+    
+    # Сохраняем изменения
+    conn.commit()
+    
+print("Таблица 'employees' создана!")</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Таблица 'employees' создана!</code></pre>
+                </div>
+
+                <div class="concept-box">
+                    <h4>Разбор SQL-запроса</h4>
+                    <p><code>CREATE TABLE IF NOT EXISTS</code> — создать таблицу, если она не существует<br>
+                    <code>id INTEGER PRIMARY KEY AUTOINCREMENT</code> — поле id, целое число, первичный ключ, увеличивается автоматически<br>
+                    <code>name TEXT NOT NULL</code> — поле name, текст, обязательное (не может быть пустым)<br>
+                    <code>age INTEGER</code> — поле age, целое число<br>
+                    <code>salary REAL</code> — поле salary, число с плавающей точкой</p>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Добавление данных (INSERT)</h2>
+                <p>Вставляем записи в таблицу.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 3: Вставка данных</span>
+                    </div>
+                    <pre><code class="language-python">import sqlite3
+
+with sqlite3.connect('company.db') as conn:
+    cursor = conn.cursor()
+    
+    # Вставка одной записи
+    cursor.execute('''
+        INSERT INTO employees (name, age, city, salary)
+        VALUES (?, ?, ?, ?)
+    ''', ('Иван Петров', 28, 'Москва', 75000))
+    
+    # Вставка нескольких записей
+    employees = [
+        ('Анна Смирнова', 32, 'СПб', 85000),
+        ('Борис Козлов', 25, 'Москва', 65000),
+        ('Виктория Лебедева', 35, 'Казань', 95000),
+        ('Дмитрий Волков', 42, 'СПб', 120000)
+    ]
+    
+    cursor.executemany('''
+        INSERT INTO employees (name, age, city, salary)
+        VALUES (?, ?, ?, ?)
+    ''', employees)
+    
+    conn.commit()
+    
+print("Добавлено 5 сотрудников")</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Добавлено 5 сотрудников</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    Знаки вопроса <code>?</code> — это параметры для защиты от SQL-инъекций. Никогда не подставляйте значения напрямую в SQL-запрос.
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Чтение данных (SELECT)</h2>
+                <p>Получаем данные из таблицы.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 4: Выборка данных</span>
+                    </div>
+                    <pre><code class="language-python">import sqlite3
+
+with sqlite3.connect('company.db') as conn:
+    cursor = conn.cursor()
+    
+    # Выбор всех записей
+    cursor.execute('SELECT * FROM employees')
+    rows = cursor.fetchall()  # Получить все строки
+    
+    print("Все сотрудники:")
+    for row in rows:
+        print(f"  {row[0]}. {row[1]} ({row[2]} лет), {row[3]}, {row[4]} руб.")
+    
+    # Выбор с условием
+    print("\nСотрудники из Москвы:")
+    cursor.execute("SELECT name, salary FROM employees WHERE city = 'Москва'")
+    moscow = cursor.fetchall()
+    for name, salary in moscow:
+        print(f"  {name}: {salary} руб.")
+    
+    # Выбор с сортировкой
+    print("\nСотрудники по убыванию зарплаты:")
+    cursor.execute("SELECT name, salary FROM employees ORDER BY salary DESC")
+    sorted_employees = cursor.fetchall()
+    for name, salary in sorted_employees:
+        print(f"  {name}: {salary} руб.")</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Все сотрудники:
+  1. Иван Петров (28 лет), Москва, 75000 руб.
+  2. Анна Смирнова (32 лет), СПб, 85000 руб.
+  3. Борис Козлов (25 лет), Москва, 65000 руб.
+  4. Виктория Лебедева (35 лет), Казань, 95000 руб.
+  5. Дмитрий Волков (42 лет), СПб, 120000 руб.
+
+Сотрудники из Москвы:
+  Иван Петров: 75000 руб.
+  Борис Козлов: 65000 руб.
+
+Сотрудники по убыванию зарплаты:
+  Дмитрий Волков: 120000 руб.
+  Виктория Лебедева: 95000 руб.
+  Анна Смирнова: 85000 руб.
+  Иван Петров: 75000 руб.
+  Борис Козлов: 65000 руб.</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Обновление данных (UPDATE)</h2>
+                <p>Изменяем существующие записи.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 5: Обновление</span>
+                    </div>
+                    <pre><code class="language-python">import sqlite3
+
+with sqlite3.connect('company.db') as conn:
+    cursor = conn.cursor()
+    
+    # Повысить зарплату Ивану
+    cursor.execute('''
+        UPDATE employees 
+        SET salary = salary + 10000 
+        WHERE name = 'Иван Петров'
+    ''')
+    
+    # Изменить город для Бориса
+    cursor.execute('''
+        UPDATE employees 
+        SET city = 'Екатеринбург' 
+        WHERE name = 'Борис Козлов'
+    ''')
+    
+    conn.commit()
+    
+    # Проверяем изменения
+    cursor.execute('SELECT name, city, salary FROM employees')
+    for row in cursor.fetchall():
+        print(f"{row[0]}: {row[1]}, {row[2]} руб.")</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Иван Петров: Москва, 85000 руб.
+Анна Смирнова: СПб, 85000 руб.
+Борис Козлов: Екатеринбург, 65000 руб.
+Виктория Лебедева: Казань, 95000 руб.
+Дмитрий Волков: СПб, 120000 руб.</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Удаление данных (DELETE)</h2>
+                <p>Удаляем записи из таблицы.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 6: Удаление</span>
+                    </div>
+                    <pre><code class="language-python">import sqlite3
+
+with sqlite3.connect('company.db') as conn:
+    cursor = conn.cursor()
+    
+    # Удаляем сотрудника по имени
+    cursor.execute("DELETE FROM employees WHERE name = 'Борис Козлов'")
+    
+    conn.commit()
+    
+    # Показываем оставшихся
+    print("Оставшиеся сотрудники:")
+    cursor.execute('SELECT id, name FROM employees')
+    for row in cursor.fetchall():
+        print(f"  {row[0]}. {row[1]}")
+    
+    print(f"\nУдалён 1 сотрудник")</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Оставшиеся сотрудники:
+  1. Иван Петров
+  2. Анна Смирнова
+  4. Виктория Лебедева
+  5. Дмитрий Волков
+
+Удалён 1 сотрудник</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    Будьте осторожны с <code>DELETE</code> без <code>WHERE</code> — это удалит ВСЕ записи в таблице!
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Агрегатные функции</h2>
+                <p>SQL позволяет выполнять вычисления над данными.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 7: Агрегатные функции</span>
+                    </div>
+                    <pre><code class="language-python">import sqlite3
+
+with sqlite3.connect('company.db') as conn:
+    cursor = conn.cursor()
+    
+    # Количество сотрудников
+    cursor.execute('SELECT COUNT(*) FROM employees')
+    print(f"Всего сотрудников: {cursor.fetchone()[0]}")
+    
+    # Средняя зарплата
+    cursor.execute('SELECT AVG(salary) FROM employees')
+    print(f"Средняя зарплата: {cursor.fetchone()[0]:.0f} руб.")
+    
+    # Максимальная зарплата
+    cursor.execute('SELECT MAX(salary) FROM employees')
+    print(f"Максимальная зарплата: {cursor.fetchone()[0]} руб.")
+    
+    # Минимальная зарплата
+    cursor.execute('SELECT MIN(salary) FROM employees')
+    print(f"Минимальная зарплата: {cursor.fetchone()[0]} руб.")
+    
+    # Общая сумма зарплат
+    cursor.execute('SELECT SUM(salary) FROM employees')
+    print(f"Общий фонд зарплат: {cursor.fetchone()[0]:,.0f} руб.")
+    
+    # Группировка по городу
+    print("\nСотрудников по городам:")
+    cursor.execute('''
+        SELECT city, COUNT(*) as count, AVG(salary) as avg_salary
+        FROM employees 
+        GROUP BY city
+    ''')
+    for city, count, avg in cursor.fetchall():
+        print(f"  {city}: {count} чел., средняя {avg:.0f} руб.")</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Всего сотрудников: 4
+Средняя зарплата: 96250 руб.
+Максимальная зарплата: 120000 руб.
+Минимальная зарплата: 85000 руб.
+Общий фонд зарплат: 385,000 руб.
+
+Сотрудников по городам:
+  Казань: 1 чел., средняя 95000 руб.
+  Москва: 1 чел., средняя 85000 руб.
+  СПб: 2 чел., средняя 102500 руб.</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Связанные таблицы</h2>
+                <p>В реальных проектах данные хранятся в нескольких связанных таблицах.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>main.py</span>
+                        <span class="output-label">Пример 8: Две таблицы</span>
+                    </div>
+                    <pre><code class="language-python">import sqlite3
+
+with sqlite3.connect('company.db') as conn:
+    cursor = conn.cursor()
+    
+    # Создаём таблицу должностей
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS positions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            min_salary REAL,
+            max_salary REAL
+        )
+    ''')
+    
+    # Добавляем должности
+    positions = [
+        ('Менеджер', 50000, 80000),
+        ('Разработчик', 80000, 150000),
+        ('Дизайнер', 60000, 100000),
+        ('Аналитик', 70000, 120000)
+    ]
+    cursor.executemany('INSERT INTO positions (title, min_salary, max_salary) VALUES (?, ?, ?)', positions)
+    
+    # Добавляем поле position_id в таблицу сотрудников
+    try:
+        cursor.execute('ALTER TABLE employees ADD COLUMN position_id INTEGER')
+    except:
+        pass  # Поле уже существует
+    
+    # Назначаем должности
+    cursor.execute("UPDATE employees SET position_id = 2 WHERE name IN ('Иван Петров', 'Виктория Лебедева')")
+    cursor.execute("UPDATE employees SET position_id = 1 WHERE name = 'Анна Смирнова'")
+    cursor.execute("UPDATE employees SET position_id = 4 WHERE name = 'Дмитрий Волков'")
+    
+    conn.commit()
+    
+    # Запрос с объединением таблиц (JOIN)
+    print("Сотрудники с должностями:")
+    cursor.execute('''
+        SELECT e.name, e.city, p.title, e.salary
+        FROM employees e
+        JOIN positions p ON e.position_id = p.id
+    ''')
+    for row in cursor.fetchall():
+        print(f"  {row[0]} ({row[1]}) — {row[2]}, {row[3]} руб.")</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Сотрудники с должностями:
+  Иван Петров (Москва) — Разработчик, 85000 руб.
+  Анна Смирнова (СПб) — Менеджер, 85000 руб.
+  Виктория Лебедева (Казань) — Разработчик, 95000 руб.
+  Дмитрий Волков (СПб) — Аналитик, 120000 руб.</code></pre>
+                </div>
+
+                <div class="concept-box">
+                    <h4>Типы соединений (JOIN)</h4>
+                    <p><strong>INNER JOIN</strong> — только совпадающие записи в обеих таблицах<br>
+                    <strong>LEFT JOIN</strong> — все записи из левой таблицы + совпадения из правой<br>
+                    <strong>RIGHT JOIN</strong> — все записи из правой таблицы + совпадения из левой<br>
+                    <strong>FULL JOIN</strong> — все записи из обеих таблиц</p>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Практический проект: Система учёта задач</h2>
+                <p>Создадим полноценное приложение для управления задачами (To-Do List).</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>todo.py</span>
+                        <span class="output-label">Пример 9: Менеджер задач</span>
+                    </div>
+                    <pre><code class="language-python">import sqlite3
+from datetime import datetime
+
+class TaskManager:
+    def __init__(self, db_name='tasks.db'):
+        self.conn = sqlite3.connect(db_name)
+        self.cursor = self.conn.cursor()
+        self.create_table()
+    
+    def create_table(self):
+        """Создать таблицу задач"""
+        self.cursor.execute('''
+            CREATE TABLE IF NOT EXISTS tasks (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                description TEXT,
+                priority INTEGER DEFAULT 1,
+                status TEXT DEFAULT 'new',
+                created_at TEXT
+            )
+        ''')
+        self.conn.commit()
+    
+    def add_task(self, title, description='', priority=1):
+        """Добавить задачу"""
+        created_at = datetime.now().strftime('%Y-%m-%d %H:%M')
+        self.cursor.execute('''
+            INSERT INTO tasks (title, description, priority, created_at)
+            VALUES (?, ?, ?, ?)
+        ''', (title, description, priority, created_at))
+        self.conn.commit()
+        print(f"Задача '{title}' добавлена!")
+    
+    def show_tasks(self, status=None):
+        """Показать задачи"""
+        if status:
+            self.cursor.execute('''
+                SELECT id, title, priority, status, created_at 
+                FROM tasks 
+                WHERE status = ?
+                ORDER BY priority DESC, created_at
+            ''', (status,))
+        else:
+            self.cursor.execute('''
+                SELECT id, title, priority, status, created_at 
+                FROM tasks 
+                ORDER BY priority DESC, created_at
+            ''')
+        
+        tasks = self.cursor.fetchall()
+        
+        if not tasks:
+            print("Задач нет")
+            return
+        
+        print(f"\n{'ID':<4} {'Название':<25} {'Приоритет':<10} {'Статус':<10} {'Дата'}")
+        print("-" * 70)
+        for task in tasks:
+            print(f"{task[0]:<4} {task[1][:25]:<25} {task[2]:<10} {task[3]:<10} {task[4]}")
+    
+    def complete_task(self, task_id):
+        """Отметить задачу как выполненную"""
+        self.cursor.execute('''
+            UPDATE tasks SET status = 'done' WHERE id = ?
+        ''', (task_id,))
+        self.conn.commit()
+        print(f"Задача #{task_id} выполнена!")
+    
+    def delete_task(self, task_id):
+        """Удалить задачу"""
+        self.cursor.execute('DELETE FROM tasks WHERE id = ?', (task_id,))
+        self.conn.commit()
+        print(f"Задача #{task_id} удалена!")
+    
+    def close(self):
+        self.conn.close()
+
+# Использование
+manager = TaskManager()
+
+# Добавляем задачи
+manager.add_task("Изучить SQLite", "Прочитать урок и сделать практику", priority=3)
+manager.add_task("Купить продукты", "Молоко, хлеб, яйца", priority=1)
+manager.add_task("Закончить проект", "Сдать код до пятницы", priority=5)
+manager.add_task("Позвонить маме", priority=2)
+
+# Показываем все задачи
+print("\n=== ВСЕ ЗАДАЧИ ===")
+manager.show_tasks()
+
+# Показываем только новые
+print("\n=== НОВЫЕ ЗАДАЧИ ===")
+manager.show_tasks(status='new')
+
+# Выполняем задачу
+manager.complete_task(2)
+
+# Показываем выполненные
+print("\n=== ВЫПОЛНЕННЫЕ ===")
+manager.show_tasks(status='done')
+
+# Удаляем задачу
+manager.delete_task(1)
+
+manager.close()</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Задача 'Изучить SQLite' добавлена!
+Задача 'Купить продукты' добавлена!
+Задача 'Закончить проект' добавлена!
+Задача 'Позвонить маме' добавлена!
+
+=== ВСЕ ЗАДАЧИ ===
+ID   Название                  Приоритет  Статус     Дата
+----------------------------------------------------------------------
+3    Закончить проект          5          new        2024-01-15 14:30
+1    Изучить SQLite            3          new        2024-01-15 14:28
+4    Позвонить маме            2          new        2024-01-15 14:31
+2    Купить продукты           1          new        2024-01-15 14:29
+
+=== НОВЫЕ ЗАДАЧИ ===
+ID   Название                  Приоритет  Статус     Дата
+----------------------------------------------------------------------
+3    Закончить проект          5          new        2024-01-15 14:30
+1    Изучить SQLite            3          new        2024-01-15 14:28
+4    Позвонить маме            2          new        2024-01-15 14:31
+2    Купить продукты           1          new        2024-01-15 14:29
+
+Задача #2 выполнена!
+
+=== ВЫПОЛНЕННЫЕ ===
+ID   Название                  Приоритет  Статус     Дата
+----------------------------------------------------------------------
+2    Купить продукты           1          done       2024-01-15 14:29
+
+Задача #1 удалена!</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Работа с Pandas и SQLite</h2>
+                <p>Pandas может напрямую читать и записывать данные в SQLite.</p>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>analysis.py</span>
+                        <span class="output-label">Пример 10: Pandas + SQLite</span>
+                    </div>
+                    <pre><code class="language-python">import sqlite3
+import pandas as pd
+
+# Подключаемся к базе
+conn = sqlite3.connect('company.db')
+
+# Читаем данные в DataFrame
+df = pd.read_sql_query('''
+    SELECT e.name, e.city, e.salary, p.title as position
+    FROM employees e
+    JOIN positions p ON e.position_id = p.id
+''', conn)
+
+print("Данные из базы в Pandas:")
+print(df)
+
+# Статистика
+print("\nСтатистика:")
+print(f"Средняя зарплата: {df['salary'].mean():.0f} руб.")
+print(f"Максимальная зарплата: {df['salary'].max()} руб.")
+
+# Группировка по должностям
+print("\nСредняя зарплата по должностям:")
+print(df.groupby('position')['salary'].mean())
+
+# Сохраняем результат обратно в SQLite
+df.to_sql('employees_report', conn, if_exists='replace', index=False)
+print("\nОтчёт сохранён в таблицу 'employees_report'")
+
+conn.close()</code></pre>
+                </div>
+
+                <p><strong>Вывод программы:</strong></p>
+                <div class="code-window">
+                    <div class="window-header">
+                        <span>Терминал</span>
+                        <span class="output-label">Результат</span>
+                    </div>
+                    <pre><code>Данные из базы в Pandas:
+              name     city  salary   position
+0     Иван Петров   Москва   85000  Разработчик
+1   Анна Смирнова      СПб   85000    Менеджер
+2  Виктория Лебедева  Казань   95000  Разработчик
+3   Дмитрий Волков     СПб  120000   Аналитик
+
+Статистика:
+Средняя зарплата: 96250 руб.
+Максимальная зарплата: 120000 руб.
+
+Средняя зарплата по должностям:
+position
+Аналитик       120000.0
+Менеджер        85000.0
+Разработчик     90000.0
+Name: salary, dtype: float64
+
+Отчёт сохранён в таблицу 'employees_report'</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Итоги урока</h2>
+                <div class="concept-box">
+                    <h4>Что вы изучили</h4>
+                    <ul>
+                        <li><strong>SQLite</strong> — встраиваемая база данных в одном файле</li>
+                        <li><code>sqlite3.connect()</code> — подключение к базе</li>
+                        <li><code>CREATE TABLE</code> — создание таблицы</li>
+                        <li><code>INSERT INTO</code> — добавление записей</li>
+                        <li><code>SELECT FROM</code> — чтение данных</li>
+                        <li><code>UPDATE SET</code> — обновление записей</li>
+                        <li><code>DELETE FROM</code> — удаление записей</li>
+                        <li><code>WHERE</code> — фильтрация данных</li>
+                        <li><code>ORDER BY</code> — сортировка</li>
+                        <li><code>GROUP BY</code> — группировка</li>
+                        <li>Агрегатные функции: <code>COUNT</code>, <code>AVG</code>, <code>SUM</code>, <code>MIN</code>, <code>MAX</code></li>
+                        <li><code>JOIN</code> — объединение таблиц</li>
+                        <li>Интеграция с Pandas</li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="lesson-nav">
+                <a href="lesson5.html" class="btn-prev">← Предыдущий урок</a>
+                <a href="../index.html" class="btn-next">На главную →</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="../js/app.js"></script>
+</body>
+</html>

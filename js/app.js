@@ -4,6 +4,11 @@ const COURSE_CONFIG = {
     storageKey: 'prostoPython_progress'
 };
 
+const ADVANCED_COURSE_CONFIG = {
+    totalLessons: 6,
+    storageKey: 'prostoPython_advanced_progress'
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     loadLayout();
     updateProgress();
@@ -12,14 +17,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function loadLayout() {
     try {
+        // Определяем, какой курс загружать
+        const isAdvanced = window.location.pathname.includes('/advanced/');
+        const config = isAdvanced ? ADVANCED_COURSE_CONFIG : COURSE_CONFIG;
+        const basePath = isAdvanced ? '../includes/' : '../includes/';
+        
         // Загружаем шапку
-        const headerRes = await fetch('../includes/header.html');
+        const headerRes = await fetch(basePath + 'header.html');
         if (headerRes.ok) {
             document.getElementById('header-placeholder').innerHTML = await headerRes.text();
         }
 
         // Загружаем сайдбар
-        const sidebarRes = await fetch('../includes/sidebar.html');
+        const sidebarPath = isAdvanced ? 'sidebar.html' : 'sidebar.html';
+        const sidebarRes = await fetch(basePath + sidebarPath);
         if (sidebarRes.ok) {
             const sidebarHtml = await sidebarRes.text();
             const sidebarPlaceholder = document.getElementById('sidebar-placeholder');
@@ -58,12 +69,15 @@ function highlightActiveStep() {
 function updateProgress() {
     const progressFill = document.getElementById('progress-fill');
     const progressPercent = document.getElementById('progress-percent');
-    
+
     if (!progressFill || !progressPercent) return;
+
+    const isAdvanced = window.location.pathname.includes('/advanced/');
+    const config = isAdvanced ? ADVANCED_COURSE_CONFIG : COURSE_CONFIG;
     
-    const completed = getCompletedLessons();
-    const percent = Math.round((completed.length / COURSE_CONFIG.totalLessons) * 100);
-    
+    const completed = getCompletedLessons(isAdvanced);
+    const percent = Math.round((completed.length / config.totalLessons) * 100);
+
     progressFill.style.width = percent + '%';
     progressPercent.textContent = percent + '%';
 }
@@ -72,21 +86,24 @@ function updateProgress() {
 function markLessonComplete() {
     const currentFile = window.location.pathname.split('/').pop();
     const lessonMatch = currentFile.match(/lesson(\d+)\.html/);
-    
+
     if (!lessonMatch) return;
-    
+
     const lessonNum = parseInt(lessonMatch[1]);
-    const completed = getCompletedLessons();
-    
+    const isAdvanced = window.location.pathname.includes('/advanced/');
+    const completed = getCompletedLessons(isAdvanced);
+
     if (!completed.includes(lessonNum)) {
         completed.push(lessonNum);
-        localStorage.setItem(COURSE_CONFIG.storageKey, JSON.stringify(completed));
+        const storageKey = isAdvanced ? ADVANCED_COURSE_CONFIG.storageKey : COURSE_CONFIG.storageKey;
+        localStorage.setItem(storageKey, JSON.stringify(completed));
     }
 }
 
 // Получить список пройденных уроков
-function getCompletedLessons() {
-    const stored = localStorage.getItem(COURSE_CONFIG.storageKey);
+function getCompletedLessons(isAdvanced = false) {
+    const storageKey = isAdvanced ? ADVANCED_COURSE_CONFIG.storageKey : COURSE_CONFIG.storageKey;
+    const stored = localStorage.getItem(storageKey);
     return stored ? JSON.parse(stored) : [];
 }
 

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Задачи: SQLite | ProstoPython</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { background: radial-gradient(circle at top right, #1a2a22, #0a0c0b); min-height: 100vh; margin: 0; font-family: 'Inter', sans-serif; padding-bottom: 60px; }
+        .practice-header-fixed { position: fixed; top: 0; left: 0; right: 0; background: rgba(10, 12, 11, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0, 255, 65, 0.1); padding: 15px 25px; z-index: 1000; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .header-logo { font-size: 18px; font-weight: 800; color: #00FF41; text-decoration: none; letter-spacing: -0.5px; }
+        .header-logo:hover { color: #00c2ff; }
+        .header-nav { display: flex; gap: 10px; flex-wrap: wrap; }
+        .header-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; background: rgba(255, 255, 255, 0.05); color: #ccc; }
+        .header-btn:hover { background: rgba(0, 255, 65, 0.15); color: #00FF41; }
+        .header-btn.primary { background: rgba(0, 255, 65, 0.15); color: #00FF41; }
+        .header-btn.primary:hover { background: rgba(0, 255, 65, 0.25); }
+        .practice-container { max-width: 900px; margin: 0 auto; padding: 100px 20px 60px 20px; }
+        h1 { font-size: clamp(36px, 7vw, 52px); margin: 0 0 15px 0; color: #00FF41; font-weight: 800; letter-spacing: -0.5px; }
+        .topic-desc { font-size: clamp(18px, 4.5vw, 22px); color: #999; margin-bottom: 40px; line-height: 1.6; }
+        .task-level { font-size: clamp(22px, 5vw, 28px); font-weight: 800; color: #00c2ff; margin: 50px 0 25px 0; padding-bottom: 12px; border-bottom: 2px solid rgba(0, 194, 255, 0.25); letter-spacing: -0.3px; }
+        .task-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 255, 65, 0.12); border-radius: 18px; padding: 30px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); }
+        .task-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+        .task-num { font-size: clamp(18px, 4.5vw, 21px); font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+        .task-difficulty { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+        .task-difficulty.easy { background: rgba(0, 255, 65, 0.18); color: #00FF41; }
+        .task-difficulty.medium { background: rgba(255, 194, 0, 0.18); color: #ffc200; }
+        .task-difficulty.hard { background: rgba(255, 82, 82, 0.18); color: #ff5252; }
+        .task-description { font-size: clamp(17px, 4vw, 19px); line-height: 1.7; color: #ddd; margin-bottom: 22px; }
+        .task-hint { background: rgba(0, 194, 255, 0.08); border-left: 3px solid #00c2ff; padding: 15px; margin: 20px 0; border-radius: 0 10px 10px 0; }
+        .task-hint-title { color: #00c2ff; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
+        .task-hint-text { color: #888; font-size: 14px; margin: 0; }
+        .task-io { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-top: 22px; }
+        .io-example { background: rgba(0, 0, 0, 0.35); border-radius: 12px; padding: 18px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .io-label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: block; }
+        .io-label.input { color: #00c2ff; }
+        .io-label.output { color: #00FF41; }
+        .io-code { font-family: 'JetBrains Mono', monospace; font-size: clamp(14px, 3.5vw, 16px); color: #fff; display: block; white-space: pre-wrap; word-break: break-all; line-height: 1.5; }
+        .task-solution { margin-top: 25px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+        .solution-toggle { background: none; border: 1px solid rgba(0, 255, 65, 0.3); color: #00FF41; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-size: 15px; font-weight: 600; transition: 0.3s; }
+        .solution-toggle:hover { background: rgba(0, 255, 65, 0.12); border-color: #00FF41; }
+        .solution-code { display: none; margin-top: 18px; background: rgba(0, 0, 0, 0.5); border-radius: 12px; padding: 22px; overflow-x: auto; border: 1px solid rgba(0, 255, 65, 0.1); }
+        .solution-code pre { margin: 0; }
+        .solution-code code { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: #a5d6ff; line-height: 1.6; }
+        @media (max-width: 640px) { .practice-header-fixed { padding: 12px 15px; } .header-nav { justify-content: flex-end; } .practice-container { padding: 90px 15px 50px 15px; } .task-header { flex-direction: column; align-items: flex-start; } .task-io { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header class="practice-header-fixed">
+        <div class="header-left">
+            <a href="../index.html" class="header-logo">ProstoPython</a>
+            <a href="index.html" class="header-btn">← Все темы</a>
+        </div>
+        <div class="header-nav">
+            <a href="../advanced/index.html" class="header-btn">📚 Уроки</a>
+            <a href="practice-sqlite.html" class="header-btn primary">📝 SQLite</a>
+        </div>
+    </header>
+
+    <div class="practice-container">
+        <h1>SQLite: Базы данных</h1>
+        <p class="topic-desc">12 задач для отработки работы с базами данных</p>
+
+        <h2 class="task-level">📌 Уровень 1: Основы SQL</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 1: Создание таблицы</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Создайте базу данных <code>library.db</code> и таблицу <code>books</code> с полями: id, title, author, year, pages.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Таблица 'books' создана успешно!</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import sqlite3
+
+conn = sqlite3.connect('library.db')
+cursor = conn.cursor()
+
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS books (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        author TEXT,
+        year INTEGER,
+        pages INTEGER
+    )
+''')
+
+conn.commit()
+conn.close()
+print("Таблица 'books' создана успешно!")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 2: Добавление книг</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Добавьте 5 книг в таблицу <code>books</code>. Используйте <code>executemany()</code> для вставки нескольких записей.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Добавлено 5 книг</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import sqlite3
+
+conn = sqlite3.connect('library.db')
+cursor = conn.cursor()
+
+books = [
+    ('Война и мир', 'Толстой', 1869, 1200),
+    ('Преступление и наказание', 'Достоевский', 1866, 672),
+    ('Анна Каренина', 'Толстой', 1877, 864),
+    ('Мастер и Маргарита', 'Булгаков', 1967, 448),
+    ('Отцы и дети', 'Тургенев', 1862, 288)
+]
+
+cursor.executemany('''
+    INSERT INTO books (title, author, year, pages)
+    VALUES (?, ?, ?, ?)
+''', books)
+
+conn.commit()
+conn.close()
+print("Добавлено 5 книг")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 3: Выборка всех книг</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Выведите все книги из базы данных в формате: "Название" - Автор (год).</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">"Война и мир" - Толстой (1869)
+"Преступление и наказание" - Достоевский (1866)
+...</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import sqlite3
+
+conn = sqlite3.connect('library.db')
+cursor = conn.cursor()
+
+cursor.execute('SELECT title, author, year FROM books')
+books = cursor.fetchall()
+
+for title, author, year in books:
+    print(f'"{title}" - {author} ({year})')
+
+conn.close()</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 4: Фильтрация по году</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Выведите книги, изданные после 1870 года.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">"Анна Каренина" - Толстой (1877)
+"Мастер и Маргарита" - Булгаков (1967)</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import sqlite3
+
+conn = sqlite3.connect('library.db')
+cursor = conn.cursor()
+
+cursor.execute('''
+    SELECT title, author, year 
+    FROM books 
+    WHERE year > 1870
+    ORDER BY year
+''')
+
+for title, author, year in cursor.fetchall():
+    print(f'"{title}" - {author} ({year})')
+
+conn.close()</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">📌 Уровень 2: Обновление и удаление</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 5: Обновление года издания</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Обновите год издания книги "Война и мир" на 1865. Выведите обновлённую запись.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Обновлено: "Война и мир" (1865)</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import sqlite3
+
+conn = sqlite3.connect('library.db')
+cursor = conn.cursor()
+
+cursor.execute('''
+    UPDATE books 
+    SET year = 1865 
+    WHERE title = 'Война и мир'
+''')
+
+conn.commit()
+
+cursor.execute("SELECT title, year FROM books WHERE title = 'Война и мир'")
+title, year = cursor.fetchone()
+print(f'Обновлено: "{title}" ({year})')
+
+conn.close()</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 6: Удаление книги</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Удалите книгу "Отцы и дети" из базы данных. Подтвердите удаление выводом оставшихся книг.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Удалена книга: Отцы и дети
+Осталось книг: 4</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import sqlite3
+
+conn = sqlite3.connect('library.db')
+cursor = conn.cursor()
+
+cursor.execute("DELETE FROM books WHERE title = 'Отцы и дети'")
+conn.commit()
+
+print(f"Удалена книга: Отцы и дети")
+
+cursor.execute('SELECT COUNT(*) FROM books')
+count = cursor.fetchone()[0]
+print(f"Осталось книг: {count}")
+
+conn.close()</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 7: Поиск по автору</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Создайте функцию <code>find_by_author(author)</code>, которая возвращает все книги указанного автора.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">Толстой</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Найдено книг: 2
+- Война и мир (1865)
+- Анна Каренина (1877)</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import sqlite3
+
+def find_by_author(author):
+    conn = sqlite3.connect('library.db')
+    cursor = conn.cursor()
+    
+    cursor.execute('''
+        SELECT title, year FROM books 
+        WHERE author LIKE ?
+    ''', (f'%{author}%',))
+    
+    books = cursor.fetchall()
+    conn.close()
+    
+    print(f"Найдено книг: {len(books)}")
+    for title, year in books:
+        print(f"- {title} ({year})")
+    
+    return books
+
+find_by_author("Толстой")</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">📌 Уровень 3: Агрегатные функции</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 8: Статистика по авторам</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Выведите количество книг и среднее количество страниц для каждого автора.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Толстой: 2 книг(и), ср. 1032 стр.
+Достоевский: 1 книг(и), ср. 672 стр.
+...</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import sqlite3
+
+conn = sqlite3.connect('library.db')
+cursor = conn.cursor()
+
+cursor.execute('''
+    SELECT author, 
+           COUNT(*) as book_count,
+           AVG(pages) as avg_pages
+    FROM books
+    GROUP BY author
+    ORDER BY book_count DESC
+''')
+
+for author, count, avg_pages in cursor.fetchall():
+    print(f"{author}: {count} книг(и), ср. {avg_pages:.0f} стр.")
+
+conn.close()</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 9: Самая длинная книга</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Найдите книгу с наибольшим количеством страниц.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Самая длинная книга:
+"Анна Каренина" - 864 стр.</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import sqlite3
+
+conn = sqlite3.connect('library.db')
+cursor = conn.cursor()
+
+cursor.execute('''
+    SELECT title, author, pages
+    FROM books
+    ORDER BY pages DESC
+    LIMIT 1
+''')
+
+title, author, pages = cursor.fetchone()
+print("Самая длинная книга:")
+print(f'"{title}" - {pages} стр.')
+
+conn.close()</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">📌 Уровень 4: Связанные таблицы</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 10: Две таблицы</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Создайте вторую таблицу <code>readers</code> (читатели) и таблицу <code>loans</code> (выдачи книг). Реализуйте связь между таблицами.</p>
+            <div class="task-hint">
+                <div class="task-hint-title">💡 Подсказка</div>
+                <p class="task-hint-text">Таблица <code>loans</code> должна содержать <code>reader_id</code> и <code>book_id</code> как внешние ключи.</p>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import sqlite3
+
+conn = sqlite3.connect('library.db')
+cursor = conn.cursor()
+
+# Таблица читателей
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS readers (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        phone TEXT
+    )
+''')
+
+# Таблица выдач книг
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS loans (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        reader_id INTEGER,
+        book_id INTEGER,
+        loan_date TEXT,
+        return_date TEXT,
+        FOREIGN KEY (reader_id) REFERENCES readers(id),
+        FOREIGN KEY (book_id) REFERENCES books(id)
+    )
+''')
+
+# Добавляем читателей
+readers = [
+    ('Иван Петров', '555-1234'),
+    ('Анна Смирнова', '555-5678')
+]
+cursor.executemany('INSERT INTO readers (name, phone) VALUES (?, ?)', readers)
+
+# Добавляем выдачу книги
+cursor.execute('''
+    INSERT INTO loans (reader_id, book_id, loan_date)
+    VALUES (1, 1, '2024-01-15')
+''')
+
+conn.commit()
+print("Таблицы созданы и заполнены")
+
+conn.close()</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 11: JOIN запрос</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Выведите информацию о выданных книгах: имя читателя, название книги, дата выдачи.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Иван Петров взял "Война и мир" (2024-01-15)</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import sqlite3
+
+conn = sqlite3.connect('library.db')
+cursor = conn.cursor()
+
+cursor.execute('''
+    SELECT r.name, b.title, l.loan_date
+    FROM loans l
+    JOIN readers r ON l.reader_id = r.id
+    JOIN books b ON l.book_id = b.id
+''')
+
+for reader, book, date in cursor.fetchall():
+    print(f"{reader} взял \"{book}\" ({date})")
+
+conn.close()</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 12: Система учёта</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Создайте класс <code>LibraryDB</code> с методами: <code>add_book()</code>, <code>add_reader()</code>, <code>issue_book()</code>, <code>return_book()</code>, <code>get_available_books()</code>.</p>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import sqlite3
+from datetime import datetime
+
+class LibraryDB:
+    def __init__(self, db_name='library.db'):
+        self.conn = sqlite3.connect(db_name)
+        self.cursor = self.conn.cursor()
+        self.create_tables()
+    
+    def create_tables(self):
+        self.cursor.execute('''
+            CREATE TABLE IF NOT EXISTS books (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                author TEXT,
+                is_available INTEGER DEFAULT 1
+            )
+        ''')
+        self.cursor.execute('''
+            CREATE TABLE IF NOT EXISTS readers (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL
+            )
+        ''')
+        self.cursor.execute('''
+            CREATE TABLE IF NOT EXISTS loans (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                reader_id INTEGER,
+                book_id INTEGER,
+                loan_date TEXT,
+                return_date TEXT,
+                FOREIGN KEY (reader_id) REFERENCES readers(id),
+                FOREIGN KEY (book_id) REFERENCES books(id)
+            )
+        ''')
+        self.conn.commit()
+    
+    def add_book(self, title, author):
+        self.cursor.execute('''
+            INSERT INTO books (title, author) VALUES (?, ?)
+        ''', (title, author))
+        self.conn.commit()
+        print(f"Книга '{title}' добавлена")
+    
+    def add_reader(self, name):
+        self.cursor.execute('''
+            INSERT INTO readers (name) VALUES (?)
+        ''', (name,))
+        self.conn.commit()
+        print(f"Читатель '{name}' добавлен")
+    
+    def issue_book(self, reader_id, book_id):
+        self.cursor.execute('SELECT is_available FROM books WHERE id = ?', (book_id,))
+        result = self.cursor.fetchone()
+        if result and result[0] == 1:
+            self.cursor.execute('''
+                INSERT INTO loans (reader_id, book_id, loan_date)
+                VALUES (?, ?, ?)
+            ''', (reader_id, book_id, datetime.now().strftime('%Y-%m-%d')))
+            self.cursor.execute('''
+                UPDATE books SET is_available = 0 WHERE id = ?
+            ''', (book_id,))
+            self.conn.commit()
+            print(f"Книга #{book_id} выдана читателю #{reader_id}")
+        else:
+            print("Книга недоступна")
+    
+    def return_book(self, book_id):
+        self.cursor.execute('''
+            UPDATE loans SET return_date = ? 
+            WHERE book_id = ? AND return_date IS NULL
+        ''', (datetime.now().strftime('%Y-%m-%d'), book_id))
+        self.cursor.execute('''
+            UPDATE books SET is_available = 1 WHERE id = ?
+        ''', (book_id,))
+        self.conn.commit()
+        print(f"Книга #{book_id} возвращена")
+    
+    def get_available_books(self):
+        self.cursor.execute('SELECT id, title, author FROM books WHERE is_available = 1')
+        return self.cursor.fetchall()
+    
+    def close(self):
+        self.conn.close()
+
+# Использование
+lib = LibraryDB(':memory:')  # База в памяти
+lib.add_book("Война и мир", "Толстой")
+lib.add_book("Преступление и наказание", "Достоевский")
+lib.add_reader("Иван Петров")
+lib.issue_book(1, 1)
+print("Доступные книги:", lib.get_available_books())
+lib.return_book(1)
+lib.close()</code></pre></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

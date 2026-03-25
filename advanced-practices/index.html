@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Практические задачи | ProstoPython</title>
+    <title>Практикум: Продвинутый Python | ProstoPython</title>
     <link rel="stylesheet" href="../css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -15,7 +15,6 @@
             margin: 0;
             font-family: 'Inter', sans-serif;
         }
-        /* Современная шапка */
         .practice-header-fixed {
             position: fixed;
             top: 0;
@@ -128,8 +127,8 @@
         }
         .topic-num {
             display: inline-block;
-            background: rgba(0, 255, 65, 0.18);
-            color: #00FF41;
+            background: rgba(0, 194, 255, 0.18);
+            color: #00c2ff;
             padding: 6px 14px;
             border-radius: 8px;
             font-size: 13px;
@@ -144,10 +143,15 @@
             margin: 0 0 12px 0;
             letter-spacing: -0.3px;
         }
+        .topic-desc {
+            color: #888;
+            font-size: 14px;
+            margin: 0 0 18px 0;
+            line-height: 1.5;
+        }
         .topic-info {
             display: flex;
             gap: 18px;
-            margin-top: 18px;
             font-size: 14px;
             color: #777;
         }
@@ -181,97 +185,77 @@
             <a href="../index.html" class="header-logo">ProstoPython</a>
         </div>
         <div class="header-nav">
-            <a href="../lessons/lesson1.html" class="header-btn">Уроки</a>
+            <a href="../advanced/index.html" class="header-btn">Уроки</a>
             <a href="index.html" class="header-btn primary">Практикум</a>
         </div>
     </header>
 
     <div class="practices-container">
         <a href="../index.html" class="back-link">← На главную</a>
-        
+
         <div class="practices-header">
-            <h1>Практические задачи</h1>
-            <p class="subtitle">Задачи по каждой теме курса — от простых к сложным</p>
+            <h1>Продвинутый практикум</h1>
+            <p class="subtitle">Задачи для закрепления продвинутых тем Python</p>
         </div>
 
         <div class="topics-grid">
-            <a href="practice-variables.html" class="topic-card">
+            <a href="practice-oop.html" class="topic-card">
                 <span class="topic-num">Тема 1</span>
-                <h3 class="topic-title">Переменные и типы данных</h3>
-                <p style="color: #888; font-size: 14px; margin: 0;">Создание переменных, ввод данных, преобразование типов</p>
+                <h3 class="topic-title">ООП: Классы и объекты</h3>
+                <p class="topic-desc">Создание классов, наследование, инкапсуляция, полиморфизм</p>
                 <div class="topic-info">
-                    <span class="topic-stat"><span class="stat-icon">📝</span> 15 задач</span>
-                    <span class="topic-stat"><span class="stat-icon">⏱</span> 2-3 часа</span>
+                    <span class="topic-stat"><span class="stat-icon">📝</span> 12 задач</span>
+                    <span class="topic-stat"><span class="stat-icon">⏱</span> 3-4 часа</span>
                 </div>
             </a>
 
-            <a href="practice-conditions.html" class="topic-card">
+            <a href="practice-api-json.html" class="topic-card">
                 <span class="topic-num">Тема 2</span>
-                <h3 class="topic-title">Условные операторы</h3>
-                <p style="color: #888; font-size: 14px; margin: 0;">if, elif, else, логические операторы</p>
+                <h3 class="topic-title">API и JSON</h3>
+                <p class="topic-desc">Работа с API, парсинг JSON, HTTP-запросы</p>
                 <div class="topic-info">
-                    <span class="topic-stat"><span class="stat-icon">📝</span> 12 задач</span>
-                    <span class="topic-stat"><span class="stat-icon">⏱</span> 2 часа</span>
+                    <span class="topic-stat"><span class="stat-icon">📝</span> 10 задач</span>
+                    <span class="topic-stat"><span class="stat-icon">⏱</span> 2-3 часа</span>
                 </div>
             </a>
 
-            <a href="practice-loops.html" class="topic-card">
+            <a href="practice-csv.html" class="topic-card">
                 <span class="topic-num">Тема 3</span>
-                <h3 class="topic-title">Циклы</h3>
-                <p style="color: #888; font-size: 14px; margin: 0;">for, while, break, continue</p>
+                <h3 class="topic-title">Обработка CSV</h3>
+                <p class="topic-desc">Чтение, запись, анализ CSV-файлов</p>
                 <div class="topic-info">
-                    <span class="topic-stat"><span class="stat-icon">📝</span> 15 задач</span>
-                    <span class="topic-stat"><span class="stat-icon">⏱</span> 2-3 часа</span>
-                </div>
-            </a>
-
-            <a href="practice-lists.html" class="topic-card">
-                <span class="topic-num">Тема 4</span>
-                <h3 class="topic-title">Списки</h3>
-                <p style="color: #888; font-size: 14px; margin: 0;">Создание, методы, срезы, перебор</p>
-                <div class="topic-info">
-                    <span class="topic-stat"><span class="stat-icon">📝</span> 14 задач</span>
-                    <span class="topic-stat"><span class="stat-icon">⏱</span> 2-3 часа</span>
-                </div>
-            </a>
-
-            <a href="practice-dicts.html" class="topic-card">
-                <span class="topic-num">Тема 5</span>
-                <h3 class="topic-title">Словари и множества</h3>
-                <p style="color: #888; font-size: 14px; margin: 0;">dict, set, операции и методы</p>
-                <div class="topic-info">
-                    <span class="topic-stat"><span class="stat-icon">📝</span> 12 задач</span>
+                    <span class="topic-stat"><span class="stat-icon">📝</span> 8 задач</span>
                     <span class="topic-stat"><span class="stat-icon">⏱</span> 2 часа</span>
                 </div>
             </a>
 
-            <a href="practice-functions.html" class="topic-card">
-                <span class="topic-num">Тема 6</span>
-                <h3 class="topic-title">Функции</h3>
-                <p style="color: #888; font-size: 14px; margin: 0;">Создание, параметры, возврат значений</p>
+            <a href="practice-matplotlib.html" class="topic-card">
+                <span class="topic-num">Тема 4</span>
+                <h3 class="topic-title">Визуализация</h3>
+                <p class="topic-desc">Построение графиков в Matplotlib</p>
                 <div class="topic-info">
-                    <span class="topic-stat"><span class="stat-icon">📝</span> 15 задач</span>
+                    <span class="topic-stat"><span class="stat-icon">📝</span> 10 задач</span>
                     <span class="topic-stat"><span class="stat-icon">⏱</span> 3 часа</span>
                 </div>
             </a>
 
-            <a href="practice-files.html" class="topic-card">
-                <span class="topic-num">Тема 7</span>
-                <h3 class="topic-title">Работа с файлами</h3>
-                <p style="color: #888; font-size: 14px; margin: 0;">Чтение, запись, обработка ошибок</p>
+            <a href="practice-pandas.html" class="topic-card">
+                <span class="topic-num">Тема 5</span>
+                <h3 class="topic-title">Pandas и Numpy</h3>
+                <p class="topic-desc">Анализ данных, DataFrame, массивы</p>
                 <div class="topic-info">
-                    <span class="topic-stat"><span class="stat-icon">📝</span> 10 задач</span>
-                    <span class="topic-stat"><span class="stat-icon">⏱</span> 2 часа</span>
+                    <span class="topic-stat"><span class="stat-icon">📝</span> 14 задач</span>
+                    <span class="topic-stat"><span class="stat-icon">⏱</span> 4 часа</span>
                 </div>
             </a>
 
-            <a href="practice-modules.html" class="topic-card">
-                <span class="topic-num">Тема 8</span>
-                <h3 class="topic-title">Модули</h3>
-                <p style="color: #888; font-size: 14px; margin: 0;">import, random, math, datetime</p>
+            <a href="practice-sqlite.html" class="topic-card">
+                <span class="topic-num">Тема 6</span>
+                <h3 class="topic-title">SQLite базы данных</h3>
+                <p class="topic-desc">SQL-запросы, CRUD операции, JOIN</p>
                 <div class="topic-info">
                     <span class="topic-stat"><span class="stat-icon">📝</span> 12 задач</span>
-                    <span class="topic-stat"><span class="stat-icon">⏱</span> 2-3 часа</span>
+                    <span class="topic-stat"><span class="stat-icon">⏱</span> 3-4 часа</span>
                 </div>
             </a>
         </div>

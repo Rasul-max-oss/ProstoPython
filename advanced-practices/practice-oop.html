@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Задачи: ООП | ProstoPython</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { background: radial-gradient(circle at top right, #1a2a22, #0a0c0b); min-height: 100vh; margin: 0; font-family: 'Inter', sans-serif; padding-bottom: 60px; }
+        .practice-header-fixed { position: fixed; top: 0; left: 0; right: 0; background: rgba(10, 12, 11, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0, 255, 65, 0.1); padding: 15px 25px; z-index: 1000; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .header-logo { font-size: 18px; font-weight: 800; color: #00FF41; text-decoration: none; letter-spacing: -0.5px; }
+        .header-logo:hover { color: #00c2ff; }
+        .header-nav { display: flex; gap: 10px; flex-wrap: wrap; }
+        .header-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; background: rgba(255, 255, 255, 0.05); color: #ccc; }
+        .header-btn:hover { background: rgba(0, 255, 65, 0.15); color: #00FF41; }
+        .header-btn.primary { background: rgba(0, 255, 65, 0.15); color: #00FF41; }
+        .header-btn.primary:hover { background: rgba(0, 255, 65, 0.25); }
+        .practice-container { max-width: 900px; margin: 0 auto; padding: 100px 20px 60px 20px; }
+        h1 { font-size: clamp(36px, 7vw, 52px); margin: 0 0 15px 0; color: #00FF41; font-weight: 800; letter-spacing: -0.5px; }
+        .topic-desc { font-size: clamp(18px, 4.5vw, 22px); color: #999; margin-bottom: 40px; line-height: 1.6; }
+        .task-level { font-size: clamp(22px, 5vw, 28px); font-weight: 800; color: #00c2ff; margin: 50px 0 25px 0; padding-bottom: 12px; border-bottom: 2px solid rgba(0, 194, 255, 0.25); letter-spacing: -0.3px; }
+        .task-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 255, 65, 0.12); border-radius: 18px; padding: 30px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); }
+        .task-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+        .task-num { font-size: clamp(18px, 4.5vw, 21px); font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+        .task-difficulty { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+        .task-difficulty.easy { background: rgba(0, 255, 65, 0.18); color: #00FF41; }
+        .task-difficulty.medium { background: rgba(255, 194, 0, 0.18); color: #ffc200; }
+        .task-difficulty.hard { background: rgba(255, 82, 82, 0.18); color: #ff5252; }
+        .task-description { font-size: clamp(17px, 4vw, 19px); line-height: 1.7; color: #ddd; margin-bottom: 22px; }
+        .task-hint { background: rgba(0, 194, 255, 0.08); border-left: 3px solid #00c2ff; padding: 15px; margin: 20px 0; border-radius: 0 10px 10px 0; }
+        .task-hint-title { color: #00c2ff; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
+        .task-hint-text { color: #888; font-size: 14px; margin: 0; }
+        .task-io { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-top: 22px; }
+        .io-example { background: rgba(0, 0, 0, 0.35); border-radius: 12px; padding: 18px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .io-label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: block; }
+        .io-label.input { color: #00c2ff; }
+        .io-label.output { color: #00FF41; }
+        .io-code { font-family: 'JetBrains Mono', monospace; font-size: clamp(14px, 3.5vw, 16px); color: #fff; display: block; white-space: pre-wrap; word-break: break-all; line-height: 1.5; }
+        .task-solution { margin-top: 25px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+        .solution-toggle { background: none; border: 1px solid rgba(0, 255, 65, 0.3); color: #00FF41; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-size: 15px; font-weight: 600; transition: 0.3s; }
+        .solution-toggle:hover { background: rgba(0, 255, 65, 0.12); border-color: #00FF41; }
+        .solution-code { display: none; margin-top: 18px; background: rgba(0, 0, 0, 0.5); border-radius: 12px; padding: 22px; overflow-x: auto; border: 1px solid rgba(0, 255, 65, 0.1); }
+        .solution-code pre { margin: 0; }
+        .solution-code code { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: #a5d6ff; line-height: 1.6; }
+        @media (max-width: 640px) { .practice-header-fixed { padding: 12px 15px; } .header-nav { justify-content: flex-end; } .practice-container { padding: 90px 15px 50px 15px; } .task-header { flex-direction: column; align-items: flex-start; } .task-io { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header class="practice-header-fixed">
+        <div class="header-left">
+            <a href="../index.html" class="header-logo">ProstoPython</a>
+            <a href="index.html" class="header-btn">← Все темы</a>
+        </div>
+        <div class="header-nav">
+            <a href="../advanced/index.html" class="header-btn">📚 Уроки</a>
+            <a href="practice-oop.html" class="header-btn primary">📝 ООП</a>
+        </div>
+    </header>
+
+    <div class="practice-container">
+        <h1>ООП: Классы и объекты</h1>
+        <p class="topic-desc">12 задач для отработки объектно-ориентированного программирования</p>
+
+        <h2 class="task-level">📌 Уровень 1: Основы классов</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 1: Простой класс</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Создайте класс <code>Person</code> с атрибутами <code>name</code> и <code>age</code>. Добавьте метод <code>greet()</code>, который выводит "Привет, я {name}".</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Привет, я Алексей</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+    
+    def greet(self):
+        print(f"Привет, я {self.name}")
+
+p = Person("Алексей", 25)
+p.greet()</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 2: Класс Rectangle</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Создайте класс <code>Rectangle</code> с атрибутами <code>width</code> и <code>height</code>. Добавьте методы <code>area()</code> (площадь) и <code>perimeter()</code> (периметр).</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">width=5, height=3</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Площадь: 15, Периметр: 16</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">class Rectangle:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+    
+    def area(self):
+        return self.width * self.height
+    
+    def perimeter(self):
+        return 2 * (self.width + self.height)
+
+r = Rectangle(5, 3)
+print(f"Площадь: {r.area()}, Периметр: {r.perimeter()}")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 3: Класс BankAccount</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Создайте класс <code>BankAccount</code> с приватным атрибутом <code>__balance</code>. Добавьте методы <code>deposit(amount)</code>, <code>withdraw(amount)</code> и <code>get_balance()</code>.</p>
+            <div class="task-hint">
+                <div class="task-hint-title">💡 Подсказка</div>
+                <p class="task-hint-text">Используйте два подчёркивания для приватного атрибута. Проверяйте достаточно ли средств при снятии.</p>
+            </div>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Баланс: 1500
+После пополнения: 2000
+После снятия: 1700</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">class BankAccount:
+    def __init__(self, initial_balance=0):
+        self.__balance = initial_balance
+    
+    def deposit(self, amount):
+        if amount > 0:
+            self.__balance += amount
+            return f"Внесено {amount}"
+        return "Некорректная сумма"
+    
+    def withdraw(self, amount):
+        if 0 < amount <= self.__balance:
+            self.__balance -= amount
+            return f"Снято {amount}"
+        return "Недостаточно средств"
+    
+    def get_balance(self):
+        return self.__balance
+
+acc = BankAccount(1500)
+print(f"Баланс: {acc.get_balance()}")
+acc.deposit(500)
+print(f"После пополнения: {acc.get_balance()}")
+acc.withdraw(300)
+print(f"После снятия: {acc.get_balance()}")</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">📌 Уровень 2: Наследование</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 4: Животные</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Создайте базовый класс <code>Animal</code> с методом <code>speak()</code>. Создайте дочерние классы <code>Dog</code> и <code>Cat</code>, которые переопределяют метод <code>speak()</code>.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Бобик говорит: Гав!
+Барсик говорит: Мяу!</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">class Animal:
+    def __init__(self, name):
+        self.name = name
+    
+    def speak(self):
+        return "..."
+
+class Dog(Animal):
+    def speak(self):
+        return f"{self.name} говорит: Гав!"
+
+class Cat(Animal):
+    def speak(self):
+        return f"{self.name} говорит: Мяу!"
+
+dog = Dog("Бобик")
+cat = Cat("Барсик")
+print(dog.speak())
+print(cat.speak())</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 5: Сотрудник и Менеджер</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Создайте класс <code>Employee</code> с атрибутами <code>name</code> и <code>salary</code>. Создайте дочерний класс <code>Manager</code>, который добавляет атрибут <code>bonus</code> и переопределяет метод получения зарплаты.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Иван: 50000 руб.
+Анна: 80000 руб. (с бонусом)</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">class Employee:
+    def __init__(self, name, salary):
+        self.name = name
+        self.salary = salary
+    
+    def get_salary(self):
+        return self.salary
+
+class Manager(Employee):
+    def __init__(self, name, salary, bonus):
+        super().__init__(name, salary)
+        self.bonus = bonus
+    
+    def get_salary(self):
+        return self.salary + self.bonus
+
+emp = Employee("Иван", 50000)
+mgr = Manager("Анна", 60000, 20000)
+print(f"{emp.name}: {emp.get_salary()} руб.")
+print(f"{mgr.name}: {mgr.get_salary()} руб. (с бонусом)")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 6: Фигуры</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Создайте базовый класс <code>Shape</code> с методом <code>area()</code>. Создайте дочерние классы <code>Circle</code>, <code>Square</code>, <code>Triangle</code> со своими реализациями площади.</p>
+            <div class="task-hint">
+                <div class="task-hint-title">💡 Подсказка</div>
+                <p class="task-hint-text">Импортируйте <code>math.pi</code> для круга. Для треугольника используйте формулу Герона.</p>
+            </div>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Круг (r=5): 78.54
+Квадрат (a=4): 16
+Треугольник (3,4,5): 6.0</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import math
+
+class Shape:
+    def area(self):
+        return 0
+
+class Circle(Shape):
+    def __init__(self, radius):
+        self.radius = radius
+    
+    def area(self):
+        return math.pi * self.radius ** 2
+
+class Square(Shape):
+    def __init__(self, side):
+        self.side = side
+    
+    def area(self):
+        return self.side ** 2
+
+class Triangle(Shape):
+    def __init__(self, a, b, c):
+        self.a, self.b, self.c = a, b, c
+    
+    def area(self):
+        s = (self.a + self.b + self.c) / 2
+        return math.sqrt(s * (s-self.a) * (s-self.b) * (s-self.c))
+
+circle = Circle(5)
+square = Square(4)
+triangle = Triangle(3, 4, 5)
+print(f"Круг (r=5): {circle.area():.2f}")
+print(f"Квадрат (a=4): {square.area()}")
+print(f"Треугольник (3,4,5): {triangle.area()}")</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">📌 Уровень 3: Продвинутые темы</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 7: Магические методы</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Создайте класс <code>Book</code> с магическими методами <code>__str__</code>, <code>__repr__</code>, <code>__len__</code>, <code>__eq__</code>.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">'Война и мир' by Толстой
+Book('Война и мир', 'Толстой', 1200)
+Страниц: 1200</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">class Book:
+    def __init__(self, title, author, pages):
+        self.title = title
+        self.author = author
+        self.pages = pages
+    
+    def __str__(self):
+        return f"'{self.title}' by {self.author}"
+    
+    def __repr__(self):
+        return f"Book('{self.title}', '{self.author}', {self.pages})"
+    
+    def __len__(self):
+        return self.pages
+    
+    def __eq__(self, other):
+        return self.title == other.title and self.author == other.author
+
+book = Book("Война и мир", "Толстой", 1200)
+print(book)
+print(repr(book))
+print(f"Страниц: {len(book)}")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 8: Полиморфизм</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Создайте функцию <code>animal_sound(animal)</code>, которая принимает объект животного и вызывает его метод <code>speak()</code>. Продемонстрируйте полиморфизм.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Бобик говорит: Гав!
+Барсик говорит: Мяу!
+Куку говорит: Кар!</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">class Animal:
+    def __init__(self, name):
+        self.name = name
+    def speak(self):
+        pass
+
+class Dog(Animal):
+    def speak(self):
+        return f"{self.name} говорит: Гав!"
+
+class Cat(Animal):
+    def speak(self):
+        return f"{self.name} говорит: Мяу!"
+
+class Bird(Animal):
+    def speak(self):
+        return f"{self.name} говорит: Кар!"
+
+def animal_sound(animal):
+    print(animal.speak())
+
+animals = [Dog("Бобик"), Cat("Барсик"), Bird("Куку")]
+for animal in animals:
+    animal_sound(animal)</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 9: Класс Student</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Создайте класс <code>Student</code> с атрибутами <code>name</code>, <code>grades</code> (список оценок). Добавьте методы для добавления оценки, получения среднего балла и определения статуса (отличник/хорошист/троечник).</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Средний балл: 4.4
+Статус: Хорошист</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">class Student:
+    def __init__(self, name):
+        self.name = name
+        self.grades = []
+    
+    def add_grade(self, grade):
+        if 1 <= grade <= 5:
+            self.grades.append(grade)
+    
+    def get_average(self):
+        if not self.grades:
+            return 0
+        return sum(self.grades) / len(self.grades)
+    
+    def get_status(self):
+        avg = self.get_average()
+        if avg >= 4.5:
+            return "Отличник"
+        elif avg >= 3.5:
+            return "Хорошист"
+        elif avg >= 2.5:
+            return "Троечник"
+        else:
+            return "Отстающий"
+
+student = Student("Алексей")
+student.add_grade(5)
+student.add_grade(4)
+student.add_grade(4)
+student.add_grade(5)
+student.add_grade(4)
+print(f"Средний балл: {student.get_average():.1f}")
+print(f"Статус: {student.get_status()}")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 10: Библиотека</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Создайте класс <code>Library</code>, который хранит список книг. Реализуйте методы: <code>add_book()</code>, <code>remove_book()</code>, <code>find_by_author()</code>, <code>get_available_books()</code>.</p>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">class Book:
+    def __init__(self, title, author, year):
+        self.title = title
+        self.author = author
+        self.year = year
+        self.is_available = True
+    
+    def __str__(self):
+        status = "доступна" if self.is_available else "выдана"
+        return f"'{self.title}' ({self.year}) - {status}"
+
+class Library:
+    def __init__(self, name):
+        self.name = name
+        self.books = []
+    
+    def add_book(self, book):
+        self.books.append(book)
+        print(f"Книга '{book.title}' добавлена")
+    
+    def remove_book(self, title):
+        for book in self.books:
+            if book.title == title:
+                self.books.remove(book)
+                print(f"Книга '{title}' удалена")
+                return
+        print("Книга не найдена")
+    
+    def find_by_author(self, author):
+        return [b for b in self.books if b.author == author]
+    
+    def get_available_books(self):
+        return [b for b in self.books if b.is_available]
+
+lib = Library("Городская")
+lib.add_book(Book("Война и мир", "Толстой", 1869))
+lib.add_book(Book("Анна Каренина", "Толстой", 1877))
+lib.add_book(Book("Преступление и наказание", "Достоевский", 1866))
+
+print(f"\nКниги Толстого:")
+for book in lib.find_by_author("Толстой"):
+    print(f"  - {book}")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 11: Интернет-магазин</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Создайте систему классов для интернет-магазина: <code>Product</code>, <code>Cart</code>, <code>Customer</code>. Реализуйте добавление товаров в корзину, подсчёт общей стоимости.</p>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">class Product:
+    def __init__(self, name, price, quantity=1):
+        self.name = name
+        self.price = price
+        self.quantity = quantity
+    
+    def get_total(self):
+        return self.price * self.quantity
+
+class Cart:
+    def __init__(self):
+        self.items = []
+    
+    def add_product(self, product):
+        self.items.append(product)
+    
+    def get_total(self):
+        return sum(item.get_total() for item in self.items)
+    
+    def show_cart(self):
+        if not self.items:
+            print("Корзина пуста")
+            return
+        print("Ваша корзина:")
+        for item in self.items:
+            print(f"  {item.name} x{item.quantity} = {item.get_total()} руб.")
+        print(f"Итого: {self.get_total()} руб.")
+
+class Customer:
+    def __init__(self, name):
+        self.name = name
+        self.cart = Cart()
+
+customer = Customer("Иван")
+customer.cart.add_product(Product("Ноутбук", 50000))
+customer.cart.add_product(Product("Мышь", 1500, 2))
+customer.cart.add_product(Product("Клавиатура", 3500))
+customer.cart.show_cart()</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 12: Университет</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Создайте систему управления университетом с классами <code>Person</code>, <code>Student</code>, <code>Professor</code>, <code>Course</code>. Реализуйте enrolment на курсы и ведение оценок.</p>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+class Student(Person):
+    def __init__(self, name, age, student_id):
+        super().__init__(name, age)
+        self.student_id = student_id
+        self.courses = []
+        self.grades = {}
+    
+    def enroll(self, course):
+        self.courses.append(course)
+        course.students.append(self)
+        self.grades[course.name] = []
+    
+    def add_grade(self, course_name, grade):
+        if course_name in self.grades:
+            self.grades[course_name].append(grade)
+    
+    def get_gpa(self, course_name):
+        grades = self.grades.get(course_name, [])
+        return sum(grades) / len(grades) if grades else 0
+
+class Professor(Person):
+    def __init__(self, name, age, title):
+        super().__init__(name, age)
+        self.title = title
+        self.courses = []
+
+class Course:
+    def __init__(self, name, code):
+        self.name = name
+        self.code = code
+        self.students = []
+        self.professor = None
+    
+    def assign_professor(self, professor):
+        self.professor = professor
+        professor.courses.append(self)
+
+# Использование
+prof = Professor("Петр Иванов", 45, "Доцент")
+course = Course("Программирование", "CS101")
+course.assign_professor(prof)
+
+student = Student("Алексей", 20, "S001")
+student.enroll(course)
+student.add_grade("Программирование", 5)
+student.add_grade("Программирование", 4)
+student.add_grade("Программирование", 5)
+
+print(f"Студент: {student.name}")
+print(f"Курс: {course.name}")
+print(f"GPA: {student.get_gpa('Программирование'):.2f}")</code></pre></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
