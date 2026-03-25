@@ -51,6 +51,80 @@
         .exercise-title { font-size: clamp(20px, 5vw, 24px); font-weight: 700; color: #00c2ff; margin-bottom: 20px; }
         .exercise-task { background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 12px; margin: 20px 0; font-size: clamp(15px, 3.5vw, 17px); line-height: 1.8; }
         .exercise-hint { color: #777; font-size: clamp(14px, 3vw, 16px); margin-top: 20px; padding-left: 20px; border-left: 3px solid rgba(0, 194, 255, 0.3); }
+        
+        /* Секция задач */
+        .tasks-section { margin-top: clamp(40px, 7vw, 60px); }
+        .tasks-section h2 { margin-bottom: clamp(25px, 5vw, 35px); }
+        .task-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(0, 255, 65, 0.1);
+            border-radius: clamp(14px, 3vw, 18px);
+            padding: clamp(20px, 4vw, 30px);
+            margin-bottom: clamp(20px, 4vw, 30px);
+        }
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .task-num {
+            font-size: clamp(16px, 4vw, 18px);
+            font-weight: 700;
+            color: #00FF41;
+        }
+        .task-difficulty {
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: clamp(11px, 2.5vw, 13px);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .task-difficulty.easy { background: rgba(0, 255, 65, 0.15); color: #00FF41; }
+        .task-difficulty.medium { background: rgba(255, 194, 0, 0.15); color: #ffc200; }
+        .task-difficulty.hard { background: rgba(255, 82, 82, 0.15); color: #ff5252; }
+        .task-description {
+            font-size: clamp(15px, 3.5vw, 17px);
+            line-height: 1.7;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+        .task-io {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .io-example {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .io-label {
+            font-size: clamp(11px, 2.5vw, 13px);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .io-label.input { color: #00c2ff; }
+        .io-label.output { color: #00FF41; }
+        .io-code {
+            font-family: 'Fira Code', monospace;
+            font-size: clamp(12px, 3vw, 14px);
+            color: #eee;
+            display: block;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        @media (max-width: 640px) {
+            .task-header { flex-direction: column; align-items: flex-start; }
+            .task-io { grid-template-columns: 1fr; }
+        }
         @media (max-width: 850px) { .data-table thead, .data-table tbody { display: table; width: 100%; min-width: 550px; } }
         @media (max-width: 640px) { .lesson-nav { flex-direction: column-reverse; gap: 18px; } .btn-prev, .btn-next { width: 100%; justify-content: center; } }
     </style>
@@ -253,6 +327,137 @@ if __name__ == "__main__":
                 </div>
                 <div class="exercise-hint">
                     Подсказка: для площади круга используй math.pi * r**2. Для угадывания создай цикл с подсказками "больше/меньше".
+                </div>
+            </section>
+
+            <!-- Секция задач -->
+            <section class="tasks-section">
+                <h2>Набор задач для практики</h2>
+
+                <div class="task-card">
+                    <div class="task-header">
+                        <span class="task-num">Задача 1: Генератор паролей</span>
+                        <span class="task-difficulty easy">Лёгкая</span>
+                    </div>
+                    <p class="task-description">
+                        Напиши программу, которая генерирует случайный пароль заданной длины. 
+                        Используй модуль <code>random</code> и строковые символы (буквы, цифры, спецсимволы).
+                    </p>
+                    <div class="task-io">
+                        <div class="io-example">
+                            <span class="io-label input">Ввод:</span>
+                            <code class="io-code">Длина пароля: 8</code>
+                        </div>
+                        <div class="io-example">
+                            <span class="io-label output">Вывод:</span>
+                            <code class="io-code">Ваш пароль: K7#mP2xQ</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="task-card">
+                    <div class="task-header">
+                        <span class="task-num">Задача 2: Конвертер дат</span>
+                        <span class="task-difficulty medium">Средняя</span>
+                    </div>
+                    <p class="task-description">
+                        Создай программу, которая принимает дату в формате ДД.ММ.ГГГГ и выводит:
+                        день недели, сколько дней осталось до конца года, и дату через 100 дней.
+                        Используй модуль <code>datetime</code>.
+                    </p>
+                    <div class="task-io">
+                        <div class="io-example">
+                            <span class="io-label input">Ввод:</span>
+                            <code class="io-code">Введите дату: 25.03.2026</code>
+                        </div>
+                        <div class="io-example">
+                            <span class="io-label output">Вывод:</span>
+                            <code class="io-code">День недели: Среда
+До конца года: 281 дней
+Через 100 дней: 03.07.2026</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="task-card">
+                    <div class="task-header">
+                        <span class="task-num">Задача 3: Калькулятор калорий</span>
+                        <span class="task-difficulty medium">Средняя</span>
+                    </div>
+                    <p class="task-description">
+                        Напиши программу для расчёта суточной нормы калорий по формуле Миффлина-Сан Жеора.
+                        Программа запрашивает: пол, вес (кг), рост (см), возраст (лет), уровень активности.
+                        Используй модуль <code>math</code> для округления.
+                    </p>
+                    <div class="task-io">
+                        <div class="io-example">
+                            <span class="io-label input">Ввод:</span>
+                            <code class="io-code">Пол (м/ж): м
+Вес: 75
+Рост: 180
+Возраст: 25
+Активность (1-5): 3</code>
+                        </div>
+                        <div class="io-example">
+                            <span class="io-label output">Вывод:</span>
+                            <code class="io-code">Ваша норма: 2600 ккал/день</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="task-card">
+                    <div class="task-header">
+                        <span class="task-num">Задача 4: Анализ текста</span>
+                        <span class="task-difficulty hard">Сложная</span>
+                    </div>
+                    <p class="task-description">
+                        Создай программу, которая анализирует введённый текст:
+                        считает количество слов, предложений, символов (без пробелов),
+                        находит самое длинное и короткое слово.
+                        Используй модуль <code>string</code> для работы с пунктуацией.
+                    </p>
+                    <div class="task-io">
+                        <div class="io-example">
+                            <span class="io-label input">Ввод:</span>
+                            <code class="io-code">Введите текст:
+Привет! Я изучаю Python. Это интересно.</code>
+                        </div>
+                        <div class="io-example">
+                            <span class="io-label output">Вывод:</span>
+                            <code class="io-code">Слов: 6
+Предложений: 3
+Символов: 37
+Самое длинное: изучаю
+Самое короткое: Я</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="task-card">
+                    <div class="task-header">
+                        <span class="task-num">Задача 5: Симулятор бросков кубика</span>
+                        <span class="task-difficulty easy">Лёгкая</span>
+                    </div>
+                    <p class="task-description">
+                        Напиши программу, которая симулирует броски игрального кубика.
+                        Пользователь вводит количество бросков, программа выводит результаты
+                        каждого броска и статистику (сколько раз выпало каждое число).
+                    </p>
+                    <div class="task-io">
+                        <div class="io-example">
+                            <span class="io-label input">Ввод:</span>
+                            <code class="io-code">Количество бросков: 5</code>
+                        </div>
+                        <div class="io-example">
+                            <span class="io-label output">Вывод:</span>
+                            <code class="io-code">Бросок 1: 4
+Бросок 2: 6
+Бросок 3: 2
+Бросок 4: 6
+Бросок 5: 1
+Статистика: {1: 1, 2: 1, 4: 1, 6: 2}</code>
+                        </div>
+                    </div>
                 </div>
             </section>
 

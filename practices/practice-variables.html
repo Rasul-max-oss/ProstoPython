@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Задачи: Переменные | ProstoPython</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            background: radial-gradient(circle at top right, #1a2a22, #0a0c0b);
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            padding-bottom: 60px;
+        }
+        .practice-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #999;
+            text-decoration: none;
+            margin-bottom: 30px;
+            font-size: 17px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .back-link:hover { color: #00FF41; }
+        h1 {
+            font-size: clamp(36px, 7vw, 52px);
+            margin: 0 0 15px 0;
+            color: #00FF41;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        .topic-desc {
+            font-size: clamp(18px, 4.5vw, 22px);
+            color: #999;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        .task-level {
+            font-size: clamp(22px, 5vw, 28px);
+            font-weight: 800;
+            color: #00c2ff;
+            margin: 50px 0 25px 0;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(0, 194, 255, 0.25);
+            letter-spacing: -0.3px;
+        }
+        .task-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 255, 65, 0.12);
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .task-num {
+            font-size: clamp(18px, 4.5vw, 21px);
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.3px;
+        }
+        .task-difficulty {
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+        .task-difficulty.easy { background: rgba(0, 255, 65, 0.18); color: #00FF41; }
+        .task-difficulty.medium { background: rgba(255, 194, 0, 0.18); color: #ffc200; }
+        .task-difficulty.hard { background: rgba(255, 82, 82, 0.18); color: #ff5252; }
+        .task-description {
+            font-size: clamp(17px, 4vw, 19px);
+            line-height: 1.7;
+            color: #ddd;
+            margin-bottom: 22px;
+        }
+        .task-io {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 18px;
+            margin-top: 22px;
+        }
+        .io-example {
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 12px;
+            padding: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .io-label {
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .io-label.input { color: #00c2ff; }
+        .io-label.output { color: #00FF41; }
+        .io-code {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: clamp(14px, 3.5vw, 16px);
+            color: #fff;
+            display: block;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.5;
+        }
+        .task-solution {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .solution-toggle {
+            background: none;
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            color: #00FF41;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .solution-toggle:hover {
+            background: rgba(0, 255, 65, 0.12);
+            border-color: #00FF41;
+        }
+        .solution-code {
+            display: none;
+            margin-top: 18px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            padding: 22px;
+            overflow-x: auto;
+            border: 1px solid rgba(0, 255, 65, 0.1);
+        }
+        .solution-code pre { margin: 0; }
+        .solution-code code {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 15px;
+            color: #a5d6ff;
+            line-height: 1.6;
+        }
+        @media (max-width: 640px) {
+            .practice-container { padding: 30px 15px; }
+            .task-header { flex-direction: column; align-items: flex-start; }
+            .task-io { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="practice-container">
+        <a href="index.html" class="back-link">← К списку тем</a>
+        
+        <h1>Переменные и типы данных</h1>
+        <p class="topic-desc">15 задач для отработки создания переменных, ввода данных и преобразования типов</p>
+
+        <!-- Уровень 1: Базовые задачи -->
+        <h2 class="task-level">📌 Уровень 1: Основы</h2>
+
+        <div class="task-card">
+            <div class="task-header">
+                <span class="task-num">Задача 1: Приветствие</span>
+                <span class="task-difficulty easy">Лёгкая</span>
+            </div>
+            <p class="task-description">
+                Создайте переменную <code>name</code> со своим именем и выведите сообщение "Привет, [имя]!".
+            </p>
+            <div class="task-io">
+                <div class="io-example">
+                    <span class="io-label output">Вывод:</span>
+                    <code class="io-code">Привет, Алекс!</code>
+                </div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">Показать решение</button>
+                <div class="solution-code">
+                    <pre><code class="language-python">name = "Алекс"
+print(f"Привет, {name}!")</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header">
+                <span class="task-num">Задача 2: Информация о себе</span>
+                <span class="task-difficulty easy">Лёгкая</span>
+            </div>
+            <p class="task-description">
+                Создайте три переменные: <code>name</code>, <code>age</code>, <code>city</code>. 
+                Выведите: "[Имя], [возраст] лет, из [город]".
+            </p>
+            <div class="task-io">
+                <div class="io-example">
+                    <span class="io-label output">Вывод:</span>
+                    <code class="io-code">Мария, 22 лет, из Москва</code>
+                </div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">Показать решение</button>
+                <div class="solution-code">
+                    <pre><code class="language-python">name = "Мария"
+age = 22
+city = "Москва"
+print(f"{name}, {age} лет, из {city}")</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header">
+                <span class="task-num">Задача 3: Простая математика</span>
+                <span class="task-difficulty easy">Лёгкая</span>
+            </div>
+            <p class="task-description">
+                Создайте переменные <code>a = 15</code> и <code>b = 7</code>. 
+                Выведите сумму, разность, произведение и частное.
+            </p>
+            <div class="task-io">
+                <div class="io-example">
+                    <span class="io-label output">Вывод:</span>
+                    <code class="io-code">Сумма: 22
+Разность: 8
+Произведение: 105
+Частное: 2.14</code>
+                </div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">Показать решение</button>
+                <div class="solution-code">
+                    <pre><code class="language-python">a = 15
+b = 7
+print(f"Сумма: {a + b}")
+print(f"Разность: {a - b}")
+print(f"Произведение: {a * b}")
+print(f"Частное: {(a / b):.2f}")</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header">
+                <span class="task-num">Задача 4: Квадрат и куб числа</span>
+                <span class="task-difficulty easy">Лёгкая</span>
+            </div>
+            <p class="task-description">
+                Создайте переменную <code>num = 5</code>. Выведите квадрат и куб этого числа.
+            </p>
+            <div class="task-io">
+                <div class="io-example">
+                    <span class="io-label output">Вывод:</span>
+                    <code class="io-code">Квадрат: 25
+Куб: 125</code>
+                </div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">Показать решение</button>
+                <div class="solution-code">
+                    <pre><code class="language-python">num = 5
+print(f"Квадрат: {num ** 2}")
+print(f"Куб: {num ** 3}")</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header">
+                <span class="task-num">Задача 5: Обмен значений</span>
+                <span class="task-difficulty medium">Средняя</span>
+            </div>
+            <p class="task-description">
+                Создайте <code>x = 10</code> и <code>y = 20</code>. 
+                Поменяйте их значения местами без третьей переменной.
+            </p>
+            <div class="task-io">
+                <div class="io-example">
+                    <span class="io-label output">Вывод:</span>
+                    <code class="io-code">x = 20, y = 10</code>
+                </div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">Показать решение</button>
+                <div class="solution-code">
+                    <pre><code class="language-python">x = 10
+y = 20
+x, y = y, x
+print(f"x = {x}, y = {y}")</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Уровень 2: Ввод данных -->
+        <h2 class="task-level">⌨️ Уровень 2: Ввод данных (input)</h2>
+
+        <div class="task-card">
+            <div class="task-header">
+                <span class="task-num">Задача 6: Приветствие с вводом</span>
+                <span class="task-difficulty easy">Лёгкая</span>
+            </div>
+            <p class="task-description">
+                Запросите имя пользователя и выведите приветственное сообщение.
+            </p>
+            <div class="task-io">
+                <div class="io-example">
+                    <span class="io-label input">Ввод:</span>
+                    <code class="io-code">Дмитрий</code>
+                </div>
+                <div class="io-example">
+                    <span class="io-label output">Вывод:</span>
+                    <code class="io-code">Привет, Дмитрий! Рад знакомству!</code>
+                </div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">Показать решение</button>
+                <div class="solution-code">
+                    <pre><code class="language-python">name = input("Как вас зовут? ")
+print(f"Привет, {name}! Рад знакомству!")</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header">
+                <span class="task-num">Задача 7: Возраст в следующем году</span>
+                <span class="task-difficulty easy">Лёгкая</span>
+            </div>
+            <p class="task-description">
+                Запросите возраст и выведите, сколько лет будет в следующем году.
+            </p>
+            <div class="task-io">
+                <div class="io-example">
+                    <span class="io-label input">Ввод:</span>
+                    <code class="io-code">25</code>
+                </div>
+                <div class="io-example">
+                    <span class="io-label output">Вывод:</span>
+                    <code class="io-code">В следующем году вам будет 26 лет</code>
+                </div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">Показать решение</button>
+                <div class="solution-code">
+                    <pre><code class="language-python">age = int(input("Сколько вам лет? "))
+print(f"В следующем году вам будет {age + 1} лет")</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header">
+                <span class="task-num">Задача 8: Конвертер валют</span>
+                <span class="task-difficulty medium">Средняя</span>
+            </div>
+            <p class="task-description">
+                Запросите сумму в рублях и курс доллара. Выведите сумму в долларах.
+            </p>
+            <div class="task-io">
+                <div class="io-example">
+                    <span class="io-label input">Ввод:</span>
+                    <code class="io-code">10000
+92.5</code>
+                </div>
+                <div class="io-example">
+                    <span class="io-label output">Вывод:</span>
+                    <code class="io-code">10000 рублей = 108.11 долларов</code>
+                </div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">Показать решение</button>
+                <div class="solution-code">
+                    <pre><code class="language-python">rubles = float(input("Сумма в рублях: "))
+rate = float(input("Курс доллара: "))
+dollars = rubles / rate
+print(f"{rubles} рублей = {dollars:.2f} долларов")</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header">
+                <span class="task-num">Задача 9: Среднее арифметическое</span>
+                <span class="task-difficulty medium">Средняя</span>
+            </div>
+            <p class="task-description">
+                Запросите три числа и выведите их среднее арифметическое.
+            </p>
+            <div class="task-io">
+                <div class="io-example">
+                    <span class="io-label input">Ввод:</span>
+                    <code class="io-code">10
+20
+30</code>
+                </div>
+                <div class="io-example">
+                    <span class="io-label output">Вывод:</span>
+                    <code class="io-code">Среднее: 20.0</code>
+                </div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">Показать решение</button>
+                <div class="solution-code">
+                    <pre><code class="language-python">num1 = float(input("Число 1: "))
+num2 = float(input("Число 2: "))
+num3 = float(input("Число 3: "))
+average = (num1 + num2 + num3) / 3
+print(f"Среднее: {average}")</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header">
+                <span class="task-num">Задача 10: Калькулятор ИМТ</span>
+                <span class="task-difficulty medium">Средняя</span>
+            </div>
+            <p class="task-description">
+                Запросите вес (кг) и рост (м). Вычислите ИМТ: вес / рост².
+            </p>
+            <div class="task-io">
+                <div class="io-example">
+                    <span class="io-label input">Ввод:</span>
+                    <code class="io-code">70
+1.75</code>
+                </div>
+                <div class="io-example">
+                    <span class="io-label output">Вывод:</span>
+                    <code class="io-code">Ваш ИМТ: 22.86</code>
+                </div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">Показать решение</button>
+                <div class="solution-code">
+                    <pre><code class="language-python">weight = float(input("Вес (кг): "))
+height = float(input("Рост (м): "))
+bmi = weight / (height ** 2)
+print(f"Ваш ИМТ: {bmi:.2f}")</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Уровень 3: Сложные задачи -->
+        <h2 class="task-level">🔥 Уровень 3: Сложные задачи</h2>
+
+        <div class="task-card">
+            <div class="task-header">
+                <span class="task-num">Задача 11: Время в секундах</span>
+                <span class="task-difficulty medium">Средняя</span>
+            </div>
+            <p class="task-description">
+                Запросите часы, минуты, секунды. Переведите в секунды.
+            </p>
+            <div class="task-io">
+                <div class="io-example">
+                    <span class="io-label input">Ввод:</span>
+                    <code class="io-code">2
+30
+45</code>
+                </div>
+                <div class="io-example">
+                    <span class="io-label output">Вывод:</span>
+                    <code class="io-code">Прошло секунд: 9045</code>
+                </div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">Показать решение</button>
+                <div class="solution-code">
+                    <pre><code class="language-python">hours = int(input("Часы: "))
+minutes = int(input("Минуты: "))
+seconds = int(input("Секунды: "))
+total = hours * 3600 + minutes * 60 + seconds
+print(f"Прошло секунд: {total}")</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header">
+                <span class="task-num">Задача 12: Сдача в магазине</span>
+                <span class="task-difficulty medium">Средняя</span>
+            </div>
+            <p class="task-description">
+                Запросите стоимость и сумму покупателя. Выведите сдачу.
+            </p>
+            <div class="task-io">
+                <div class="io-example">
+                    <span class="io-label input">Ввод:</span>
+                    <code class="io-code">350
+500</code>
+                </div>
+                <div class="io-example">
+                    <span class="io-label output">Вывод:</span>
+                    <code class="io-code">Сдача: 150 рублей</code>
+                </div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">Показать решение</button>
+                <div class="solution-code">
+                    <pre><code class="language-python">price = float(input("Стоимость: "))
+given = float(input("Дал: "))
+change = given - price
+print(f"Сдача: {change} рублей")</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header">
+                <span class="task-num">Задача 13: Прямоугольник</span>
+                <span class="task-difficulty easy">Лёгкая</span>
+            </div>
+            <p class="task-description">
+                Запросите длину и ширину. Выведите периметр и площадь.
+            </p>
+            <div class="task-io">
+                <div class="io-example">
+                    <span class="io-label input">Ввод:</span>
+                    <code class="io-code">10
+5</code>
+                </div>
+                <div class="io-example">
+                    <span class="io-label output">Вывод:</span>
+                    <code class="io-code">Периметр: 30
+Площадь: 50</code>
+                </div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">Показать решение</button>
+                <div class="solution-code">
+                    <pre><code class="language-python">length = float(input("Длина: "))
+width = float(input("Ширина: "))
+perimeter = 2 * (length + width)
+area = length * width
+print(f"Периметр: {perimeter}")
+print(f"Площадь: {area}")</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header">
+                <span class="task-num">Задача 14: Конвертер температур</span>
+                <span class="task-difficulty medium">Средняя</span>
+            </div>
+            <p class="task-description">
+                Запросите температуру в °C. Переведите в °F: F = C × 9/5 + 32.
+            </p>
+            <div class="task-io">
+                <div class="io-example">
+                    <span class="io-label input">Ввод:</span>
+                    <code class="io-code">25</code>
+                </div>
+                <div class="io-example">
+                    <span class="io-label output">Вывод:</span>
+                    <code class="io-code">25°C = 77.0°F</code>
+                </div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">Показать решение</button>
+                <div class="solution-code">
+                    <pre><code class="language-python">celsius = float(input("Температура (°C): "))
+fahrenheit = celsius * 9/5 + 32
+print(f"{celsius}°C = {fahrenheit}°F")</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header">
+                <span class="task-num">Задача 15: Анкета пользователя</span>
+                <span class="task-difficulty hard">Сложная</span>
+            </div>
+            <p class="task-description">
+                Запросите: имя, фамилию, возраст, город, хобби. Выведите красивую анкету.
+            </p>
+            <div class="task-io">
+                <div class="io-example">
+                    <span class="io-label input">Ввод:</span>
+                    <code class="io-code">Иван
+Петров
+28
+СПб
+Программирование</code>
+                </div>
+                <div class="io-example">
+                    <span class="io-label output">Вывод:</span>
+                    <code class="io-code">═══════════════════════════
+       АНКЕТА ПОЛЬЗОВАТЕЛЯ
+═══════════════════════════
+Имя: Иван
+Фамилия: Петров
+Возраст: 28 лет
+Город: СПб
+Хобби: Программирование
+═══════════════════════════</code>
+                </div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">Показать решение</button>
+                <div class="solution-code">
+                    <pre><code class="language-python">line = "═" * 27
+name = input("Имя: ")
+surname = input("Фамилия: ")
+age = input("Возраст: ")
+city = input("Город: ")
+hobby = input("Хобби: ")
+
+print(line)
+print("       АНКЕТА ПОЛЬЗОВАТЕЛЯ")
+print(line)
+print(f"Имя: {name}")
+print(f"Фамилия: {surname}")
+print(f"Возраст: {age} лет")
+print(f"Город: {city}")
+print(f"Хобби: {hobby}")
+print(line)</code></pre>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.querySelectorAll('.solution-toggle').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.nextElementSibling.style.display = 'block';
+                this.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

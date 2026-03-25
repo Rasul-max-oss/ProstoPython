@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Практические задачи | ProstoPython</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            background: radial-gradient(circle at top right, #1a2a22, #0a0c0b);
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+        }
+        .practices-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        .practices-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        h1 {
+            font-size: clamp(36px, 7vw, 52px);
+            margin: 0 0 15px 0;
+            background: linear-gradient(90deg, #00FF41, #00c2ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        .subtitle {
+            font-size: clamp(18px, 4.5vw, 22px);
+            color: #999;
+            line-height: 1.6;
+        }
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+        .topic-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 255, 65, 0.12);
+            border-radius: 18px;
+            padding: 28px;
+            transition: 0.3s;
+            text-decoration: none;
+            display: block;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        .topic-card:hover {
+            border-color: rgba(0, 255, 65, 0.35);
+            transform: translateY(-6px);
+            background: rgba(0, 255, 65, 0.03);
+            box-shadow: 0 8px 30px rgba(0, 255, 65, 0.1);
+        }
+        .topic-num {
+            display: inline-block;
+            background: rgba(0, 255, 65, 0.18);
+            color: #00FF41;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 18px;
+        }
+        .topic-title {
+            font-size: clamp(20px, 4.5vw, 24px);
+            font-weight: 700;
+            color: #fff;
+            margin: 0 0 12px 0;
+            letter-spacing: -0.3px;
+        }
+        .topic-info {
+            display: flex;
+            gap: 18px;
+            margin-top: 18px;
+            font-size: 14px;
+            color: #777;
+        }
+        .topic-stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .stat-icon { color: #00FF41; font-size: 16px; }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #999;
+            text-decoration: none;
+            margin-bottom: 30px;
+            font-size: 17px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .back-link:hover { color: #00FF41; }
+        @media (max-width: 640px) {
+            .practices-container { padding: 40px 15px; }
+            .topics-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="practices-container">
+        <a href="../index.html" class="back-link">← На главную</a>
+        
+        <div class="practices-header">
+            <h1>Практические задачи</h1>
+            <p class="subtitle">Задачи по каждой теме курса — от простых к сложным</p>
+        </div>
+
+        <div class="topics-grid">
+            <a href="practice-variables.html" class="topic-card">
+                <span class="topic-num">Тема 1</span>
+                <h3 class="topic-title">Переменные и типы данных</h3>
+                <p style="color: #888; font-size: 14px; margin: 0;">Создание переменных, ввод данных, преобразование типов</p>
+                <div class="topic-info">
+                    <span class="topic-stat"><span class="stat-icon">📝</span> 15 задач</span>
+                    <span class="topic-stat"><span class="stat-icon">⏱</span> 2-3 часа</span>
+                </div>
+            </a>
+
+            <a href="practice-conditions.html" class="topic-card">
+                <span class="topic-num">Тема 2</span>
+                <h3 class="topic-title">Условные операторы</h3>
+                <p style="color: #888; font-size: 14px; margin: 0;">if, elif, else, логические операторы</p>
+                <div class="topic-info">
+                    <span class="topic-stat"><span class="stat-icon">📝</span> 12 задач</span>
+                    <span class="topic-stat"><span class="stat-icon">⏱</span> 2 часа</span>
+                </div>
+            </a>
+
+            <a href="practice-loops.html" class="topic-card">
+                <span class="topic-num">Тема 3</span>
+                <h3 class="topic-title">Циклы</h3>
+                <p style="color: #888; font-size: 14px; margin: 0;">for, while, break, continue</p>
+                <div class="topic-info">
+                    <span class="topic-stat"><span class="stat-icon">📝</span> 15 задач</span>
+                    <span class="topic-stat"><span class="stat-icon">⏱</span> 2-3 часа</span>
+                </div>
+            </a>
+
+            <a href="practice-lists.html" class="topic-card">
+                <span class="topic-num">Тема 4</span>
+                <h3 class="topic-title">Списки</h3>
+                <p style="color: #888; font-size: 14px; margin: 0;">Создание, методы, срезы, перебор</p>
+                <div class="topic-info">
+                    <span class="topic-stat"><span class="stat-icon">📝</span> 14 задач</span>
+                    <span class="topic-stat"><span class="stat-icon">⏱</span> 2-3 часа</span>
+                </div>
+            </a>
+
+            <a href="practice-dicts.html" class="topic-card">
+                <span class="topic-num">Тема 5</span>
+                <h3 class="topic-title">Словари и множества</h3>
+                <p style="color: #888; font-size: 14px; margin: 0;">dict, set, операции и методы</p>
+                <div class="topic-info">
+                    <span class="topic-stat"><span class="stat-icon">📝</span> 12 задач</span>
+                    <span class="topic-stat"><span class="stat-icon">⏱</span> 2 часа</span>
+                </div>
+            </a>
+
+            <a href="practice-functions.html" class="topic-card">
+                <span class="topic-num">Тема 6</span>
+                <h3 class="topic-title">Функции</h3>
+                <p style="color: #888; font-size: 14px; margin: 0;">Создание, параметры, возврат значений</p>
+                <div class="topic-info">
+                    <span class="topic-stat"><span class="stat-icon">📝</span> 15 задач</span>
+                    <span class="topic-stat"><span class="stat-icon">⏱</span> 3 часа</span>
+                </div>
+            </a>
+
+            <a href="practice-files.html" class="topic-card">
+                <span class="topic-num">Тема 7</span>
+                <h3 class="topic-title">Работа с файлами</h3>
+                <p style="color: #888; font-size: 14px; margin: 0;">Чтение, запись, обработка ошибок</p>
+                <div class="topic-info">
+                    <span class="topic-stat"><span class="stat-icon">📝</span> 10 задач</span>
+                    <span class="topic-stat"><span class="stat-icon">⏱</span> 2 часа</span>
+                </div>
+            </a>
+
+            <a href="practice-modules.html" class="topic-card">
+                <span class="topic-num">Тема 8</span>
+                <h3 class="topic-title">Модули</h3>
+                <p style="color: #888; font-size: 14px; margin: 0;">import, random, math, datetime</p>
+                <div class="topic-info">
+                    <span class="topic-stat"><span class="stat-icon">📝</span> 12 задач</span>
+                    <span class="topic-stat"><span class="stat-icon">⏱</span> 2-3 часа</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
