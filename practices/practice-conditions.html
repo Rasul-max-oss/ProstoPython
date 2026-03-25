@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Задачи: Условия | ProstoPython</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { background: radial-gradient(circle at top right, #1a2a22, #0a0c0b); min-height: 100vh; margin: 0; font-family: 'Inter', sans-serif; padding-bottom: 60px; }
+        .practice-header-fixed { position: fixed; top: 0; left: 0; right: 0; background: rgba(10, 12, 11, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0, 255, 65, 0.1); padding: 15px 25px; z-index: 1000; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .header-logo { font-size: 18px; font-weight: 800; color: #00FF41; text-decoration: none; letter-spacing: -0.5px; }
+        .header-logo:hover { color: #00c2ff; }
+        .header-nav { display: flex; gap: 10px; flex-wrap: wrap; }
+        .header-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; background: rgba(255, 255, 255, 0.05); color: #ccc; }
+        .header-btn:hover { background: rgba(0, 255, 65, 0.15); color: #00FF41; }
+        .header-btn.primary { background: rgba(0, 255, 65, 0.15); color: #00FF41; }
+        .header-btn.primary:hover { background: rgba(0, 255, 65, 0.25); }
+        .practice-container { max-width: 900px; margin: 0 auto; padding: 100px 20px 60px 20px; }
+        h1 { font-size: clamp(36px, 7vw, 52px); margin: 0 0 15px 0; color: #00FF41; font-weight: 800; letter-spacing: -0.5px; }
+        .topic-desc { font-size: clamp(18px, 4.5vw, 22px); color: #999; margin-bottom: 40px; line-height: 1.6; }
+        .task-level { font-size: clamp(22px, 5vw, 28px); font-weight: 800; color: #00c2ff; margin: 50px 0 25px 0; padding-bottom: 12px; border-bottom: 2px solid rgba(0, 194, 255, 0.25); letter-spacing: -0.3px; }
+        .task-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 255, 65, 0.12); border-radius: 18px; padding: 30px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); }
+        .task-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+        .task-num { font-size: clamp(18px, 4.5vw, 21px); font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+        .task-difficulty { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+        .task-difficulty.easy { background: rgba(0, 255, 65, 0.18); color: #00FF41; }
+        .task-difficulty.medium { background: rgba(255, 194, 0, 0.18); color: #ffc200; }
+        .task-difficulty.hard { background: rgba(255, 82, 82, 0.18); color: #ff5252; }
+        .task-description { font-size: clamp(17px, 4vw, 19px); line-height: 1.7; color: #ddd; margin-bottom: 22px; }
+        .task-io { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-top: 22px; }
+        .io-example { background: rgba(0, 0, 0, 0.35); border-radius: 12px; padding: 18px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .io-label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: block; }
+        .io-label.input { color: #00c2ff; }
+        .io-label.output { color: #00FF41; }
+        .io-code { font-family: 'JetBrains Mono', monospace; font-size: clamp(14px, 3.5vw, 16px); color: #fff; display: block; white-space: pre-wrap; word-break: break-all; line-height: 1.5; }
+        .task-solution { margin-top: 25px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+        .solution-toggle { background: none; border: 1px solid rgba(0, 255, 65, 0.3); color: #00FF41; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-size: 15px; font-weight: 600; transition: 0.3s; }
+        .solution-toggle:hover { background: rgba(0, 255, 65, 0.12); border-color: #00FF41; }
+        .solution-code { display: none; margin-top: 18px; background: rgba(0, 0, 0, 0.5); border-radius: 12px; padding: 22px; overflow-x: auto; border: 1px solid rgba(0, 255, 65, 0.1); }
+        .solution-code pre { margin: 0; }
+        .solution-code code { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: #a5d6ff; line-height: 1.6; }
+        @media (max-width: 640px) { .practice-header-fixed { padding: 12px 15px; } .header-nav { justify-content: flex-end; } .practice-container { padding: 90px 15px 50px 15px; } .task-header { flex-direction: column; align-items: flex-start; } .task-io { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header class="practice-header-fixed">
+        <div class="header-left">
+            <a href="../index.html" class="header-logo">ProstoPython</a>
+            <a href="index.html" class="header-btn">← Все темы</a>
+        </div>
+        <div class="header-nav">
+            <a href="../lessons/lesson1.html" class="header-btn">📚 Уроки</a>
+            <a href="practice-conditions.html" class="header-btn primary">📝 Условия</a>
+        </div>
+    </header>
+
+    <div class="practice-container">
+        <h1>Условные операторы</h1>
+        <p class="topic-desc">12 задач для отработки if, elif, else и логических операторов</p>
+
+        <h2 class="task-level">📌 Уровень 1: Основы</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 1: Положительное или отрицательное</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Запросите число и выведите, положительное оно, отрицательное или равно нулю.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">-5</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Отрицательное число</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">num = int(input("Введите число: "))
+if num > 0:
+    print("Положительное число")
+elif num < 0:
+    print("Отрицательное число")
+else:
+    print("Равно нулю")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 2: Чётное или нечётное</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Запросите число и проверьте, чётное ли оно.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">10</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Чётное число</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">num = int(input("Введите число: "))
+if num % 2 == 0:
+    print("Чётное число")
+else:
+    print("Нечётное число")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 3: Максимум из двух</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Запросите два числа и выведите большее из них.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">5\n12</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">12</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">a = int(input("Число 1: "))
+b = int(input("Число 2: "))
+if a > b:
+    print(a)
+else:
+    print(b)</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 4: Високосный год</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Запросите год и проверьте, високосный ли он.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">2024</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Високосный год</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">year = int(input("Введите год: "))
+if (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0):
+    print("Високосный год")
+else:
+    print("Не високосный год")</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">⌨️ Уровень 2: Логические операторы</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 5: Доступ по возрасту</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Запросите возраст. Если 18 и больше — доступ разрешён.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">20</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Доступ разрешён</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">age = int(input("Ваш возраст: "))
+if age >= 18:
+    print("Доступ разрешён")
+else:
+    print("Доступ запрещён")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 6: Треугольник</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Запросите три стороны. Проверьте, существует ли треугольник.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">3\n4\n5</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Треугольник существует</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">a = int(input("Сторона 1: "))
+b = int(input("Сторона 2: "))
+c = int(input("Сторона 3: "))
+if a + b > c and a + c > b and b + c > a:
+    print("Треугольник существует")
+else:
+    print("Треугольник не существует")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 7: Оценка студента</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Запросите балл (0-100) и выведите оценку: 90+ отлично, 75-89 хорошо, 60-74 удовлетворительно, меньше 60 плохо.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">85</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Хорошо</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">score = int(input("Балл: "))
+if score >= 90:
+    print("Отлично")
+elif score >= 75:
+    print("Хорошо")
+elif score >= 60:
+    print("Удовлетворительно")
+else:
+    print("Плохо")</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">🔥 Уровень 3: Сложные задачи</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 8: Калькулятор</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Запросите два числа и операцию (+, -, *, /). Выведите результат.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">10\n5\n+</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">15</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">a = float(input("Число 1: "))
+b = float(input("Число 2: "))
+op = input("Операция: ")
+if op == "+":
+    print(a + b)
+elif op == "-":
+    print(a - b)
+elif op == "*":
+    print(a * b)
+elif op == "/":
+    print(a / b)</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 9: День недели</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Запросите номер дня (1-7) и выведите название.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">3</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Среда</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">day = int(input("Номер дня (1-7): "))
+if day == 1:
+    print("Понедельник")
+elif day == 2:
+    print("Вторник")
+elif day == 3:
+    print("Среда")
+elif day == 4:
+    print("Четверг")
+elif day == 5:
+    print("Пятница")
+elif day == 6:
+    print("Суббота")
+elif day == 7:
+    print("Воскресенье")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 10: Скидка в магазине</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Запросите сумму покупки. Если больше 5000 — скидка 10%, если больше 10000 — 20%.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">7000</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Скидка: 700₽\nИтого: 6300₽</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">amount = float(input("Сумма: "))
+if amount > 10000:
+    discount = amount * 0.2
+elif amount > 5000:
+    discount = amount * 0.1
+else:
+    discount = 0
+print(f"Скидка: {discount}₽")
+print(f"Итого: {amount - discount}₽")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 11: Координатная четверть</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Запросите координаты X и Y. Определите четверть.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">5\n-3</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">IV четверть</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">x = int(input("X: "))
+y = int(input("Y: "))
+if x > 0 and y > 0:
+    print("I четверть")
+elif x < 0 and y > 0:
+    print("II четверть")
+elif x < 0 and y < 0:
+    print("III четверть")
+elif x > 0 and y < 0:
+    print("IV четверть")
+else:
+    print("На оси")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 12: Банкомат</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Запросите баланс и сумму снятия. Проверьте, хватает ли средств.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">5000\n2000</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Снято 2000₽\nОстаток: 3000₽</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">balance = float(input("Баланс: "))
+withdraw = float(input("Снять: "))
+if withdraw > balance:
+    print("Недостаточно средств")
+elif withdraw <= 0:
+    print("Некорректная сумма")
+else:
+    balance -= withdraw
+    print(f"Снято {withdraw}₽")
+    print(f"Остаток: {balance}₽")</code></pre></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.solution-toggle').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.nextElementSibling.style.display = 'block';
+                this.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
