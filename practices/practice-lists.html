@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Задачи: Списки | ProstoPython</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { background: radial-gradient(circle at top right, #1a2a22, #0a0c0b); min-height: 100vh; margin: 0; font-family: 'Inter', sans-serif; padding-bottom: 60px; }
+        .practice-header-fixed { position: fixed; top: 0; left: 0; right: 0; background: rgba(10, 12, 11, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0, 255, 65, 0.1); padding: 15px 25px; z-index: 1000; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .header-logo { font-size: 18px; font-weight: 800; color: #00FF41; text-decoration: none; letter-spacing: -0.5px; }
+        .header-logo:hover { color: #00c2ff; }
+        .header-nav { display: flex; gap: 10px; flex-wrap: wrap; }
+        .header-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; background: rgba(255, 255, 255, 0.05); color: #ccc; }
+        .header-btn:hover { background: rgba(0, 255, 65, 0.15); color: #00FF41; }
+        .header-btn.primary { background: rgba(0, 255, 65, 0.15); color: #00FF41; }
+        .header-btn.primary:hover { background: rgba(0, 255, 65, 0.25); }
+        .practice-container { max-width: 900px; margin: 0 auto; padding: 100px 20px 60px 20px; }
+        h1 { font-size: clamp(36px, 7vw, 52px); margin: 0 0 15px 0; color: #00FF41; font-weight: 800; letter-spacing: -0.5px; }
+        .topic-desc { font-size: clamp(18px, 4.5vw, 22px); color: #999; margin-bottom: 40px; line-height: 1.6; }
+        .task-level { font-size: clamp(22px, 5vw, 28px); font-weight: 800; color: #00c2ff; margin: 50px 0 25px 0; padding-bottom: 12px; border-bottom: 2px solid rgba(0, 194, 255, 0.25); letter-spacing: -0.3px; }
+        .task-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 255, 65, 0.12); border-radius: 18px; padding: 30px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); }
+        .task-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+        .task-num { font-size: clamp(18px, 4.5vw, 21px); font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+        .task-difficulty { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+        .task-difficulty.easy { background: rgba(0, 255, 65, 0.18); color: #00FF41; }
+        .task-difficulty.medium { background: rgba(255, 194, 0, 0.18); color: #ffc200; }
+        .task-difficulty.hard { background: rgba(255, 82, 82, 0.18); color: #ff5252; }
+        .task-description { font-size: clamp(17px, 4vw, 19px); line-height: 1.7; color: #ddd; margin-bottom: 22px; }
+        .task-io { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-top: 22px; }
+        .io-example { background: rgba(0, 0, 0, 0.35); border-radius: 12px; padding: 18px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .io-label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: block; }
+        .io-label.input { color: #00c2ff; }
+        .io-label.output { color: #00FF41; }
+        .io-code { font-family: 'JetBrains Mono', monospace; font-size: clamp(14px, 3.5vw, 16px); color: #fff; display: block; white-space: pre-wrap; word-break: break-all; line-height: 1.5; }
+        .task-solution { margin-top: 25px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+        .solution-toggle { background: none; border: 1px solid rgba(0, 255, 65, 0.3); color: #00FF41; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-size: 15px; font-weight: 600; transition: 0.3s; }
+        .solution-toggle:hover { background: rgba(0, 255, 65, 0.12); border-color: #00FF41; }
+        .solution-code { display: none; margin-top: 18px; background: rgba(0, 0, 0, 0.5); border-radius: 12px; padding: 22px; overflow-x: auto; border: 1px solid rgba(0, 255, 65, 0.1); }
+        .solution-code pre { margin: 0; }
+        .solution-code code { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: #a5d6ff; line-height: 1.6; }
+        @media (max-width: 640px) { .practice-header-fixed { padding: 12px 15px; } .header-nav { justify-content: flex-end; } .practice-container { padding: 90px 15px 50px 15px; } .task-header { flex-direction: column; align-items: flex-start; } .task-io { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header class="practice-header-fixed">
+        <div class="header-left">
+            <a href="../index.html" class="header-logo">ProstoPython</a>
+            <a href="index.html" class="header-btn">← Все темы</a>
+        </div>
+        <div class="header-nav">
+            <a href="../lessons/lesson1.html" class="header-btn">📚 Уроки</a>
+            <a href="practice-lists.html" class="header-btn primary">📝 Списки</a>
+        </div>
+    </header>
+
+    <div class="practice-container">
+        <h1>Списки</h1>
+        <p class="topic-desc">14 задач для отработки создания, методов и срезов списков</p>
+
+        <h2 class="task-level">📌 Уровень 1: Основы</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 1: Создание списка</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Создайте список из 5 любых элементов и выведите его.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">[1, 2, 3, 4, 5]</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">my_list = [1, 2, 3, 4, 5]
+print(my_list)</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 2: Первый и последний</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Выведите первый и последний элемент списка.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Список:</span><code class="io-code">[10, 20, 30, 40, 50]</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Первый: 10
+Последний: 50</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">lst = [10, 20, 30, 40, 50]
+print(f"Первый: {lst[0]}")
+print(f"Последний: {lst[-1]}")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 3: Добавить элемент</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Добавьте элемент в конец списка и выведите результат.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Список:</span><code class="io-code">[1, 2, 3]</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">[1, 2, 3, 4]</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">lst = [1, 2, 3]
+lst.append(4)
+print(lst)</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 4: Сумма элементов</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Найдите сумму всех элементов списка.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Список:</span><code class="io-code">[1, 2, 3, 4, 5]</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">15</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">lst = [1, 2, 3, 4, 5]
+print(sum(lst))</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">⌨️ Уровень 2: Методы и срезы</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 5: Срез списка</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Выведите первые 3 элемента списка.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Список:</span><code class="io-code">[1, 2, 3, 4, 5]</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">[1, 2, 3]</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">lst = [1, 2, 3, 4, 5]
+print(lst[:3])</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 6: Переворот списка</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Выведите список в обратном порядке.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Список:</span><code class="io-code">[1, 2, 3, 4, 5]</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">[5, 4, 3, 2, 1]</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">lst = [1, 2, 3, 4, 5]
+print(lst[::-1])</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 7: Удалить элемент</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Удалите элемент со значением 3 из списка.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Список:</span><code class="io-code">[1, 2, 3, 4, 5]</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">[1, 2, 4, 5]</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">lst = [1, 2, 3, 4, 5]
+lst.remove(3)
+print(lst)</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 8: Сортировка</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Отсортируйте список по возрастанию.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Список:</span><code class="io-code">[5, 2, 8, 1, 9]</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">[1, 2, 5, 8, 9]</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">lst = [5, 2, 8, 1, 9]
+lst.sort()
+print(lst)</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">🔥 Уровень 3: Сложные задачи</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 9: Уникальные элементы</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Удалите дубликаты из списка.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Список:</span><code class="io-code">[1, 2, 2, 3, 3, 3]</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">[1, 2, 3]</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">lst = [1, 2, 2, 3, 3, 3]
+unique = list(set(lst))
+print(unique)</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 10: Среднее значение</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Найдите среднее арифметическое элементов списка.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Список:</span><code class="io-code">[10, 20, 30, 40, 50]</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">30.0</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">lst = [10, 20, 30, 40, 50]
+print(sum(lst) / len(lst))</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 11: Количество вхождений</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Посчитайте, сколько раз элемент встречается в списке.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Список:</span><code class="io-code">[1, 2, 2, 3, 2, 4]</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">2 встречается 3 раз(а)</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">lst = [1, 2, 2, 3, 2, 4]
+count = lst.count(2)
+print(f"2 встречается {count} раз(а)")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 12: Список квадратов</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Создайте список квадратов чисел от 1 до 10.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">squares = [i**2 for i in range(1, 11)]
+print(squares)</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 13: Максимум и минимум</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Найдите максимальный и минимальный элемент списка.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Список:</span><code class="io-code">[5, 2, 8, 1, 9]</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Макс: 9, Мин: 1</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">lst = [5, 2, 8, 1, 9]
+print(f"Макс: {max(lst)}, Мин: {min(lst)}")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 14: Общие элементы</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Найдите общие элементы двух списков.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Списки:</span><code class="io-code">[1, 2, 3, 4]
+[3, 4, 5, 6]</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">[3, 4]</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">lst1 = [1, 2, 3, 4]
+lst2 = [3, 4, 5, 6]
+common = list(set(lst1) & set(lst2))
+print(common)</code></pre></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.solution-toggle').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.nextElementSibling.style.display = 'block';
+                this.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
