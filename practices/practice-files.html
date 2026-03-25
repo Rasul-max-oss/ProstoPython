@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Задачи: Работа с файлами | ProstoPython</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { background: radial-gradient(circle at top right, #1a2a22, #0a0c0b); min-height: 100vh; margin: 0; font-family: 'Inter', sans-serif; padding-bottom: 60px; }
+        .practice-header-fixed { position: fixed; top: 0; left: 0; right: 0; background: rgba(10, 12, 11, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0, 255, 65, 0.1); padding: 15px 25px; z-index: 1000; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .header-logo { font-size: 18px; font-weight: 800; color: #00FF41; text-decoration: none; letter-spacing: -0.5px; }
+        .header-logo:hover { color: #00c2ff; }
+        .header-nav { display: flex; gap: 10px; flex-wrap: wrap; }
+        .header-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; background: rgba(255, 255, 255, 0.05); color: #ccc; }
+        .header-btn:hover { background: rgba(0, 255, 65, 0.15); color: #00FF41; }
+        .header-btn.primary { background: rgba(0, 255, 65, 0.15); color: #00FF41; }
+        .header-btn.primary:hover { background: rgba(0, 255, 65, 0.25); }
+        .practice-container { max-width: 900px; margin: 0 auto; padding: 100px 20px 60px 20px; }
+        h1 { font-size: clamp(36px, 7vw, 52px); margin: 0 0 15px 0; color: #00FF41; font-weight: 800; letter-spacing: -0.5px; }
+        .topic-desc { font-size: clamp(18px, 4.5vw, 22px); color: #999; margin-bottom: 40px; line-height: 1.6; }
+        .task-level { font-size: clamp(22px, 5vw, 28px); font-weight: 800; color: #00c2ff; margin: 50px 0 25px 0; padding-bottom: 12px; border-bottom: 2px solid rgba(0, 194, 255, 0.25); letter-spacing: -0.3px; }
+        .task-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 255, 65, 0.12); border-radius: 18px; padding: 30px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); }
+        .task-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+        .task-num { font-size: clamp(18px, 4.5vw, 21px); font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+        .task-difficulty { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+        .task-difficulty.easy { background: rgba(0, 255, 65, 0.18); color: #00FF41; }
+        .task-difficulty.medium { background: rgba(255, 194, 0, 0.18); color: #ffc200; }
+        .task-difficulty.hard { background: rgba(255, 82, 82, 0.18); color: #ff5252; }
+        .task-description { font-size: clamp(17px, 4vw, 19px); line-height: 1.7; color: #ddd; margin-bottom: 22px; }
+        .task-io { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-top: 22px; }
+        .io-example { background: rgba(0, 0, 0, 0.35); border-radius: 12px; padding: 18px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .io-label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: block; }
+        .io-label.input { color: #00c2ff; }
+        .io-label.output { color: #00FF41; }
+        .io-code { font-family: 'JetBrains Mono', monospace; font-size: clamp(14px, 3.5vw, 16px); color: #fff; display: block; white-space: pre-wrap; word-break: break-all; line-height: 1.5; }
+        .task-solution { margin-top: 25px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+        .solution-toggle { background: none; border: 1px solid rgba(0, 255, 65, 0.3); color: #00FF41; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-size: 15px; font-weight: 600; transition: 0.3s; }
+        .solution-toggle:hover { background: rgba(0, 255, 65, 0.12); border-color: #00FF41; }
+        .solution-code { display: none; margin-top: 18px; background: rgba(0, 0, 0, 0.5); border-radius: 12px; padding: 22px; overflow-x: auto; border: 1px solid rgba(0, 255, 65, 0.1); }
+        .solution-code pre { margin: 0; }
+        .solution-code code { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: #a5d6ff; line-height: 1.6; }
+        @media (max-width: 640px) { .practice-header-fixed { padding: 12px 15px; } .header-nav { justify-content: flex-end; } .practice-container { padding: 90px 15px 50px 15px; } .task-header { flex-direction: column; align-items: flex-start; } .task-io { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header class="practice-header-fixed">
+        <div class="header-left">
+            <a href="../index.html" class="header-logo">ProstoPython</a>
+            <a href="index.html" class="header-btn">← Все темы</a>
+        </div>
+        <div class="header-nav">
+            <a href="../lessons/lesson1.html" class="header-btn">📚 Уроки</a>
+            <a href="practice-files.html" class="header-btn primary">📝 Файлы</a>
+        </div>
+    </header>
+
+    <div class="practice-container">
+        <h1>Работа с файлами</h1>
+        <p class="topic-desc">10 задач для отработки чтения, записи и обработки файлов</p>
+
+        <h2 class="task-level">📌 Уровень 1: Основы работы с файлами</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 1: Чтение файла</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Прочитайте содержимое файла 'test.txt' и выведите его.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Файл:</span><code class="io-code">Привет, мир!</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Привет, мир!</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">with open('test.txt', 'r', encoding='utf-8') as f:
+    content = f.read()
+    print(content)</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 2: Запись в файл</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Запишите текст "Hello, File!" в файл 'output.txt'.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Файл:</span><code class="io-code">Hello, File!</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">with open('output.txt', 'w', encoding='utf-8') as f:
+    f.write("Hello, File!")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 3: Построчное чтение</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Прочитайте файл 'data.txt' построчно и выведите каждую строку.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Файл:</span><code class="io-code">строка 1
+строка 2
+строка 3</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">строка 1
+строка 2
+строка 3</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">with open('data.txt', 'r', encoding='utf-8') as f:
+    for line in f:
+        print(line.strip())</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 4: Добавление в файл</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Добавьте новую строку в конец файла 'log.txt'.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">Новая запись</code></div>
+                <div class="io-example"><span class="io-label output">Файл:</span><code class="io-code">...
+Новая запись</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">with open('log.txt', 'a', encoding='utf-8') as f:
+    f.write("\nНовая запись")</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">⌨️ Уровень 2: Обработка данных из файлов</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 5: Подсчёт строк</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Посчитайте количество строк в файле.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Файл:</span><code class="io-code">строка 1
+строка 2
+строка 3</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">3 строк(и)</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">with open('data.txt', 'r', encoding='utf-8') as f:
+    lines = f.readlines()
+    print(f"{len(lines)} строк(и)")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 6: Подсчёт слов</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Посчитайте общее количество слов в файле.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Файл:</span><code class="io-code">Привет мир
+Python это просто</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">5 слов(а)</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">with open('text.txt', 'r', encoding='utf-8') as f:
+    content = f.read()
+    words = content.split()
+    print(f"{len(words)} слов(а)")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 7: Копирование файла</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Скопируйте содержимое одного файла в другой.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">source.txt:</span><code class="io-code">Данные для копирования</code></div>
+                <div class="io-example"><span class="io-label output">dest.txt:</span><code class="io-code">Данные для копирования</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">with open('source.txt', 'r', encoding='utf-8') as src:
+    with open('dest.txt', 'w', encoding='utf-8') as dst:
+        dst.write(src.read())</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 8: Поиск слова в файле</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Найдите все строки, содержащие заданное слово.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Файл:</span><code class="io-code">Python это круто
+Java тоже хорош
+Python легко учить</code></div>
+                <div class="io-example"><span class="io-label input">Поиск:</span><code class="io-code">Python</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Python это круто
+Python легко учить</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">word = "Python"
+with open('text.txt', 'r', encoding='utf-8') as f:
+    for line in f:
+        if word in line:
+            print(line.strip())</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">🔥 Уровень 3: Обработка ошибок</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 9: Безопасное чтение</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Прочитайте файл с обработкой ошибки, если файл не существует.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Файл:</span><code class="io-code">не существует</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Ошибка: файл не найден</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">try:
+    with open('nonexistent.txt', 'r', encoding='utf-8') as f:
+        print(f.read())
+except FileNotFoundError:
+    print("Ошибка: файл не найден")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 10: Логгер</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Создайте функцию log(message), которая записывает сообщение с датой и временем в файл 'log.txt'.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">log("Пользователь вошёл")</code></div>
+                <div class="io-example"><span class="io-label output">Файл:</span><code class="io-code">[2026-03-26 14:30:00] Пользователь вошёл</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">from datetime import datetime
+
+def log(message):
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open('log.txt', 'a', encoding='utf-8') as f:
+        f.write(f"[{timestamp}] {message}\n")
+
+log("Пользователь вошёл")</code></pre></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.solution-toggle').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.nextElementSibling.style.display = 'block';
+                this.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

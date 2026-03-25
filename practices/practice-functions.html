@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Задачи: Функции | ProstoPython</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { background: radial-gradient(circle at top right, #1a2a22, #0a0c0b); min-height: 100vh; margin: 0; font-family: 'Inter', sans-serif; padding-bottom: 60px; }
+        .practice-header-fixed { position: fixed; top: 0; left: 0; right: 0; background: rgba(10, 12, 11, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0, 255, 65, 0.1); padding: 15px 25px; z-index: 1000; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .header-logo { font-size: 18px; font-weight: 800; color: #00FF41; text-decoration: none; letter-spacing: -0.5px; }
+        .header-logo:hover { color: #00c2ff; }
+        .header-nav { display: flex; gap: 10px; flex-wrap: wrap; }
+        .header-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; background: rgba(255, 255, 255, 0.05); color: #ccc; }
+        .header-btn:hover { background: rgba(0, 255, 65, 0.15); color: #00FF41; }
+        .header-btn.primary { background: rgba(0, 255, 65, 0.15); color: #00FF41; }
+        .header-btn.primary:hover { background: rgba(0, 255, 65, 0.25); }
+        .practice-container { max-width: 900px; margin: 0 auto; padding: 100px 20px 60px 20px; }
+        h1 { font-size: clamp(36px, 7vw, 52px); margin: 0 0 15px 0; color: #00FF41; font-weight: 800; letter-spacing: -0.5px; }
+        .topic-desc { font-size: clamp(18px, 4.5vw, 22px); color: #999; margin-bottom: 40px; line-height: 1.6; }
+        .task-level { font-size: clamp(22px, 5vw, 28px); font-weight: 800; color: #00c2ff; margin: 50px 0 25px 0; padding-bottom: 12px; border-bottom: 2px solid rgba(0, 194, 255, 0.25); letter-spacing: -0.3px; }
+        .task-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 255, 65, 0.12); border-radius: 18px; padding: 30px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); }
+        .task-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+        .task-num { font-size: clamp(18px, 4.5vw, 21px); font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+        .task-difficulty { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+        .task-difficulty.easy { background: rgba(0, 255, 65, 0.18); color: #00FF41; }
+        .task-difficulty.medium { background: rgba(255, 194, 0, 0.18); color: #ffc200; }
+        .task-difficulty.hard { background: rgba(255, 82, 82, 0.18); color: #ff5252; }
+        .task-description { font-size: clamp(17px, 4vw, 19px); line-height: 1.7; color: #ddd; margin-bottom: 22px; }
+        .task-io { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-top: 22px; }
+        .io-example { background: rgba(0, 0, 0, 0.35); border-radius: 12px; padding: 18px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .io-label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: block; }
+        .io-label.input { color: #00c2ff; }
+        .io-label.output { color: #00FF41; }
+        .io-code { font-family: 'JetBrains Mono', monospace; font-size: clamp(14px, 3.5vw, 16px); color: #fff; display: block; white-space: pre-wrap; word-break: break-all; line-height: 1.5; }
+        .task-solution { margin-top: 25px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+        .solution-toggle { background: none; border: 1px solid rgba(0, 255, 65, 0.3); color: #00FF41; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-size: 15px; font-weight: 600; transition: 0.3s; }
+        .solution-toggle:hover { background: rgba(0, 255, 65, 0.12); border-color: #00FF41; }
+        .solution-code { display: none; margin-top: 18px; background: rgba(0, 0, 0, 0.5); border-radius: 12px; padding: 22px; overflow-x: auto; border: 1px solid rgba(0, 255, 65, 0.1); }
+        .solution-code pre { margin: 0; }
+        .solution-code code { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: #a5d6ff; line-height: 1.6; }
+        @media (max-width: 640px) { .practice-header-fixed { padding: 12px 15px; } .header-nav { justify-content: flex-end; } .practice-container { padding: 90px 15px 50px 15px; } .task-header { flex-direction: column; align-items: flex-start; } .task-io { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header class="practice-header-fixed">
+        <div class="header-left">
+            <a href="../index.html" class="header-logo">ProstoPython</a>
+            <a href="index.html" class="header-btn">← Все темы</a>
+        </div>
+        <div class="header-nav">
+            <a href="../lessons/lesson1.html" class="header-btn">📚 Уроки</a>
+            <a href="practice-functions.html" class="header-btn primary">📝 Функции</a>
+        </div>
+    </header>
+
+    <div class="practice-container">
+        <h1>Функции</h1>
+        <p class="topic-desc">15 задач для отработки создания функций, параметров и возврата значений</p>
+
+        <h2 class="task-level">📌 Уровень 1: Основы функций</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 1: Приветствие</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Создайте функцию greet(), которая выводит "Привет, мир!".</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Привет, мир!</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">def greet():
+    print("Привет, мир!")
+
+greet()</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 2: Приветствие по имени</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Создайте функцию greet_name(name), которая принимает имя и выводит приветствие.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">Алекс</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Привет, Алекс!</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">def greet_name(name):
+    print(f"Привет, {name}!")
+
+greet_name("Алекс")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 3: Сумма двух чисел</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Создайте функцию add(a, b), которая возвращает сумму двух чисел.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">5, 3</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">8</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">def add(a, b):
+    return a + b
+
+print(add(5, 3))</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 4: Квадрат числа</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Создайте функцию square(x), которая возвращает квадрат числа.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">5</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">25</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">def square(x):
+    return x ** 2
+
+print(square(5))</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 5: Максимум из двух</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Создайте функцию max_of_two(a, b), которая возвращает большее число.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">10, 20</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">20</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">def max_of_two(a, b):
+    return a if a > b else b
+
+print(max_of_two(10, 20))</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">⌨️ Уровень 2: Параметры и аргументы</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 6: Площадь прямоугольника</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Создайте функцию rectangle_area(width, height) с параметрами по умолчанию 1.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">5, 3</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">15</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">def rectangle_area(width=1, height=1):
+    return width * height
+
+print(rectangle_area(5, 3))</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 7: Конвертер температур</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Создайте функцию celsius_to_fahrenheit(c), которая конвертирует °C в °F.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">25</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">77.0</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">def celsius_to_fahrenheit(c):
+    return c * 9/5 + 32
+
+print(celsius_to_fahrenheit(25))</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 8: Проверка чётности</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Создайте функцию is_even(n), которая возвращает True, если число чётное.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">10</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">True</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">def is_even(n):
+    return n % 2 == 0
+
+print(is_even(10))</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 9: Сумма списка</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Создайте функцию sum_list(lst), которая возвращает сумму элементов списка.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">[1, 2, 3, 4, 5]</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">15</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">def sum_list(lst):
+    return sum(lst)
+
+print(sum_list([1, 2, 3, 4, 5]))</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 10: Факториал</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Создайте функцию factorial(n), которая вычисляет факториал числа.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">5</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">120</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">def factorial(n):
+    result = 1
+    for i in range(1, n + 1):
+        result *= i
+    return result
+
+print(factorial(5))</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">🔥 Уровень 3: Сложные функции</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 11: Палиндром</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Создайте функцию is_palindrome(s), которая проверяет, является ли строка палиндромом.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">шалаш</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">True</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">def is_palindrome(s):
+    return s == s[::-1]
+
+print(is_palindrome("шалаш"))</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 12: Простое число</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Создайте функцию is_prime(n), которая проверяет, простое ли число.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">17</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">True</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">def is_prime(n):
+    if n < 2:
+        return False
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+print(is_prime(17))</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 13: Подсчёт символов</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Создайте функцию count_chars(s), которая возвращает словарь с количеством каждого символа.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">hello</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">{'h': 1, 'e': 1, 'l': 2, 'o': 1}</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">def count_chars(s):
+    count = {}
+    for char in s:
+        count[char] = count.get(char, 0) + 1
+    return count
+
+print(count_chars("hello"))</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 14: Фибоначчи</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Создайте функцию fibonacci(n), которая возвращает первые n чисел Фибоначчи.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">10</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">[0, 1, 1, 2, 3, 5, 8, 13, 21, 34]</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">def fibonacci(n):
+    if n <= 0:
+        return []
+    if n == 1:
+        return [0]
+    fib = [0, 1]
+    for _ in range(2, n):
+        fib.append(fib[-1] + fib[-2])
+    return fib
+
+print(fibonacci(10))</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 15: Калькулятор</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Создайте функцию calculator(a, b, operation), которая выполняет операцию (+, -, *, /).</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Ввод:</span><code class="io-code">10, 5, '*'</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">50</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">def calculator(a, b, operation):
+    if operation == '+':
+        return a + b
+    elif operation == '-':
+        return a - b
+    elif operation == '*':
+        return a * b
+    elif operation == '/':
+        return a / b if b != 0 else "Ошибка: деление на 0"
+    return "Неизвестная операция"
+
+print(calculator(10, 5, '*'))</code></pre></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.solution-toggle').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.nextElementSibling.style.display = 'block';
+                this.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
