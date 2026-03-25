@@ -15,10 +15,69 @@
             margin: 0;
             font-family: 'Inter', sans-serif;
         }
+        /* Фиксированная шапка */
+        .practice-header-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 12, 11, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 255, 65, 0.1);
+            padding: 15px 25px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .header-logo {
+            font-size: 18px;
+            font-weight: 800;
+            color: #00FF41;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        .header-logo:hover { color: #00c2ff; }
+        .header-nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .header-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.3s;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ccc;
+        }
+        .header-btn:hover {
+            background: rgba(0, 255, 65, 0.15);
+            color: #00FF41;
+        }
+        .header-btn.primary {
+            background: rgba(0, 255, 65, 0.15);
+            color: #00FF41;
+        }
+        .header-btn.primary:hover {
+            background: rgba(0, 255, 65, 0.25);
+        }
         .practices-container {
             max-width: 1100px;
             margin: 0 auto;
-            padding: 60px 20px;
+            padding: 100px 20px 60px 20px;
         }
         .practices-header {
             text-align: center;
@@ -109,6 +168,21 @@
     </style>
 </head>
 <body>
+    <!-- Фиксированная шапка -->
+    <header class="practice-header-fixed">
+        <div class="header-left">
+            <a href="../index.html" class="header-logo">ProstoPython</a>
+        </div>
+        <div class="header-nav">
+            <a href="../lessons/lesson1.html" class="header-btn">
+                📚 Уроки
+            </a>
+            <a href="index.html" class="header-btn primary">
+                📝 Практикум
+            </a>
+        </div>
+    </header>
+
     <div class="practices-container">
         <a href="../index.html" class="back-link">← На главную</a>
         
