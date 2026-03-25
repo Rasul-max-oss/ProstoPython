@@ -53,13 +53,13 @@
         </div>
         <div class="header-nav">
             <a href="../lessons/lesson1.html" class="header-btn">📚 Уроки</a>
-            <a href="practice-modules.html" class="header-btn primary">📝 Модули</a>
+            <a href="practice-modules.html" class="header-btn primary">📝 24 задачи</a>
         </div>
     </header>
 
     <div class="practice-container">
         <h1>Модули</h1>
-        <p class="topic-desc">12 задач для отработки random, math, datetime и других модулей</p>
+        <p class="topic-desc">24 задачи для отработки random, math, datetime, os, json и других модулей</p>
 
         <h2 class="task-level">📌 Уровень 1: Модуль random</h2>
 
@@ -246,6 +246,193 @@ now = datetime.now()
 midnight = datetime(now.year, now.month, now.day) + timedelta(days=1)
 delta = midnight - now
 print(f"{int(delta.total_seconds())} секунд")</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">💻 Уровень 4: Модуль os</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 13: Текущая директория</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Выведите путь к текущей рабочей директории.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">C:\Users\Name\Project</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import os
+print(os.getcwd())</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 14: Список файлов</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Выведите список всех файлов и папок в текущей директории.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">['file1.txt', 'file2.py', 'folder1']</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import os
+print(os.listdir('.'))</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 15: Создание папки</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Создайте новую папку 'test_folder' и проверьте её существование.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Папка создана: True</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import os
+os.makedirs('test_folder', exist_ok=True)
+print(f"Папка создана: {os.path.exists('test_folder')}")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 16: Размер файла</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Получите размер файла в байтах.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Файл:</span><code class="io-code">test.txt</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">1024 байт</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import os
+size = os.path.getsize('test.txt')
+print(f"{size} байт")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 17: Переименование файла</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Переименуйте файл 'old_name.txt' в 'new_name.txt'.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Файл:</span><code class="io-code">old_name.txt</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Файл переименован</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import os
+os.rename('old_name.txt', 'new_name.txt')
+print("Файл переименован")</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">📦 Уровень 5: Модуль json</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 18: Создание JSON</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Создайте JSON-строку из словаря.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Словарь:</span><code class="io-code">{'name': 'Алекс', 'age': 25}</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">{"name": "Алекс", "age": 25}</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import json
+data = {'name': 'Алекс', 'age': 25}
+json_str = json.dumps(data, ensure_ascii=False)
+print(json_str)</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 19: Парсинг JSON</span><span class="task-difficulty easy">Лёгкая</span></div>
+            <p class="task-description">Распарсите JSON-строку в словарь.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">JSON:</span><code class="io-code">{"name": "Мария", "age": 30}</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Мария, 30 лет</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import json
+json_str = '{"name": "Мария", "age": 30}'
+data = json.loads(json_str)
+print(f"{data['name']}, {data['age']} лет")</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 20: Запись в JSON-файл</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Запишите словарь в файл 'data.json'.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Словарь:</span><code class="io-code">{'users': [{'name': 'Алекс'}, {'name': 'Мария'}]}</code></div>
+                <div class="io-example"><span class="io-label output">Файл:</span><code class="io-code">data.json</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import json
+data = {'users': [{'name': 'Алекс'}, {'name': 'Мария'}]}
+with open('data.json', 'w', encoding='utf-8') as f:
+    json.dump(data, f, ensure_ascii=False, indent=2)</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 21: Чтение JSON-файла</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Прочитайте данные из файла 'data.json'.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Файл:</span><code class="io-code">{"count": 5, "items": [1, 2, 3]}</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">count: 5, items: [1, 2, 3]</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">import json
+with open('data.json', 'r', encoding='utf-8') as f:
+    data = json.load(f)
+print(f"count: {data['count']}, items: {data['items']}")</code></pre></div>
+            </div>
+        </div>
+
+        <h2 class="task-level">🧠 Уровень 6: Модуль collections</h2>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 22: Counter - подсчёт</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Посчитайте количество каждого элемента в списке.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label input">Список:</span><code class="io-code">['яблоко', 'банан', 'яблоко', 'апельсин', 'банан', 'яблоко']</code></div>
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Counter({'яблоко': 3, 'банан': 2, 'апельсин': 1})</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">from collections import Counter
+fruits = ['яблоко', 'банан', 'яблоко', 'апельсин', 'банан', 'яблоко']
+print(Counter(fruits))</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 23: defaultdict</span><span class="task-difficulty medium">Средняя</span></div>
+            <p class="task-description">Создайте словарь со значениями по умолчанию (списки).</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">{'fruits': ['яблоко', 'банан'], 'vegetables': ['огурец']}</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">from collections import defaultdict
+d = defaultdict(list)
+d['fruits'].append('яблоко')
+d['fruits'].append('банан')
+d['vegetables'].append('огурец')
+print(dict(d))</code></pre></div>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <div class="task-header"><span class="task-num">Задача 24: namedtuple</span><span class="task-difficulty hard">Сложная</span></div>
+            <p class="task-description">Создайте именованный кортеж Person с полями name, age, city.</p>
+            <div class="task-io">
+                <div class="io-example"><span class="io-label output">Вывод:</span><code class="io-code">Person(name='Алекс', age=25, city='Москва')</code></div>
+            </div>
+            <div class="task-solution">
+                <button class="solution-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">Показать решение</button>
+                <div class="solution-code"><pre><code class="language-python">from collections import namedtuple
+Person = namedtuple('Person', ['name', 'age', 'city'])
+p = Person('Алекс', 25, 'Москва')
+print(p)</code></pre></div>
             </div>
         </div>
     </div>
