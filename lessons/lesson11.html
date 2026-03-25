@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Модули и импорт | ProstoPython</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        * { box-sizing: border-box; }
+        .lesson-section { margin-bottom: clamp(35px, 5vw, 55px); }
+        .lesson-header h1 { font-size: clamp(32px, 7vw, 48px); margin: 0 0 clamp(20px, 3vw, 25px) 0; background: linear-gradient(90deg, #fff, #00FF41); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .lead { font-size: clamp(18px, 4.5vw, 22px); color: #888; line-height: 1.7; margin-bottom: clamp(35px, 5vw, 45px); }
+        h2 { font-size: clamp(26px, 6vw, 36px); color: #00FF41; margin-bottom: clamp(20px, 3vw, 25px); }
+        h3 { font-size: clamp(20px, 5vw, 26px); margin-bottom: clamp(15px, 2vw, 20px); }
+        p, li { font-size: clamp(16px, 4vw, 18px); line-height: 1.7; }
+        ul, ol { padding-left: clamp(25px, 5vw, 35px); }
+        .code-window { background: #0a0c0b; border: 1px solid rgba(0, 255, 65, 0.15); border-radius: clamp(14px, 3vw, 18px); margin: clamp(25px, 5vw, 35px) 0; overflow: hidden; }
+        .window-header { background: rgba(255, 255, 255, 0.05); padding: clamp(12px, 2vw, 15px) clamp(18px, 3vw, 25px); font-family: monospace; font-size: clamp(13px, 3vw, 15px); color: #666; }
+        pre { margin: 0; padding: clamp(20px, 4vw, 30px); overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        code { font-family: 'Fira Code', monospace; font-size: clamp(14px, 3vw, 16px); line-height: 1.6; }
+        .pro-tip { background: rgba(0, 255, 65, 0.06); border-left: 4px solid #00FF41; padding: clamp(18px, 4vw, 22px); margin: clamp(25px, 5vw, 35px) 0; border-radius: 10px; }
+        .pro-tip strong { color: #00FF41; font-size: clamp(16px, 4vw, 18px); }
+        .pro-tip p { margin: 10px 0 0 0; font-size: clamp(15px, 3.5vw, 17px); }
+        .tip { background: rgba(0, 194, 255, 0.06); border-left: 4px solid #00c2ff; padding: clamp(18px, 4vw, 22px); margin: clamp(25px, 5vw, 35px) 0; border-radius: 10px; }
+        .tip strong { color: #00c2ff; font-size: clamp(16px, 4vw, 18px); }
+        .tip p { margin: 10px 0 0 0; font-size: clamp(15px, 3.5vw, 17px); }
+        .data-table { width: 100%; border-collapse: collapse; margin: 30px 0; background: rgba(255, 255, 255, 0.02); border-radius: 14px; overflow: hidden; border: 1px solid rgba(0, 255, 65, 0.1); }
+        .data-table th, .data-table td { padding: 18px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .data-table th { background: rgba(0, 255, 65, 0.08); color: #00FF41; font-size: 15px; text-transform: uppercase; font-weight: 700; }
+        .data-table td { font-size: clamp(15px, 3.5vw, 17px); }
+        .example-block { background: rgba(10, 12, 11, 0.8); border: 1px solid rgba(0, 255, 65, 0.12); border-radius: clamp(14px, 3vw, 18px); margin: clamp(25px, 5vw, 35px) 0; overflow: hidden; }
+        .example-header { background: linear-gradient(135deg, rgba(0, 255, 65, 0.08), rgba(0, 0, 0, 0)); padding: clamp(15px, 3vw, 20px) clamp(20px, 4vw, 30px); border-bottom: 1px solid rgba(0, 255, 65, 0.08); }
+        .example-label { display: inline-block; background: rgba(0, 255, 65, 0.15); color: #00FF41; padding: 5px 12px; border-radius: 6px; font-size: clamp(12px, 2.5vw, 14px); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+        .example-title { font-size: clamp(18px, 4vw, 22px); font-weight: 700; color: #fff; margin: 0 0 8px 0; }
+        .example-description { font-size: clamp(14px, 3vw, 16px); color: #888; margin: 0; }
+        .example-code { padding: clamp(20px, 4vw, 30px); }
+        .example-code pre { margin: 0; padding: 0; }
+        .progress-container { background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 18px 24px; margin: 25px 0 35px 0; }
+        .progress-labels { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #999; }
+        .progress-bar { height: 10px; background: rgba(0, 0, 0, 0.4); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #00FF41, #00cc33); border-radius: 10px; transition: width 0.3s ease; }
+        .lesson-nav { margin-top: auto; padding-top: clamp(35px, 6vw, 55px); display: flex; justify-content: space-between; align-items: center; gap: clamp(20px, 4vw, 30px); flex-wrap: wrap; }
+        .btn-prev, .btn-next { display: inline-flex; align-items: center; padding: clamp(14px, 3vw, 18px) clamp(25px, 5vw, 40px); border-radius: 50px; text-decoration: none; font-weight: 700; transition: 0.3s; font-size: clamp(15px, 3.5vw, 17px); white-space: nowrap; }
+        .btn-prev { color: #666; background: rgba(255, 255, 255, 0.05); }
+        .btn-prev:hover { color: #00FF41; background: rgba(0, 255, 65, 0.1); }
+        .btn-next { background: #00FF41; color: #000; box-shadow: 0 10px 25px rgba(0, 255, 65, 0.15); }
+        .btn-next:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0, 255, 65, 0.25); }
+        .exercise { background: linear-gradient(135deg, rgba(0, 194, 255, 0.06), rgba(0, 0, 0, 0.2)); border-radius: clamp(18px, 4vw, 24px); padding: clamp(25px, 5vw, 35px); margin: clamp(35px, 6vw, 50px) 0; border: 1px solid rgba(0, 194, 255, 0.15); }
+        .exercise-title { font-size: clamp(20px, 5vw, 24px); font-weight: 700; color: #00c2ff; margin-bottom: 20px; }
+        .exercise-task { background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 12px; margin: 20px 0; font-size: clamp(15px, 3.5vw, 17px); line-height: 1.8; }
+        .exercise-hint { color: #777; font-size: clamp(14px, 3vw, 16px); margin-top: 20px; padding-left: 20px; border-left: 3px solid rgba(0, 194, 255, 0.3); }
+        @media (max-width: 850px) { .data-table thead, .data-table tbody { display: table; width: 100%; min-width: 550px; } }
+        @media (max-width: 640px) { .lesson-nav { flex-direction: column-reverse; gap: 18px; } .btn-prev, .btn-next { width: 100%; justify-content: center; } }
+    </style>
+</head>
+<body class="lesson-page">
+    <div id="header-placeholder"></div>
+    <div class="container lesson-layout">
+        <aside class="sidebar" id="sidebar-placeholder"></aside>
+        <main class="content">
+            <nav class="breadcrumb">Основы / Урок 11</nav>
+            <div class="progress-container">
+                <div class="progress-labels"><span>Прогресс курса</span><span id="progress-percent">0%</span></div>
+                <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width: 0%"></div></div>
+            </div>
+            <section class="lesson-header">
+                <h1>Модули и импорт</h1>
+                <p class="lead">Модули позволяют разделять код на файлы и использовать готовые библиотеки. Изучим импорт и создание собственных модулей.</p>
+            </section>
+
+            <section class="lesson-section">
+                <h2>1. Импорт модулей</h2>
+                <p>Python имеет богатую стандартную библиотеку модулей. Для использования модуля нужно его импортировать.</p>
+                <div class="code-window">
+                    <div class="window-header">import_basic.py</div>
+                    <pre><code class="language-python"># Импорт всего модуля
+import math
+
+print(math.sqrt(16))  # 4.0
+print(math.pi)        # 3.14159...
+
+# Импорт с псевдонимом
+import datetime as dt
+
+print(dt.datetime.now())</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>2. Конкретные импорты</h2>
+                <p>Можно импортировать только нужные функции из модуля.</p>
+                <div class="code-window">
+                    <div class="window-header">from_import.py</div>
+                    <pre><code class="language-python"># Импорт конкретных функций
+from math import sqrt, pi
+
+print(sqrt(16))  # 4.0 - не нужно math.
+print(pi)        # 3.14159...
+
+# Импорт всех имён из модуля (не рекомендуется)
+from math import *
+
+print(sqrt(25))  # 5.0</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    <strong>Лучшая практика:</strong> Импортируй конкретные имена или используй import module. Избегай from module import *.
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>3. Популярные стандартные модули</h2>
+                <table class="data-table">
+                    <thead><tr><th>Модуль</th><th>Назначение</th><th>Пример</th></tr></thead>
+                    <tbody>
+                        <tr><td>math</td><td>Математические функции</td><td>math.sqrt(), math.sin()</td></tr>
+                        <tr><td>random</td><td>Генерация случайных чисел</td><td>random.randint(1, 10)</td></tr>
+                        <tr><td>datetime</td><td>Работа с датой и временем</td><td>datetime.datetime.now()</td></tr>
+                        <tr><td>os</td><td>Операции с файловой системой</td><td>os.getcwd(), os.listdir()</td></tr>
+                        <tr><td>sys</td><td>Системные функции</td><td>sys.argv, sys.exit()</td></tr>
+                        <tr><td>json</td><td>Работа с JSON</td><td>json.loads(), json.dumps()</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="lesson-section">
+                <h2>4. Практические примеры</h2>
+
+                <div class="example-block">
+                    <div class="example-header">
+                        <span class="example-label">Пример 1</span>
+                        <h4 class="example-title">Генератор паролей</h4>
+                        <p class="example-description">Использование модуля random</p>
+                    </div>
+                    <div class="example-code">
+                        <pre><code class="language-python">import random
+import string
+
+def generate_password(length=12):
+    chars = string.ascii_letters + string.digits + string.punctuation
+    password = ''.join(random.choice(chars) for _ in range(length))
+    return password
+
+print(generate_password(16))</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-block">
+                    <div class="example-header">
+                        <span class="example-label">Пример 2</span>
+                        <h4 class="example-title">Работа с датой</h4>
+                        <p class="example-description">Использование модуля datetime</p>
+                    </div>
+                    <div class="example-code">
+                        <pre><code class="language-python">from datetime import datetime, timedelta
+
+# Текущая дата
+now = datetime.now()
+print(f"Сегодня: {now.strftime('%d.%m.%Y')}")
+print(f"Время: {now.strftime('%H:%M')}")
+
+# Дата через неделю
+next_week = now + timedelta(days=7)
+print(f"Через неделю: {next_week.strftime('%d.%m.%Y')}")</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-block">
+                    <div class="example-header">
+                        <span class="example-label">Пример 3</span>
+                        <h4 class="example-title">Калькулятор с math</h4>
+                        <p class="example-description">Математические вычисления</p>
+                    </div>
+                    <div class="example-code">
+                        <pre><code class="language-python">import math
+
+def circle_area(radius):
+    """Площадь круга"""
+    return math.pi * radius ** 2
+
+def hypotenuse(a, b):
+    """Гипотенуза треугольника"""
+    return math.hypot(a, b)
+
+print(f"Площадь круга R=5: {circle_area(5):.2f}")
+print(f"Гипотенуза 3,4: {hypotenuse(3, 4)}")</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>5. Создание собственного модуля</h2>
+                <p>Любой Python-файл может быть модулем. Создай файл mymodule.py и импортируй его.</p>
+                
+                <div class="code-window">
+                    <div class="window-header">mymodule.py</div>
+                    <pre><code class="language-python"># Файл mymodule.py
+
+def greet(name):
+    return f"Привет, {name}!"
+
+def add(a, b):
+    return a + b
+
+VERSION = "1.0"</code></pre>
+                </div>
+
+                <div class="code-window">
+                    <div class="window-header">main.py</div>
+                    <pre><code class="language-python"># Файл main.py
+import mymodule
+
+print(mymodule.greet("Алекс"))  # Привет, Алекс!
+print(mymodule.add(5, 3))       # 8
+print(mymodule.VERSION)         # 1.0</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>6. Модуль __name__</h2>
+                <p>Конструкция if __name__ == "__main__" позволяет запускать код только при прямом запуске файла.</p>
+                <div class="code-window">
+                    <div class="window-header">module_main.py</div>
+                    <pre><code class="language-python"># Файл calculator.py
+
+def add(a, b):
+    return a + b
+
+if __name__ == "__main__":
+    # Этот код выполнится только при прямом запуске
+    print("Тестирование:")
+    print(add(2, 3))
+    
+# При импорте этот код не выполнится</code></pre>
+                </div>
+
+                <div class="tip">
+                    <strong>Зачем это нужно:</strong> Позволяет использовать файл и как модуль для импорта, и как самостоятельную программу.
+                </div>
+            </section>
+
+            <div class="pro-tip">
+                <strong>Установка сторонних модулей:</strong> Используй pip install package_name для установки библиотек из PyPI (Python Package Index).
+            </div>
+
+            <section class="exercise">
+                <div class="exercise-title">Практическое задание</div>
+                <div class="exercise-task">
+                    <strong>Задача 1:</strong> Создай модуль с функциями для работы с геометрическими фигурами (площадь прямоугольника, круга, периметр). Импортируй и используй в другом файле.<br><br>
+                    <strong>Задача 2:</strong> Напиши программу "Угадай число" с использованием random.randint(). Компьютер загадывает число, пользователь угадывает.
+                </div>
+                <div class="exercise-hint">
+                    Подсказка: для площади круга используй math.pi * r**2. Для угадывания создай цикл с подсказками "больше/меньше".
+                </div>
+            </section>
+
+            <div class="lesson-nav">
+                <a href="lesson10.html" class="btn-prev">← Назад</a>
+                <a href="completion.html" class="btn-next">Курс завершён 🏆</a>
+            </div>
+        </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="../js/app.js"></script>
+</body>
+</html>

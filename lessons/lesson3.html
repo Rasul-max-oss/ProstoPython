@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Условные операторы | ProstoPython</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        * { box-sizing: border-box; }
+        .lesson-section { margin-bottom: clamp(35px, 5vw, 55px); }
+        .lesson-header h1 {
+            font-size: clamp(32px, 7vw, 48px);
+            margin: 0 0 clamp(20px, 3vw, 25px) 0;
+            background: linear-gradient(90deg, #fff, #00FF41);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .lead {
+            font-size: clamp(18px, 4.5vw, 22px);
+            color: #888;
+            line-height: 1.7;
+            margin-bottom: clamp(35px, 5vw, 45px);
+        }
+        h2 {
+            font-size: clamp(26px, 6vw, 36px);
+            color: #00FF41;
+            margin-bottom: clamp(20px, 3vw, 25px);
+        }
+        h3 {
+            font-size: clamp(20px, 5vw, 26px);
+            margin-bottom: clamp(15px, 2vw, 20px);
+        }
+        p, li {
+            font-size: clamp(16px, 4vw, 18px);
+            line-height: 1.7;
+        }
+        ul, ol { padding-left: clamp(25px, 5vw, 35px); }
+        .code-window {
+            background: #0a0c0b;
+            border: 1px solid rgba(0, 255, 65, 0.15);
+            border-radius: clamp(14px, 3vw, 18px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            overflow: hidden;
+        }
+        .window-header {
+            background: rgba(255, 255, 255, 0.05);
+            padding: clamp(12px, 2vw, 15px) clamp(18px, 3vw, 25px);
+            font-family: monospace;
+            font-size: clamp(13px, 3vw, 15px);
+            color: #666;
+        }
+        pre { margin: 0; padding: clamp(20px, 4vw, 30px); overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        code { font-family: 'Fira Code', monospace; font-size: clamp(14px, 3vw, 16px); line-height: 1.6; }
+        .pro-tip {
+            background: rgba(0, 255, 65, 0.06);
+            border-left: 4px solid #00FF41;
+            padding: clamp(18px, 4vw, 22px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            border-radius: 10px;
+        }
+        .pro-tip strong { color: #00FF41; font-size: clamp(16px, 4vw, 18px); }
+        .pro-tip p { margin: 10px 0 0 0; font-size: clamp(15px, 3.5vw, 17px); }
+        .tip {
+            background: rgba(0, 194, 255, 0.06);
+            border-left: 4px solid #00c2ff;
+            padding: clamp(18px, 4vw, 22px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            border-radius: 10px;
+        }
+        .tip strong { color: #00c2ff; font-size: clamp(16px, 4vw, 18px); }
+        .tip p { margin: 10px 0 0 0; font-size: clamp(15px, 3.5vw, 17px); }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 255, 65, 0.1);
+        }
+        .data-table th, .data-table td {
+            padding: 18px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .data-table th {
+            background: rgba(0, 255, 65, 0.08);
+            color: #00FF41;
+            font-size: 15px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        .data-table td { font-size: clamp(15px, 3.5vw, 17px); }
+        .example-block {
+            background: rgba(10, 12, 11, 0.8);
+            border: 1px solid rgba(0, 255, 65, 0.12);
+            border-radius: clamp(14px, 3vw, 18px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            overflow: hidden;
+        }
+        .example-header {
+            background: linear-gradient(135deg, rgba(0, 255, 65, 0.08), rgba(0, 0, 0, 0));
+            padding: clamp(15px, 3vw, 20px) clamp(20px, 4vw, 30px);
+            border-bottom: 1px solid rgba(0, 255, 65, 0.08);
+        }
+        .example-label {
+            display: inline-block;
+            background: rgba(0, 255, 65, 0.15);
+            color: #00FF41;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: clamp(12px, 2.5vw, 14px);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+        .example-title {
+            font-size: clamp(18px, 4vw, 22px);
+            font-weight: 700;
+            color: #fff;
+            margin: 0 0 8px 0;
+        }
+        .example-description {
+            font-size: clamp(14px, 3vw, 16px);
+            color: #888;
+            margin: 0;
+        }
+        .example-code { padding: clamp(20px, 4vw, 30px); }
+        .example-code pre { margin: 0; padding: 0; }
+        .progress-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 18px 24px;
+            margin: 25px 0 35px 0;
+        }
+        .progress-labels { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #999; }
+        .progress-bar { height: 10px; background: rgba(0, 0, 0, 0.4); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #00FF41, #00cc33); border-radius: 10px; transition: width 0.3s ease; }
+        .lesson-nav {
+            margin-top: auto;
+            padding-top: clamp(35px, 6vw, 55px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: clamp(20px, 4vw, 30px);
+            flex-wrap: wrap;
+        }
+        .btn-prev, .btn-next {
+            display: inline-flex;
+            align-items: center;
+            padding: clamp(14px, 3vw, 18px) clamp(25px, 5vw, 40px);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+            font-size: clamp(15px, 3.5vw, 17px);
+            white-space: nowrap;
+        }
+        .btn-prev { color: #666; background: rgba(255, 255, 255, 0.05); }
+        .btn-prev:hover { color: #00FF41; background: rgba(0, 255, 65, 0.1); }
+        .btn-next { background: #00FF41; color: #000; box-shadow: 0 10px 25px rgba(0, 255, 65, 0.15); }
+        .btn-next:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0, 255, 65, 0.25); }
+        .exercise {
+            background: linear-gradient(135deg, rgba(0, 194, 255, 0.06), rgba(0, 0, 0, 0.2));
+            border-radius: clamp(18px, 4vw, 24px);
+            padding: clamp(25px, 5vw, 35px);
+            margin: clamp(35px, 6vw, 50px) 0;
+            border: 1px solid rgba(0, 194, 255, 0.15);
+        }
+        .exercise-title {
+            font-size: clamp(20px, 5vw, 24px);
+            font-weight: 700;
+            color: #00c2ff;
+            margin-bottom: 20px;
+        }
+        .exercise-task {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-size: clamp(15px, 3.5vw, 17px);
+            line-height: 1.8;
+        }
+        .exercise-hint {
+            color: #777;
+            font-size: clamp(14px, 3vw, 16px);
+            margin-top: 20px;
+            padding-left: 20px;
+            border-left: 3px solid rgba(0, 194, 255, 0.3);
+        }
+        @media (max-width: 850px) {
+            .data-table thead, .data-table tbody { display: table; width: 100%; min-width: 550px; }
+        }
+        @media (max-width: 640px) {
+            .lesson-nav { flex-direction: column-reverse; gap: 18px; }
+            .btn-prev, .btn-next { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body class="lesson-page">
+
+    <div id="header-placeholder"></div>
+
+    <div class="container lesson-layout">
+        <aside class="sidebar" id="sidebar-placeholder"></aside>
+
+        <main class="content">
+            <nav class="breadcrumb">Основы / Урок 3</nav>
+
+            <div class="progress-container">
+                <div class="progress-labels">
+                    <span>Прогресс курса</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <section class="lesson-header">
+                <h1>Условные операторы</h1>
+                <p class="lead">Конструкция if-elif-else позволяет программе принимать решения и выполнять разный код в зависимости от условий.</p>
+            </section>
+
+            <section class="lesson-section">
+                <h2>1. Конструкция if-else</h2>
+                <p>Оператор if проверяет условие и выполняет код, если условие истинно. else выполняет альтернативный код, если условие ложно.</p>
+
+                <div class="code-window">
+                    <div class="window-header">basic_if.py</div>
+                    <pre><code class="language-python">age = 18
+
+if age >= 18:
+    print("Доступ разрешён")
+else:
+    print("Доступ запрещён")
+
+print("Код продолжается...")</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    <strong>Важно:</strong> После if и else ставится двоеточие, а код внутри блока выполняется с отступом (4 пробела).
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>2. Операторы сравнения</h2>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Оператор</th>
+                            <th>Значение</th>
+                            <th>Пример</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>==</td>
+                            <td>Равно</td>
+                            <td>5 == 5 → True</td>
+                        </tr>
+                        <tr>
+                            <td>!=</td>
+                            <td>Не равно</td>
+                            <td>5 != 3 → True</td>
+                        </tr>
+                        <tr>
+                            <td>&gt;</td>
+                            <td>Больше</td>
+                            <td>5 &gt; 3 → True</td>
+                        </tr>
+                        <tr>
+                            <td>&lt;</td>
+                            <td>Меньше</td>
+                            <td>3 &lt; 5 → True</td>
+                        </tr>
+                        <tr>
+                            <td>&gt;=</td>
+                            <td>Больше или равно</td>
+                            <td>5 &gt;= 5 → True</td>
+                        </tr>
+                        <tr>
+                            <td>&lt;=</td>
+                            <td>Меньше или равно</td>
+                            <td>3 &lt;= 5 → True</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="lesson-section">
+                <h2>3. Конструкция elif</h2>
+                <p>elif (else if) позволяет проверить несколько условий последовательно.</p>
+
+                <div class="code-window">
+                    <div class="window-header">grading.py</div>
+                    <pre><code class="language-python">score = 85
+
+if score >= 90:
+    print("Отлично")
+elif score >= 75:
+    print("Хорошо")
+elif score >= 60:
+    print("Удовлетворительно")
+else:
+    print("Нужно подучить")</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>4. Логические операторы</h2>
+                
+                <h3>AND — оба условия истинны</h3>
+                <div class="code-window">
+                    <div class="window-header">and_operator.py</div>
+                    <pre><code class="language-python">age = 25
+has_license = True
+
+if age >= 18 and has_license:
+    print("Можно водить машину")</code></pre>
+                </div>
+
+                <h3>OR — хотя бы одно условие истинно</h3>
+                <div class="code-window">
+                    <div class="window-header">or_operator.py</div>
+                    <pre><code class="language-python">is_weekend = True
+is_holiday = False
+
+if is_weekend or is_holiday:
+    print("Можно отдыхать")</code></pre>
+                </div>
+
+                <h3>NOT — инверсия условия</h3>
+                <div class="code-window">
+                    <div class="window-header">not_operator.py</div>
+                    <pre><code class="language-python">is_raining = False
+
+if not is_raining:
+    print("Можно гулять")</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>5. Практические примеры</h2>
+
+                <div class="example-block">
+                    <div class="example-header">
+                        <span class="example-label">Пример 1</span>
+                        <h4 class="example-title">Калькулятор скидок</h4>
+                        <p class="example-description">Расчёт скидки в зависимости от суммы покупки</p>
+                    </div>
+                    <div class="example-code">
+                        <pre><code class="language-python">total = 3500
+is_member = True
+
+# Определяем базовую скидку
+if total >= 5000:
+    discount = 20
+elif total >= 3000:
+    discount = 10
+elif total >= 1000:
+    discount = 5
+else:
+    discount = 0
+
+# Дополнительная скидка для членов клуба
+if is_member:
+    discount += 5
+
+final_price = total * (100 - discount) / 100
+print(f"Скидка: {discount}%")
+print(f"К оплате: {final_price} руб.")</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-block">
+                    <div class="example-header">
+                        <span class="example-label">Пример 2</span>
+                        <h4 class="example-title">Проверка пароля</h4>
+                        <p class="example-description">Сравнение введённого пароля с правильным</p>
+                    </div>
+                    <div class="example-code">
+                        <pre><code class="language-python">correct_password = "secret123"
+user_input = input("Введите пароль: ")
+
+if user_input == correct_password:
+    print("Доступ разрешён")
+else:
+    print("Неверный пароль")</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-block">
+                    <div class="example-header">
+                        <span class="example-label">Пример 3</span>
+                        <h4 class="example-title">Калькулятор ИМТ</h4>
+                        <p class="example-description">Индекс массы тела с оценкой результата</p>
+                    </div>
+                    <div class="example-code">
+                        <pre><code class="language-python">weight = float(input("Вес (кг): "))
+height = float(input("Рост (м): "))
+
+bmi = weight / (height ** 2)
+
+print(f"Ваш ИМТ: {bmi:.1f}")
+
+if bmi < 18.5:
+    print("Недостаточный вес")
+elif bmi < 25:
+    print("Нормальный вес")
+elif bmi < 30:
+    print("Избыточный вес")
+else:
+    print("Ожирение")</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <div class="tip">
+                <strong>Цепочка сравнений:</strong> В Python можно писать условия как в математике: <code>if 0 &lt; x &lt; 10:</code> вместо <code>if x &gt; 0 and x &lt; 10:</code>
+            </div>
+
+            <section class="exercise">
+                <div class="exercise-title">Практическое задание</div>
+                <div class="exercise-task">
+                    <strong>Задача 1:</strong> Напиши программу "Светофор". Пользователь вводит цвет (красный, жёлтый, зелёный), программа выводит соответствующее действие.<br><br>
+                    <strong>Задача 2:</strong> Создай программу "Банкомат". Пользователь вводит сумму снятия, программа проверяет баланс (5000 руб.) и выводит результат операции.
+                </div>
+                <div class="exercise-hint">
+                    Подсказка: используй if-elif-else для проверки условий. Для светофора сравни строки, для банкомата — числа.
+                </div>
+            </section>
+
+            <div class="lesson-nav">
+                <a href="lesson2.html" class="btn-prev">← Назад</a>
+                <a href="lesson4.html" class="btn-next">Следующий урок →</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Работа с файлами | ProstoPython</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        * { box-sizing: border-box; }
+        .lesson-section { margin-bottom: clamp(35px, 5vw, 55px); }
+        .lesson-header h1 { font-size: clamp(32px, 7vw, 48px); margin: 0 0 clamp(20px, 3vw, 25px) 0; background: linear-gradient(90deg, #fff, #00FF41); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .lead { font-size: clamp(18px, 4.5vw, 22px); color: #888; line-height: 1.7; margin-bottom: clamp(35px, 5vw, 45px); }
+        h2 { font-size: clamp(26px, 6vw, 36px); color: #00FF41; margin-bottom: clamp(20px, 3vw, 25px); }
+        h3 { font-size: clamp(20px, 5vw, 26px); margin-bottom: clamp(15px, 2vw, 20px); }
+        p, li { font-size: clamp(16px, 4vw, 18px); line-height: 1.7; }
+        ul, ol { padding-left: clamp(25px, 5vw, 35px); }
+        .code-window { background: #0a0c0b; border: 1px solid rgba(0, 255, 65, 0.15); border-radius: clamp(14px, 3vw, 18px); margin: clamp(25px, 5vw, 35px) 0; overflow: hidden; }
+        .window-header { background: rgba(255, 255, 255, 0.05); padding: clamp(12px, 2vw, 15px) clamp(18px, 3vw, 25px); font-family: monospace; font-size: clamp(13px, 3vw, 15px); color: #666; }
+        pre { margin: 0; padding: clamp(20px, 4vw, 30px); overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        code { font-family: 'Fira Code', monospace; font-size: clamp(14px, 3vw, 16px); line-height: 1.6; }
+        .pro-tip { background: rgba(0, 255, 65, 0.06); border-left: 4px solid #00FF41; padding: clamp(18px, 4vw, 22px); margin: clamp(25px, 5vw, 35px) 0; border-radius: 10px; }
+        .pro-tip strong { color: #00FF41; font-size: clamp(16px, 4vw, 18px); }
+        .pro-tip p { margin: 10px 0 0 0; font-size: clamp(15px, 3.5vw, 17px); }
+        .tip { background: rgba(0, 194, 255, 0.06); border-left: 4px solid #00c2ff; padding: clamp(18px, 4vw, 22px); margin: clamp(25px, 5vw, 35px) 0; border-radius: 10px; }
+        .tip strong { color: #00c2ff; font-size: clamp(16px, 4vw, 18px); }
+        .tip p { margin: 10px 0 0 0; font-size: clamp(15px, 3.5vw, 17px); }
+        .data-table { width: 100%; border-collapse: collapse; margin: 30px 0; background: rgba(255, 255, 255, 0.02); border-radius: 14px; overflow: hidden; border: 1px solid rgba(0, 255, 65, 0.1); }
+        .data-table th, .data-table td { padding: 18px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .data-table th { background: rgba(0, 255, 65, 0.08); color: #00FF41; font-size: 15px; text-transform: uppercase; font-weight: 700; }
+        .data-table td { font-size: clamp(15px, 3.5vw, 17px); }
+        .example-block { background: rgba(10, 12, 11, 0.8); border: 1px solid rgba(0, 255, 65, 0.12); border-radius: clamp(14px, 3vw, 18px); margin: clamp(25px, 5vw, 35px) 0; overflow: hidden; }
+        .example-header { background: linear-gradient(135deg, rgba(0, 255, 65, 0.08), rgba(0, 0, 0, 0)); padding: clamp(15px, 3vw, 20px) clamp(20px, 4vw, 30px); border-bottom: 1px solid rgba(0, 255, 65, 0.08); }
+        .example-label { display: inline-block; background: rgba(0, 255, 65, 0.15); color: #00FF41; padding: 5px 12px; border-radius: 6px; font-size: clamp(12px, 2.5vw, 14px); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+        .example-title { font-size: clamp(18px, 4vw, 22px); font-weight: 700; color: #fff; margin: 0 0 8px 0; }
+        .example-description { font-size: clamp(14px, 3vw, 16px); color: #888; margin: 0; }
+        .example-code { padding: clamp(20px, 4vw, 30px); }
+        .example-code pre { margin: 0; padding: 0; }
+        .progress-container { background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 18px 24px; margin: 25px 0 35px 0; }
+        .progress-labels { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #999; }
+        .progress-bar { height: 10px; background: rgba(0, 0, 0, 0.4); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #00FF41, #00cc33); border-radius: 10px; transition: width 0.3s ease; }
+        .lesson-nav { margin-top: auto; padding-top: clamp(35px, 6vw, 55px); display: flex; justify-content: space-between; align-items: center; gap: clamp(20px, 4vw, 30px); flex-wrap: wrap; }
+        .btn-prev, .btn-next { display: inline-flex; align-items: center; padding: clamp(14px, 3vw, 18px) clamp(25px, 5vw, 40px); border-radius: 50px; text-decoration: none; font-weight: 700; transition: 0.3s; font-size: clamp(15px, 3.5vw, 17px); white-space: nowrap; }
+        .btn-prev { color: #666; background: rgba(255, 255, 255, 0.05); }
+        .btn-prev:hover { color: #00FF41; background: rgba(0, 255, 65, 0.1); }
+        .btn-next { background: #00FF41; color: #000; box-shadow: 0 10px 25px rgba(0, 255, 65, 0.15); }
+        .btn-next:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0, 255, 65, 0.25); }
+        .exercise { background: linear-gradient(135deg, rgba(0, 194, 255, 0.06), rgba(0, 0, 0, 0.2)); border-radius: clamp(18px, 4vw, 24px); padding: clamp(25px, 5vw, 35px); margin: clamp(35px, 6vw, 50px) 0; border: 1px solid rgba(0, 194, 255, 0.15); }
+        .exercise-title { font-size: clamp(20px, 5vw, 24px); font-weight: 700; color: #00c2ff; margin-bottom: 20px; }
+        .exercise-task { background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 12px; margin: 20px 0; font-size: clamp(15px, 3.5vw, 17px); line-height: 1.8; }
+        .exercise-hint { color: #777; font-size: clamp(14px, 3vw, 16px); margin-top: 20px; padding-left: 20px; border-left: 3px solid rgba(0, 194, 255, 0.3); }
+        @media (max-width: 850px) { .data-table thead, .data-table tbody { display: table; width: 100%; min-width: 550px; } }
+        @media (max-width: 640px) { .lesson-nav { flex-direction: column-reverse; gap: 18px; } .btn-prev, .btn-next { width: 100%; justify-content: center; } }
+    </style>
+</head>
+<body class="lesson-page">
+    <div id="header-placeholder"></div>
+    <div class="container lesson-layout">
+        <aside class="sidebar" id="sidebar-placeholder"></aside>
+        <main class="content">
+            <nav class="breadcrumb">Основы / Урок 9</nav>
+            <div class="progress-container">
+                <div class="progress-labels"><span>Прогресс курса</span><span id="progress-percent">0%</span></div>
+                <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width: 0%"></div></div>
+            </div>
+            <section class="lesson-header">
+                <h1>Работа с файлами</h1>
+                <p class="lead">Научимся читать и записывать файлы. Это необходимо для сохранения данных между запусками программы.</p>
+            </section>
+
+            <section class="lesson-section">
+                <h2>1. Открытие файлов</h2>
+                <p>Для работы с файлами используется функция open(). Важно закрыть файл после работы.</p>
+                <div class="code-window">
+                    <div class="window-header">file_open.py</div>
+                    <pre><code class="language-python"># Открытие файла
+file = open("data.txt", "r", encoding="utf-8")
+
+# Чтение содержимого
+content = file.read()
+print(content)
+
+# Закрытие файла
+file.close()</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    <strong>Режимы открытия:</strong>
+                    <ul>
+                        <li>"r" — чтение (по умолчанию)</li>
+                        <li>"w" — запись (перезаписывает файл)</li>
+                        <li>"a" — добавление в конец</li>
+                        <li>"x" — создание нового файла</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>2. Конструкция with</h2>
+                <p>Конструкция with автоматически закрывает файл, даже если произошла ошибка.</p>
+                <div class="code-window">
+                    <div class="window-header">file_with.py</div>
+                    <pre><code class="language-python"># Рекомендуемый способ
+with open("data.txt", "r", encoding="utf-8") as file:
+    content = file.read()
+    print(content)
+# Файл автоматически закрыт</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>3. Чтение файлов</h2>
+                
+                <div class="example-block">
+                    <div class="example-header">
+                        <span class="example-label">Пример 1</span>
+                        <h4 class="example-title">Чтение всего файла</h4>
+                        <p class="example-description">Метод read() читает всё содержимое</p>
+                    </div>
+                    <div class="example-code">
+                        <pre><code class="language-python">with open("text.txt", "r", encoding="utf-8") as f:
+    content = f.read()
+    print(content)</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-block">
+                    <div class="example-header">
+                        <span class="example-label">Пример 2</span>
+                        <h4 class="example-title">Чтение по строкам</h4>
+                        <p class="example-description">Метод readline() читает одну строку</p>
+                    </div>
+                    <div class="example-code">
+                        <pre><code class="language-python">with open("text.txt", "r", encoding="utf-8") as f:
+    line1 = f.readline()
+    line2 = f.readline()
+    print(line1)
+    print(line2)</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-block">
+                    <div class="example-header">
+                        <span class="example-label">Пример 3</span>
+                        <h4 class="example-title">Чтение всех строк</h4>
+                        <p class="example-description">Метод readlines() возвращает список строк</p>
+                    </div>
+                    <div class="example-code">
+                        <pre><code class="language-python">with open("text.txt", "r", encoding="utf-8") as f:
+    lines = f.readlines()
+    for line in lines:
+        print(line.strip())  # strip() удаляет \n</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>4. Запись в файлы</h2>
+                
+                <div class="code-window">
+                    <div class="window-header">file_write.py</div>
+                    <pre><code class="language-python"># Запись в файл (перезапись)
+with open("output.txt", "w", encoding="utf-8") as f:
+    f.write("Привет, мир!\n")
+    f.write("Это мой первый файл.\n")
+
+# Добавление в файл
+with open("output.txt", "a", encoding="utf-8") as f:
+    f.write("Новая строка\n")</code></pre>
+                </div>
+
+                <div class="tip">
+                    <strong>Важно:</strong> При записи в режиме "w" старое содержимое файла удаляется. Используй "a" для добавления.
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>5. Практические примеры</h2>
+
+                <div class="example-block">
+                    <div class="example-header">
+                        <span class="example-label">Пример 1</span>
+                        <h4 class="example-title">Чтение заметок</h4>
+                        <p class="example-description">Программа читает файл с заметками</p>
+                    </div>
+                    <div class="example-code">
+                        <pre><code class="language-python">def read_notes():
+    try:
+        with open("notes.txt", "r", encoding="utf-8") as f:
+            notes = f.read()
+            print("Мои заметки:")
+            print(notes)
+    except FileNotFoundError:
+        print("Файл с заметками не найден")
+
+read_notes()</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-block">
+                    <div class="example-header">
+                        <span class="example-label">Пример 2</span>
+                        <h4 class="example-title">Дневник</h4>
+                        <p class="example-description">Запись мыслей в файл с датой</p>
+                    </div>
+                    <div class="example-code">
+                        <pre><code class="language-python">from datetime import datetime
+
+def write_diary():
+    thought = input("О чём думаешь? ")
+    date = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    with open("diary.txt", "a", encoding="utf-8") as f:
+        f.write(f"[{date}] {thought}\n")
+    
+    print("Записано в дневник!")
+
+write_diary()</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-block">
+                    <div class="example-header">
+                        <span class="example-label">Пример 3</span>
+                        <h4 class="example-title">Копирование файла</h4>
+                        <p class="example-description">Чтение одного файла и запись в другой</p>
+                    </div>
+                    <div class="example-code">
+                        <pre><code class="language-python">def copy_file(source, destination):
+    with open(source, "r", encoding="utf-8") as src:
+        content = src.read()
+    
+    with open(destination, "w", encoding="utf-8") as dst:
+        dst.write(content)
+    
+    print(f"Файл скопирован из {source} в {destination}")
+
+copy_file("original.txt", "copy.txt")</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>6. Обработка ошибок</h2>
+                <p>При работе с файлами могут возникать ошибки. Используй try-except для их обработки.</p>
+                <div class="code-window">
+                    <div class="window-header">file_errors.py</div>
+                    <pre><code class="language-python">try:
+    with open("missing.txt", "r") as f:
+        print(f.read())
+except FileNotFoundError:
+    print("Файл не найден!")
+except PermissionError:
+    print("Нет доступа к файлу!")
+except Exception as e:
+    print(f"Ошибка: {e}")</code></pre>
+                </div>
+            </section>
+
+            <div class="pro-tip">
+                <strong>Кодировка:</strong> Всегда указывай encoding="utf-8" при работе с русским текстом, чтобы избежать проблем с кодировкой.
+            </div>
+
+            <section class="exercise">
+                <div class="exercise-title">Практическое задание</div>
+                <div class="exercise-task">
+                    <strong>Задача 1:</strong> Создай текстовый файл с именем friends.txt и запиши туда имена 5 друзей (каждое с новой строки).<br><br>
+                    <strong>Задача 2:</strong> Напиши программу, которая читает файл и выводит количество строк в нём.
+                </div>
+                <div class="exercise-hint">
+                    Подсказка: используй режим "w" для записи. Для подсчёта строк используй len(readlines()) или цикл с счётчиком.
+                </div>
+            </section>
+
+            <div class="lesson-nav">
+                <a href="lesson8.html" class="btn-prev">← Назад</a>
+                <a href="lesson10.html" class="btn-next">Следующий урок →</a>
+            </div>
+        </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="../js/app.js"></script>
+</body>
+</html>

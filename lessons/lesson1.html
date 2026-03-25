@@ -2,36 +2,184 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Установка VS Code | ProstoPython</title>
-    
     <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        * { box-sizing: border-box; }
+        .lesson-section { margin-bottom: clamp(35px, 5vw, 55px); }
+        .lesson-header h1 {
+            font-size: clamp(32px, 7vw, 48px);
+            margin: 0 0 clamp(20px, 3vw, 25px) 0;
+            background: linear-gradient(90deg, #fff, #00FF41);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .lead {
+            font-size: clamp(18px, 4.5vw, 22px);
+            color: #888;
+            line-height: 1.7;
+            margin-bottom: clamp(35px, 5vw, 45px);
+        }
+        h2 {
+            font-size: clamp(26px, 6vw, 36px);
+            color: #00FF41;
+            margin-bottom: clamp(20px, 3vw, 25px);
+        }
+        p, li {
+            font-size: clamp(16px, 4vw, 18px);
+            line-height: 1.7;
+        }
+        ul, ol { padding-left: clamp(25px, 5vw, 35px); }
+        .code-window {
+            background: #0a0c0b;
+            border: 1px solid rgba(0, 255, 65, 0.15);
+            border-radius: clamp(14px, 3vw, 18px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            overflow: hidden;
+        }
+        .window-header {
+            background: rgba(255, 255, 255, 0.05);
+            padding: clamp(12px, 2vw, 15px) clamp(18px, 3vw, 25px);
+            font-family: monospace;
+            font-size: clamp(13px, 3vw, 15px);
+            color: #666;
+        }
+        pre { margin: 0; padding: clamp(20px, 4vw, 30px); overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        code { font-family: 'Fira Code', monospace; font-size: clamp(14px, 3vw, 16px); line-height: 1.6; }
+        .pro-tip {
+            background: rgba(0, 255, 65, 0.06);
+            border-left: 4px solid #00FF41;
+            padding: clamp(18px, 4vw, 22px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            border-radius: 10px;
+        }
+        .pro-tip strong { color: #00FF41; font-size: clamp(16px, 4vw, 18px); }
+        .pro-tip p { margin: 10px 0 0 0; font-size: clamp(15px, 3.5vw, 17px); }
+        .progress-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 18px 24px;
+            margin: 25px 0 35px 0;
+        }
+        .progress-labels { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #999; }
+        .progress-bar { height: 10px; background: rgba(0, 0, 0, 0.4); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #00FF41, #00cc33); border-radius: 10px; transition: width 0.3s ease; }
+        .lesson-nav {
+            margin-top: auto;
+            padding-top: clamp(35px, 6vw, 55px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: clamp(20px, 4vw, 30px);
+            flex-wrap: wrap;
+        }
+        .btn-prev, .btn-next {
+            display: inline-flex;
+            align-items: center;
+            padding: clamp(14px, 3vw, 18px) clamp(25px, 5vw, 40px);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+            font-size: clamp(15px, 3.5vw, 17px);
+            white-space: nowrap;
+        }
+        .btn-prev { color: #666; background: rgba(255, 255, 255, 0.05); }
+        .btn-prev:hover { color: #00FF41; background: rgba(0, 255, 65, 0.1); }
+        .btn-next { background: #00FF41; color: #000; box-shadow: 0 10px 25px rgba(0, 255, 65, 0.15); }
+        .btn-next:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0, 255, 65, 0.25); }
+        @media (max-width: 640px) {
+            .lesson-nav { flex-direction: column-reverse; gap: 18px; }
+            .btn-prev, .btn-next { width: 100%; justify-content: center; }
+        }
+    </style>
 </head>
 <body class="lesson-page">
 
     <div id="header-placeholder"></div>
 
     <div class="container lesson-layout">
-        
         <aside class="sidebar" id="sidebar-placeholder"></aside>
 
         <main class="content">
             <nav class="breadcrumb">Основы / Урок 1</nav>
-            
-            <section class="lesson-header">
-                <h1>Установка VS Code</h1>
-                <p class="lead">Прежде чем писать код, нам нужно настроить рабочее место. VS Code — это самый популярный редактор в мире.</p>
-            </section>
 
-            <div class="code-window">
-                <div class="window-header">hello.py</div>
-                <pre><code class="language-python">print("Привет, мир!")
-# Запусти этот код после установки</code></pre>
+            <div class="progress-container">
+                <div class="progress-labels">
+                    <span>Прогресс курса</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
             </div>
 
+            <section class="lesson-header">
+                <h1>Установка VS Code</h1>
+                <p class="lead">Прежде чем писать код, нужно настроить рабочее место. VS Code — самый популярный редактор кода в мире.</p>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Что такое VS Code</h2>
+                <p>Visual Studio Code (VS Code) — это бесплатный редактор кода от Microsoft. Он поддерживает Python и сотни других языков программирования.</p>
+                
+                <div class="pro-tip">
+                    <strong>Почему VS Code:</strong>
+                    <ul>
+                        <li>Бесплатный и открытый</li>
+                        <li>Работает на Windows, macOS и Linux</li>
+                        <li>Огромное количество расширений</li>
+                        <li>Встроенный терминал и отладчик</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Шаг 1: Скачивание</h2>
+                <p>Перейди на официальный сайт <a href="https://code.visualstudio.com" target="_blank" style="color: #00FF41;">code.visualstudio.com</a> и нажми кнопку Download для своей операционной системы.</p>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Шаг 2: Установка</h2>
+                <p>Запусти скачанный файл и следуй инструкциям установщика. Рекомендуется оставить все настройки по умолчанию.</p>
+                
+                <div class="code-window">
+                    <div class="window-header">Рекомендуемые настройки</div>
+                    <pre><code>✓ Добавить в PATH
+✓ Создать ярлык на рабочем столе
+✓ Открыть через VS Code (контекстное меню)</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Шаг 3: Установка расширения Python</h2>
+                <p>После установки VS Code нужно добавить поддержку Python:</p>
+                <ol>
+                    <li>Открой VS Code</li>
+                    <li>Нажми на иконку расширений слева (квадраты) или Ctrl+Shift+X</li>
+                    <li>В поиске введи "Python"</li>
+                    <li>Установи расширение от Microsoft</li>
+                </ol>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Проверка установки</h2>
+                <p>Создай новый файл с расширением .py и напиши простой код:</p>
+                
+                <div class="code-window">
+                    <div class="window-header">hello.py</div>
+                    <pre><code class="language-python">print("Привет, мир!")
+print("VS Code готов к работе!")</code></pre>
+                </div>
+
+                <p>Запусти код нажатием F5 или через меню Run → Start Debugging.</p>
+            </section>
+
             <div class="pro-tip">
-                <strong>💡 На заметку:</strong> Не забудь установить расширение "Python" от Microsoft внутри самого VS Code.
+                <strong>Совет:</strong> Установи также расширение "Pylance" — оно улучшает автодополнение и подсветку кода на Python.
             </div>
 
             <div class="lesson-nav">
@@ -43,39 +191,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-    
-    <script>
-        async function loadLayout() {
-    try {
-        // Загружаем шапку
-        const headerRes = await fetch('../includes/header.html');
-        const headerHtml = await headerRes.text();
-        document.getElementById('header-placeholder').innerHTML = headerHtml;
-
-        // Загружаем сайдбар
-        const sidebarRes = await fetch('../includes/sidebar.html');
-        const sidebarHtml = await sidebarRes.text();
-        document.getElementById('sidebar-placeholder').innerHTML = sidebarHtml;
-        
-        // Запускаем подсветку активного урока
-        highlightActive();
-        
-    } catch (err) {
-        console.error("Детали ошибки:", err);
-    }
-}
-
-function highlightActive() {
-    const currentPath = window.location.pathname.split('/').pop();
-    const links = document.querySelectorAll('.nav-item');
-    links.forEach(link => {
-        if (link.getAttribute('href') === currentPath) {
-            link.classList.add('active');
-        }
-    });
-}
-
-loadLayout();
-    </script>
+    <script src="../js/app.js"></script>
 </body>
 </html>

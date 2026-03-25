@@ -17,22 +17,300 @@ body {
 
 
 /* Шапка */
+/* =========================================
+   АДАПТИВНАЯ ШАПКА (MOBILE FIRST)
+   ========================================= */
+
+/* Базовые стили шапки */
 .main-header {
-    padding: 15px 0; /* Чуть уменьшил отступы, чтобы она не была слишком массивной при фиксации */
+    padding: 15px 0;
     border-bottom: 1px solid rgba(0, 255, 65, 0.1);
-    background: rgba(15, 17, 16, 0.95); /* Увеличил непрозрачность, чтобы текст под шапкой не сливался */
-    backdrop-filter: blur(15px); /* Усилил эффект стекла */
-    
-    /* Фиксация */
-    position: fixed; /* Меняем sticky на fixed для надежности */
+    background: rgba(15, 17, 16, 0.95);
+    backdrop-filter: blur(15px);
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     width: 100%;
-    
-    z-index: 9999; /* Максимальный приоритет, чтобы быть поверх всего */
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); /* Добавил тень для объема */
+    z-index: 9999;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
 }
+
+.flex-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    z-index: 10000;
+    transition: font-size 0.3s ease;
+}
+
+.logo span {
+    background: linear-gradient(90deg, #00FF41, #00CC33);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Навигационное меню - десктопная версия */
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-menu a {
+    color: #aaa;
+    text-decoration: none;
+    margin-left: 30px;
+    font-weight: 500;
+    transition: 0.3s;
+    white-space: nowrap;
+}
+
+.nav-menu a:first-child {
+    margin-left: 0;
+}
+
+.nav-menu a:hover {
+    color: #00FF41;
+}
+
+.btn-contact {
+    border: 1px solid #00FF41;
+    padding: 8px 20px;
+    border-radius: 50px;
+    color: #00FF41 !important;
+    transition: all 0.3s ease;
+}
+
+.btn-contact:hover {
+    background: rgba(0, 255, 65, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Кнопка бургер-меню (скрыта на десктопе) */
+.burger-menu {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+    z-index: 10000;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.burger-line {
+    width: 100%;
+    height: 3px;
+    background: #00FF41;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+/* Анимация для крестика при открытом меню */
+.burger-menu.active .burger-line:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.burger-menu.active .burger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.burger-menu.active .burger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Мобильное меню (overlay) */
+.mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 17, 16, 0.98);
+    backdrop-filter: blur(20px);
+    z-index: 9998;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.mobile-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    width: 100%;
+    padding: 20px;
+}
+
+.mobile-nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: 600;
+    padding: 12px 20px;
+    transition: 0.3s;
+    width: 100%;
+    text-align: center;
+    border-radius: 12px;
+}
+
+.mobile-nav a:hover {
+    color: #00FF41;
+    background: rgba(0, 255, 65, 0.1);
+    transform: scale(1.05);
+}
+
+.mobile-nav .btn-contact-mobile {
+    border: 2px solid #00FF41;
+    color: #00FF41 !important;
+    margin-top: 20px;
+    background: transparent;
+}
+
+.mobile-nav .btn-contact-mobile:hover {
+    background: #00FF41;
+    color: #000 !important;
+}
+
+/* =========================================
+   АДАПТИВНЫЕ МЕДИА-ЗАПРОСЫ ДЛЯ ШАПКИ
+   ========================================= */
+
+/* Планшеты (768px - 1024px) */
+@media (max-width: 1024px) {
+    .nav-menu a {
+        margin-left: 20px;
+    }
+    
+    .btn-contact {
+        padding: 6px 16px;
+    }
+}
+
+/* Мобильные устройства (до 768px) */
+@media (max-width: 768px) {
+    .main-header {
+        padding: 12px 0;
+    }
+    
+    .logo {
+        font-size: 22px;
+    }
+    
+    /* Скрываем обычное меню */
+    .nav-menu {
+        display: none;
+    }
+    
+    /* Показываем бургер-меню */
+    .burger-menu {
+        display: flex;
+    }
+    
+    /* Уменьшаем отступы контента */
+    .container {
+        padding: 0 15px;
+    }
+    
+    /* Корректируем отступ для основного контента */
+    .hero {
+        padding: 80px 0 40px;
+    }
+    
+    .lesson-layout {
+        padding-top: 80px;
+    }
+}
+
+/* Маленькие телефоны (до 480px) */
+@media (max-width: 480px) {
+    .main-header {
+        padding: 10px 0;
+    }
+    
+    .logo {
+        font-size: 20px;
+    }
+    
+    .burger-menu {
+        width: 26px;
+        height: 18px;
+    }
+    
+    .burger-line {
+        height: 2px;
+    }
+    
+    .burger-menu.active .burger-line:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    
+    .burger-menu.active .burger-line:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+    }
+    
+    .mobile-nav a {
+        font-size: 20px;
+        padding: 10px 16px;
+    }
+}
+
+/* Для устройств с вырезом (iPhone и т.д.) */
+@supports (padding: max(0px)) {
+    .main-header {
+        padding-left: max(15px, env(safe-area-inset-left));
+        padding-right: max(15px, env(safe-area-inset-right));
+        padding-top: max(12px, env(safe-area-inset-top));
+    }
+    
+    .mobile-menu-overlay {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+/* Анимация появления меню */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.mobile-nav a {
+    animation: fadeInScale 0.3s ease forwards;
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+.mobile-nav a:nth-child(1) { animation-delay: 0.05s; }
+.mobile-nav a:nth-child(2) { animation-delay: 0.1s; }
+.mobile-nav a:nth-child(3) { animation-delay: 0.15s; }
+.mobile-nav a:nth-child(4) { animation-delay: 0.2s; }
 .flex-header {
     display: flex;
     justify-content: space-between;

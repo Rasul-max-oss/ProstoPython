@@ -2,38 +2,165 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Переменные и Типы данных | ProstoPython</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Переменные и типы данных | ProstoPython</title>
     <link rel="stylesheet" href="../css/style.css">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <style>
-        /* Дополнительные стили для таблицы внутри справочника */
+        * { box-sizing: border-box; }
+        .lesson-section { margin-bottom: clamp(35px, 5vw, 55px); }
+        .lesson-header h1 {
+            font-size: clamp(32px, 7vw, 48px);
+            margin: 0 0 clamp(20px, 3vw, 25px) 0;
+            background: linear-gradient(90deg, #fff, #00FF41);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .lead {
+            font-size: clamp(18px, 4.5vw, 22px);
+            color: #888;
+            line-height: 1.7;
+            margin-bottom: clamp(35px, 5vw, 45px);
+        }
+        h2 {
+            font-size: clamp(26px, 6vw, 36px);
+            color: #00FF41;
+            margin-bottom: clamp(20px, 3vw, 25px);
+        }
+        h3 {
+            font-size: clamp(20px, 5vw, 26px);
+            margin-bottom: clamp(15px, 2vw, 20px);
+        }
+        p, li {
+            font-size: clamp(16px, 4vw, 18px);
+            line-height: 1.7;
+        }
+        ul, ol { padding-left: clamp(25px, 5vw, 35px); }
+        .code-window {
+            background: #0a0c0b;
+            border: 1px solid rgba(0, 255, 65, 0.15);
+            border-radius: clamp(14px, 3vw, 18px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            overflow: hidden;
+        }
+        .window-header {
+            background: rgba(255, 255, 255, 0.05);
+            padding: clamp(12px, 2vw, 15px) clamp(18px, 3vw, 25px);
+            font-family: monospace;
+            font-size: clamp(13px, 3vw, 15px);
+            color: #666;
+        }
+        pre { margin: 0; padding: clamp(20px, 4vw, 30px); overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        code { font-family: 'Fira Code', monospace; font-size: clamp(14px, 3vw, 16px); line-height: 1.6; }
+        .pro-tip {
+            background: rgba(0, 255, 65, 0.06);
+            border-left: 4px solid #00FF41;
+            padding: clamp(18px, 4vw, 22px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            border-radius: 10px;
+        }
+        .pro-tip strong { color: #00FF41; font-size: clamp(16px, 4vw, 18px); }
+        .pro-tip p { margin: 10px 0 0 0; font-size: clamp(15px, 3.5vw, 17px); }
+        .tip {
+            background: rgba(0, 194, 255, 0.06);
+            border-left: 4px solid #00c2ff;
+            padding: clamp(18px, 4vw, 22px);
+            margin: clamp(25px, 5vw, 35px) 0;
+            border-radius: 10px;
+        }
+        .tip strong { color: #00c2ff; font-size: clamp(16px, 4vw, 18px); }
+        .tip p { margin: 10px 0 0 0; font-size: clamp(15px, 3.5vw, 17px); }
         .data-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 25px 0;
+            margin: 30px 0;
             background: rgba(255, 255, 255, 0.02);
-            border-radius: 12px;
+            border-radius: 14px;
             overflow: hidden;
             border: 1px solid rgba(0, 255, 65, 0.1);
         }
         .data-table th, .data-table td {
-            padding: 15px;
+            padding: 18px;
             text-align: left;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
         .data-table th {
-            background: rgba(0, 255, 65, 0.05);
+            background: rgba(0, 255, 65, 0.08);
             color: #00FF41;
-            font-size: 14px;
+            font-size: 15px;
             text-transform: uppercase;
+            font-weight: 700;
         }
-        .type-badge {
-            color: #00FF41;
-            font-family: monospace;
-            font-weight: bold;
+        .data-table td { font-size: clamp(15px, 3.5vw, 17px); }
+        .type-badge { color: #00FF41; font-family: monospace; font-weight: bold; }
+        .progress-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 18px 24px;
+            margin: 25px 0 35px 0;
+        }
+        .progress-labels { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #999; }
+        .progress-bar { height: 10px; background: rgba(0, 0, 0, 0.4); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #00FF41, #00cc33); border-radius: 10px; transition: width 0.3s ease; }
+        .lesson-nav {
+            margin-top: auto;
+            padding-top: clamp(35px, 6vw, 55px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: clamp(20px, 4vw, 30px);
+            flex-wrap: wrap;
+        }
+        .btn-prev, .btn-next {
+            display: inline-flex;
+            align-items: center;
+            padding: clamp(14px, 3vw, 18px) clamp(25px, 5vw, 40px);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+            font-size: clamp(15px, 3.5vw, 17px);
+            white-space: nowrap;
+        }
+        .btn-prev { color: #666; background: rgba(255, 255, 255, 0.05); }
+        .btn-prev:hover { color: #00FF41; background: rgba(0, 255, 65, 0.1); }
+        .btn-next { background: #00FF41; color: #000; box-shadow: 0 10px 25px rgba(0, 255, 65, 0.15); }
+        .btn-next:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0, 255, 65, 0.25); }
+        .exercise {
+            background: linear-gradient(135deg, rgba(0, 194, 255, 0.06), rgba(0, 0, 0, 0.2));
+            border-radius: clamp(18px, 4vw, 24px);
+            padding: clamp(25px, 5vw, 35px);
+            margin: clamp(35px, 6vw, 50px) 0;
+            border: 1px solid rgba(0, 194, 255, 0.15);
+        }
+        .exercise-title {
+            font-size: clamp(20px, 5vw, 24px);
+            font-weight: 700;
+            color: #00c2ff;
+            margin-bottom: 20px;
+        }
+        .exercise-task {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-size: clamp(15px, 3.5vw, 17px);
+            line-height: 1.8;
+        }
+        .exercise-hint {
+            color: #777;
+            font-size: clamp(14px, 3vw, 16px);
+            margin-top: 20px;
+            padding-left: 20px;
+            border-left: 3px solid rgba(0, 194, 255, 0.3);
+        }
+        @media (max-width: 850px) {
+            .data-table thead, .data-table tbody { display: table; width: 100%; min-width: 550px; }
+        }
+        @media (max-width: 640px) {
+            .lesson-nav { flex-direction: column-reverse; gap: 18px; }
+            .btn-prev, .btn-next { width: 100%; justify-content: center; }
         }
     </style>
 </head>
@@ -42,47 +169,58 @@
     <div id="header-placeholder"></div>
 
     <div class="container lesson-layout">
-        
         <aside class="sidebar" id="sidebar-placeholder"></aside>
 
         <main class="content">
             <nav class="breadcrumb">Основы / Урок 2</nav>
-            
+
+            <div class="progress-container">
+                <div class="progress-labels">
+                    <span>Прогресс курса</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+
             <section class="lesson-header">
-                <h1>Переменные и ввод данных</h1>
-                <p class="lead">Справочник по работе с данными в Python: от создания первой переменной до получения ответов от пользователя.</p>
+                <h1>Переменные и типы данных</h1>
+                <p class="lead">Переменные хранят данные в программе. Изучим основные типы данных и работу с вводом от пользователя.</p>
             </section>
 
             <section class="lesson-section">
-                <h2>1. Переменные (Variables)</h2>
-                <p>Переменная — это способ сохранить данные под определенным именем. В Python не нужно указывать тип данных заранее.</p>
+                <h2>1. Переменные</h2>
+                <p>Переменная — это именованное место в памяти для хранения данных. В Python не нужно указывать тип переменной заранее.</p>
+                
                 <div class="code-window">
-                    <div class="window-header">variables.py</div>
-                    <pre><code class="language-python"># Имя = Значение
-user_name = "Петя"  # Текст (string)
-score = 100          # Число (integer)
+                    <div class="window-header>variables.py</div>
+                    <pre><code class="language-python"># Создание переменных
+name = "Алекс"
+age = 25
+height = 175.5
+is_student = False
 
-print(user_name)     # Выведет: Петя</code></pre>
+# Вывод значений
+print(name)
+print(age)
+print(height)
+print(is_student)</code></pre>
                 </div>
-                 <div class="code-window">
-                    <div class="window-header">variables.py</div>
-                    <pre><code class="language-python"># Имя = Значение
-name = "Петя"  # Текст (string)
-age = 20          # Число (integer)
-city = "Москва"  # Текст (string)
-balance = 150.75  # Число с плавающей точкой (float)
-is_active = True  # Логический тип (boolean)
 
-print(f"Имя: {name}, Возраст: {age}, Город: {city}, Баланс: {balance}, Активен: {is_active}")
-# Выведет: Имя: Петя, Возраст: 20, Город: Москва, Баланс: 150.75, Активен: True</code></pre>
-                </div>
                 <div class="pro-tip">
-                    <strong>💡 Имена:</strong> Используй <code>snake_case</code> (маленькие буквы и нижнее подчеркивание). Нельзя начинать имя с цифры.
+                    <strong>Правила именования:</strong>
+                    <ul>
+                        <li>Используй snake_case: user_name, total_price</li>
+                        <li>Нельзя начинать с цифры: name1 можно, 1name нельзя</li>
+                        <li>Имена чувствительны к регистру: Name и name — разные переменные</li>
+                    </ul>
                 </div>
             </section>
 
             <section class="lesson-section">
                 <h2>2. Основные типы данных</h2>
+                
                 <table class="data-table">
                     <thead>
                         <tr>
@@ -94,108 +232,112 @@ print(f"Имя: {name}, Возраст: {age}, Город: {city}, Баланс:
                     <tbody>
                         <tr>
                             <td><span class="type-badge">str</span></td>
-                            <td>Строки (текст в кавычках)</td>
-                            <td><code>"Hello"</code></td>
+                            <td>Строки (текст)</td>
+                            <td>"Hello", "Москва"</td>
                         </tr>
                         <tr>
                             <td><span class="type-badge">int</span></td>
                             <td>Целые числа</td>
-                            <td><code>25</code>, <code>-5</code></td>
+                            <td>25, -10, 0</td>
                         </tr>
                         <tr>
                             <td><span class="type-badge">float</span></td>
-                            <td>Числа с плавающей точкой</td>
-                            <td><code>3.14</code>, <code>0.5</code></td>
+                            <td>Дробные числа</td>
+                            <td>3.14, -0.5, 2.0</td>
                         </tr>
                         <tr>
                             <td><span class="type-badge">bool</span></td>
-                            <td>Логический тип (Истина/Ложь)</td>
-                            <td><code>True</code>, <code>False</code></td>
+                            <td>Логический тип</td>
+                            <td>True, False</td>
                         </tr>
                     </tbody>
                 </table>
             </section>
 
             <section class="lesson-section">
-                <h2>3. Ввод данных: <code>input()</code></h2>
-                <p>Функция <code>input()</code> позволяет программе "спрашивать" данные у пользователя.</p>
+                <h2>3. Ввод данных: input()</h2>
+                <p>Функция input() позволяет получать данные от пользователя через консоль.</p>
+
                 <div class="code-window">
                     <div class="window-header">input.py</div>
-                    <pre><code class="language-python">name = input("Как тебя зовут? ")
-print("Привет, " + name)</code></pre>
+                    <pre><code class="language-python"># Запрос имени
+name = input("Как вас зовут? ")
+print("Привет, " + name + "!")
+
+# Важно: input() всегда возвращает строку
+age = input("Сколько вам лет? ")
+print(type(age))  # Выведет: <class 'str'></code></pre>
                 </div>
-                <p>⚠️ <strong>Важно:</strong> <code>input()</code> всегда принимает данные как <strong>строку (str)</strong>, даже если введено число.</p>
+
+                <div class="tip">
+                    <strong>Преобразование типов:</strong>
+                    <ul>
+                        <li>int() — преобразует в целое число</li>
+                        <li>float() — преобразует в дробное число</li>
+                        <li>str() — преобразует в строку</li>
+                    </ul>
+                </div>
             </section>
 
             <section class="lesson-section">
-                <h2>Практика: Работа с вводом</h2>
-                <p>Давай разберем три типичные ситуации, где тебе понадобится ввод данных.</p>
+                <h2>4. Практические примеры</h2>
 
-                <div class="method-item">
-                    <h3>1. Сбор текстовых данных (str)</h3>
-                    <p>Используется для имен, названий городов или паролей. Никаких дополнительных функций не нужно.</p>
+                <h3>Пример 1: Калькулятор возраста</h3>
+                <div class="code-window">
+                    <div class="window-header">age_calc.py</div>
+                    <pre><code class="language-python"># Запрашиваем год рождения
+birth_year = int(input("Введите год рождения: "))
+
+# Считаем возраст
+current_year = 2026
+age = current_year - birth_year
+
+print(f"Вам {age} лет")</code></pre>
                 </div>
+
+                <h3>Пример 2: Конвертер валют</h3>
+                <div class="code-window">
+                    <div class="window-header">converter.py</div>
+                    <pre><code class="language-python"># Курс доллара
+usd_rate = 92.5
+
+# Запрашиваем сумму в рублях
+rubles = float(input("Сумма в рублях: "))
+
+# Конвертируем
+dollars = rubles / usd_rate
+
+print(f"{rubles} рублей = {dollars:.2f} долларов")</code></pre>
+                </div>
+
+                <h3>Пример 3: Анкета пользователя</h3>
                 <div class="code-window">
                     <div class="window-header">profile.py</div>
-                    <pre><code class="language-python">city = input("В каком городе ты живешь? ")
-hobby = input("Твое любимое хобби? ")
+                    <pre><code class="language-python"># Сбор данных
+name = input("Имя: ")
+city = input("Город: ")
+hobby = input("Хобби: ")
 
-print("Круто! Я тоже люблю " + hobby + ", особенно в городе " + city)</code></pre>
-                </div>
-
-                <div class="method-item">
-                    <h3>2. Числовые расчеты (int + input)</h3>
-                    <p>Если ты хочешь умножать, складывать или вычитать введенные данные, обязательно используй <code>int()</code>.</p>
-                </div>
-                <div class="code-window">
-                    <div class="window-header">salary_calc.py</div>
-                    <pre><code class="language-python"># Считаем бюджет на неделю
-daily_budget = int(input("Сколько денег ты тратишь в день? "))
-weekly_total = daily_budget * 7
-
-print("За неделю тебе понадобится: " + str(weekly_total) + " рублей")
-# Обрати внимание: при выводе числа с текстом мы превратили его обратно в str()</code></pre>
-                </div>
-
-                <div class="method-item">
-                    <h3>3. Работа с ценами и весом (float + input)</h3>
-                    <p>Если пользователь может ввести число с точкой (например, 2.5), используй <code>float()</code>.</p>
-                </div>
-                <div class="code-window">
-                    <div class="window-header">shop.py</div>
-                    <pre><code class="language-python">price = float(input("Сколько стоит 1 кг яблок? "))
-weight = float(input("Сколько кг ты хочешь купить? "))
-
-total = price * weight
-print("К оплате: " + str(total))</code></pre>
+# Вывод анкеты
+print("\n--- Профиль ---")
+print(f"Имя: {name}")
+print(f"Город: {city}")
+print(f"Хобби: {hobby}")</code></pre>
                 </div>
             </section>
 
-            <div class="pro-tip" style="background: rgba(0, 194, 255, 0.05); border-left-color: #00c2ff;">
-                <strong>⚡️ Быстрая проверка:</strong> 
-                <p>Если ты забыл поставить <code>int()</code> и попробовал сложить два ввода "10" и "5", Python не выдаст ошибку, он просто склеит их и получится <code>105</code>. Если видишь такой странный результат — значит, ты забыл про преобразование типов!</p>
+            <div class="pro-tip">
+                <strong>Форматированный вывод:</strong> Используй f-строки для удобного вывода: <code>print(f"Привет, {name}!")</code>. Для float можно указать точность: <code>{value:.2f}</code> покажет 2 знака после запятой.
             </div>
 
-
-            <section class="lesson-section">
-                <h2>4. Преобразование типов (Casting)</h2>
-                <p>Если нужно проводить математические операции с вводом пользователя, используй функции преобразования:</p>
-                <div class="code-window">
-                    <div class="window-header">casting.py</div>
-                    <pre><code class="language-python"># Превращаем текст в целое число
-age = int(input("Введите ваш возраст: "))
-next_year = age + 1
-
-# Превращаем число в строку (для склейки с текстом)
-print("В следующем году вам будет " + str(next_year))</code></pre>
+            <section class="exercise">
+                <div class="exercise-title">Практическое задание</div>
+                <div class="exercise-task">
+                    <strong>Задача 1:</strong> Создай программу, которая запрашивает два числа и выводит их сумму, разность, произведение и частное.<br><br>
+                    <strong>Задача 2:</strong> Напиши программу "Паспорт", которая запрашивает имя, фамилию, возраст и город, затем выводит красивую анкету.
                 </div>
-                <div class="highlight-box">
-                    <strong>Основные функции:</strong>
-                    <ul>
-                        <li><code>int()</code> — в целое число</li>
-                        <li><code>float()</code> — в дробное число</li>
-                        <li><code>str()</code> — в строку</li>
-                    </ul>
+                <div class="exercise-hint">
+                    Подсказка: для преобразования ввода используй int() или float(). Для красивого вывода используй f-строки с переносом строки \n.
                 </div>
             </section>
 
@@ -208,7 +350,6 @@ print("В следующем году вам будет " + str(next_year))</cod
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-    
     <script src="../js/app.js"></script>
 </body>
 </html>

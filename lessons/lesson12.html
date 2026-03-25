@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Основы ООП | ProstoPython</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        * { box-sizing: border-box; }
+        .lesson-section { margin-bottom: clamp(35px, 5vw, 55px); }
+        .lesson-header h1 { font-size: clamp(32px, 7vw, 48px); margin: 0 0 clamp(20px, 3vw, 25px) 0; background: linear-gradient(90deg, #fff, #00FF41); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .lead { font-size: clamp(18px, 4.5vw, 22px); color: #888; line-height: 1.7; margin-bottom: clamp(35px, 5vw, 45px); }
+        h2 { font-size: clamp(26px, 6vw, 36px); color: #00FF41; margin-bottom: clamp(20px, 3vw, 25px); }
+        h3 { font-size: clamp(20px, 5vw, 26px); margin-bottom: clamp(15px, 2vw, 20px); }
+        p, li { font-size: clamp(16px, 4vw, 18px); line-height: 1.7; }
+        ul, ol { padding-left: clamp(25px, 5vw, 35px); }
+        .code-window { background: #0a0c0b; border: 1px solid rgba(0, 255, 65, 0.15); border-radius: clamp(14px, 3vw, 18px); margin: clamp(25px, 5vw, 35px) 0; overflow: hidden; }
+        .window-header { background: rgba(255, 255, 255, 0.05); padding: clamp(12px, 2vw, 15px) clamp(18px, 3vw, 25px); font-family: monospace; font-size: clamp(13px, 3vw, 15px); color: #666; }
+        pre { margin: 0; padding: clamp(20px, 4vw, 30px); overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        code { font-family: 'Fira Code', monospace; font-size: clamp(14px, 3vw, 16px); line-height: 1.6; }
+        .pro-tip { background: rgba(0, 255, 65, 0.06); border-left: 4px solid #00FF41; padding: clamp(18px, 4vw, 22px); margin: clamp(25px, 5vw, 35px) 0; border-radius: 10px; }
+        .pro-tip strong { color: #00FF41; font-size: clamp(16px, 4vw, 18px); }
+        .pro-tip p { margin: 10px 0 0 0; font-size: clamp(15px, 3.5vw, 17px); }
+        .tip { background: rgba(0, 194, 255, 0.06); border-left: 4px solid #00c2ff; padding: clamp(18px, 4vw, 22px); margin: clamp(25px, 5vw, 35px) 0; border-radius: 10px; }
+        .tip strong { color: #00c2ff; font-size: clamp(16px, 4vw, 18px); }
+        .tip p { margin: 10px 0 0 0; font-size: clamp(15px, 3.5vw, 17px); }
+        .data-table { width: 100%; border-collapse: collapse; margin: 30px 0; background: rgba(255, 255, 255, 0.02); border-radius: 14px; overflow: hidden; border: 1px solid rgba(0, 255, 65, 0.1); }
+        .data-table th, .data-table td { padding: 18px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .data-table th { background: rgba(0, 255, 65, 0.08); color: #00FF41; font-size: 15px; text-transform: uppercase; font-weight: 700; }
+        .data-table td { font-size: clamp(15px, 3.5vw, 17px); }
+        .example-block { background: rgba(10, 12, 11, 0.8); border: 1px solid rgba(0, 255, 65, 0.12); border-radius: clamp(14px, 3vw, 18px); margin: clamp(25px, 5vw, 35px) 0; overflow: hidden; }
+        .example-header { background: linear-gradient(135deg, rgba(0, 255, 65, 0.08), rgba(0, 0, 0, 0)); padding: clamp(15px, 3vw, 20px) clamp(20px, 4vw, 30px); border-bottom: 1px solid rgba(0, 255, 65, 0.08); }
+        .example-label { display: inline-block; background: rgba(0, 255, 65, 0.15); color: #00FF41; padding: 5px 12px; border-radius: 6px; font-size: clamp(12px, 2.5vw, 14px); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+        .example-title { font-size: clamp(18px, 4vw, 22px); font-weight: 700; color: #fff; margin: 0 0 8px 0; }
+        .example-description { font-size: clamp(14px, 3vw, 16px); color: #888; margin: 0; }
+        .example-code { padding: clamp(20px, 4vw, 30px); }
+        .example-code pre { margin: 0; padding: 0; }
+        .progress-container { background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 18px 24px; margin: 25px 0 35px 0; }
+        .progress-labels { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #999; }
+        .progress-bar { height: 10px; background: rgba(0, 0, 0, 0.4); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #00FF41, #00cc33); border-radius: 10px; transition: width 0.3s ease; }
+        .lesson-nav { margin-top: auto; padding-top: clamp(35px, 6vw, 55px); display: flex; justify-content: space-between; align-items: center; gap: clamp(20px, 4vw, 30px); flex-wrap: wrap; }
+        .btn-prev, .btn-next { display: inline-flex; align-items: center; padding: clamp(14px, 3vw, 18px) clamp(25px, 5vw, 40px); border-radius: 50px; text-decoration: none; font-weight: 700; transition: 0.3s; font-size: clamp(15px, 3.5vw, 17px); white-space: nowrap; }
+        .btn-prev { color: #666; background: rgba(255, 255, 255, 0.05); }
+        .btn-prev:hover { color: #00FF41; background: rgba(0, 255, 65, 0.1); }
+        .btn-next { background: #00FF41; color: #000; box-shadow: 0 10px 25px rgba(0, 255, 65, 0.15); }
+        .btn-next:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0, 255, 65, 0.25); }
+        .exercise { background: linear-gradient(135deg, rgba(0, 194, 255, 0.06), rgba(0, 0, 0, 0.2)); border-radius: clamp(18px, 4vw, 24px); padding: clamp(25px, 5vw, 35px); margin: clamp(35px, 6vw, 50px) 0; border: 1px solid rgba(0, 194, 255, 0.15); }
+        .exercise-title { font-size: clamp(20px, 5vw, 24px); font-weight: 700; color: #00c2ff; margin-bottom: 20px; }
+        .exercise-task { background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 12px; margin: 20px 0; font-size: clamp(15px, 3.5vw, 17px); line-height: 1.8; }
+        .exercise-hint { color: #777; font-size: clamp(14px, 3vw, 16px); margin-top: 20px; padding-left: 20px; border-left: 3px solid rgba(0, 194, 255, 0.3); }
+        @media (max-width: 850px) { .data-table thead, .data-table tbody { display: table; width: 100%; min-width: 550px; } }
+        @media (max-width: 640px) { .lesson-nav { flex-direction: column-reverse; gap: 18px; } .btn-prev, .btn-next { width: 100%; justify-content: center; } }
+    </style>
+</head>
+<body class="lesson-page">
+    <div id="header-placeholder"></div>
+    <div class="container lesson-layout">
+        <aside class="sidebar" id="sidebar-placeholder"></aside>
+        <main class="content">
+            <nav class="breadcrumb">Основы / Урок 12</nav>
+            <div class="progress-container">
+                <div class="progress-labels"><span>Прогресс курса</span><span id="progress-percent">0%</span></div>
+                <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width: 0%"></div></div>
+            </div>
+            <section class="lesson-header">
+                <h1>Основы ООП</h1>
+                <p class="lead">Объектно-ориентированное программирование — парадигма, где программа состоит из объектов. Изучим классы, объекты и основные принципы ООП.</p>
+            </section>
+
+            <section class="lesson-section">
+                <h2>1. Классы и объекты</h2>
+                <p>Класс — это чертёж объекта. Объект — это экземпляр класса.</p>
+                <div class="code-window">
+                    <div class="window-header">class_basic.py</div>
+                    <pre><code class="language-python"># Создание класса
+class Dog:
+    def __init__(self, name, age):
+        self.name = name  # Атрибут объекта
+        self.age = age
+    
+    def bark(self):
+        print(f"{self.name} говорит: Гав!")
+
+# Создание объектов
+dog1 = Dog("Бобик", 3)
+dog2 = Dog("Шарик", 5)
+
+dog1.bark()  # Бобик говорит: Гав!
+dog2.bark()  # Шарик говорит: Гав!</code></pre>
+                </div>
+
+                <div class="pro-tip">
+                    <strong>self:</strong> Ссылка на текущий объект. Должна быть первым параметром методов класса.
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>2. Атрибуты и методы</h2>
+                <p>Атрибуты — это данные объекта. Методы — это функции объекта.</p>
+                
+                <div class="code-window">
+                    <div class="window-header">attributes_methods.py</div>
+                    <pre><code class="language-python">class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+    
+    def greet(self):
+        return f"Привет, я {self.name}"
+    
+    def birthday(self):
+        self.age += 1
+        return f"Мне теперь {self.age} лет"
+
+person = Person("Алекс", 25)
+print(person.greet())    # Привет, я Алекс
+print(person.birthday()) # Мне теперь 26 лет</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>3. Наследование</h2>
+                <p>Наследование позволяет создать новый класс на основе существующего.</p>
+                
+                <div class="code-window">
+                    <div class="window-header">inheritance.py</div>
+                    <pre><code class="language-python">class Animal:
+    def __init__(self, name):
+        self.name = name
+    
+    def speak(self):
+        print("Звук...")
+
+class Cat(Animal):  # Cat наследует Animal
+    def speak(self):
+        print(f"{self.name} говорит: Мяу!")
+
+class Dog(Animal):
+    def speak(self):
+        print(f"{self.name} говорит: Гав!")
+
+cat = Cat("Мурка")
+dog = Dog("Бобик")
+
+cat.speak()  # Мурка говорит: Мяу!
+dog.speak()  # Бобик говорит: Гав!</code></pre>
+                </div>
+
+                <div class="tip">
+                    <strong>Переопределение:</strong> Дочерний класс может переопределить метод родительского класса.
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>4. Инкапсуляция</h2>
+                <p>Инкапсуляция скрывает внутренние данные объекта. В Python используется соглашение об подчёркивании.</p>
+                
+                <div class="code-window">
+                    <div class="window-header">encapsulation.py</div>
+                    <pre><code class="language-python">class BankAccount:
+    def __init__(self, balance):
+        self._balance = balance  # Защищённый атрибут
+    
+    def deposit(self, amount):
+        if amount > 0:
+            self._balance += amount
+    
+    def withdraw(self, amount):
+        if amount <= self._balance:
+            self._balance -= amount
+    
+    def get_balance(self):
+        return self._balance
+
+account = BankAccount(1000)
+account.deposit(500)
+account.withdraw(200)
+print(account.get_balance())  # 1300</code></pre>
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>5. Практические примеры</h2>
+
+                <div class="example-block">
+                    <div class="example-header">
+                        <span class="example-label">Пример 1</span>
+                        <h4 class="example-title">Класс Книга</h4>
+                        <p class="example-description">Моделирование книги</p>
+                    </div>
+                    <div class="example-code">
+                        <pre><code class="language-python">class Book:
+    def __init__(self, title, author, pages):
+        self.title = title
+        self.author = author
+        self.pages = pages
+        self.current_page = 1
+    
+    def read(self, pages):
+        self.current_page += pages
+        if self.current_page > self.pages:
+            self.current_page = self.pages
+    
+    def get_progress(self):
+        return f"Прочитано {self.current_page}/{self.pages} страниц"
+
+book = Book("Python для начинающих", "Иван Петров", 300)
+book.read(50)
+print(book.get_progress())</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-block">
+                    <div class="example-header">
+                        <span class="example-label">Пример 2</span>
+                        <h4 class="example-title">Класс Rectangle</h4>
+                        <p class="example-description">Геометрическая фигура</p>
+                    </div>
+                    <div class="example-code">
+                        <pre><code class="language-python">class Rectangle:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+    
+    def area(self):
+        return self.width * self.height
+    
+    def perimeter(self):
+        return 2 * (self.width + self.height)
+    
+    def is_square(self):
+        return self.width == self.height
+
+rect = Rectangle(5, 10)
+print(f"Площадь: {rect.area()}")
+print(f"Периметр: {rect.perimeter()}")
+print(f"Квадрат: {rect.is_square()}")</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-block">
+                    <div class="example-header">
+                        <span class="example-label">Пример 3</span>
+                        <h4 class="example-title">Класс Student</h4>
+                        <p class="example-description">Ученик с оценками</p>
+                    </div>
+                    <div class="example-code">
+                        <pre><code class="language-python">class Student:
+    def __init__(self, name):
+        self.name = name
+        self.grades = []
+    
+    def add_grade(self, grade):
+        self.grades.append(grade)
+    
+    def average(self):
+        if self.grades:
+            return sum(self.grades) / len(self.grades)
+        return 0
+
+student = Student("Мария")
+student.add_grade(5)
+student.add_grade(4)
+student.add_grade(5)
+print(f"Средний балл: {student.average():.2f}")</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <div class="pro-tip">
+                <strong>Полиморфизм:</strong> Разные классы могут иметь методы с одинаковым именем. Это позволяет обрабатывать объекты разных классов единообразно.
+            </div>
+
+            <section class="exercise">
+                <div class="exercise-title">Практическое задание</div>
+                <div class="exercise-task">
+                    <strong>Задача 1:</strong> Создай класс Product с атрибутами name, price, quantity. Добавь методы для изменения цены и количества.<br><br>
+                    <strong>Задача 2:</strong> Создай класс Counter со значением по умолчанию 0. Добавь методы increment(), decrement() и get_value().
+                </div>
+                <div class="exercise-hint">
+                    Подсказка: используй __init__ для инициализации атрибутов. self.attribute для доступа к ним.
+                </div>
+            </section>
+
+            <div class="lesson-nav">
+                <a href="lesson11.html" class="btn-prev">← Назад</a>
+                <a href="lesson13.html" class="btn-next">Следующий урок →</a>
+            </div>
+        </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="../js/app.js"></script>
+</body>
+</html>
