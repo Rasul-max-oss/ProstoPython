@@ -56,11 +56,67 @@
     </style>
 </head>
 <body class="lesson-page">
-    <div id="header-placeholder"></div>
+    <!-- NAV-HEADER:START -->
+<header class="main-header">
+    <div class="container flex-header">
+        <a href="../index.html" class="logo">Prosto<span>Python</span></a>
+        <nav class="nav-menu" aria-label="Основная навигация">
+            <a href="../index.html">Главная</a>
+            <a href="../lessons/index.html" class="active" aria-current="page">Основы</a>
+            <a href="../advanced/index.html">Продвинутый</a>
+            <a href="../practices/index.html">Практикум</a>
+            <a href="../lessons/lesson1.html" class="btn-contact">Начать обучение</a>
+        </nav>
+        <button class="burger-menu" id="burger-menu" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu">
+            <span class="burger-line"></span>
+            <span class="burger-line"></span>
+            <span class="burger-line"></span>
+        </button>
+    </div>
+</header>
+<div class="mobile-menu-overlay" id="mobile-menu">
+    <nav class="mobile-nav" aria-label="Мобильная навигация">
+        <a href="../index.html">Главная</a>
+        <a href="../lessons/index.html" class="active" aria-current="page">Основы</a>
+        <a href="../advanced/index.html">Продвинутый</a>
+        <a href="../practices/index.html">Практикум</a>
+        <a href="../lessons/lesson1.html" class="btn-contact-mobile">Начать обучение</a>
+    </nav>
+</div>
+<!-- NAV-HEADER:END -->
     <div class="container lesson-layout">
-        <aside class="sidebar" id="sidebar-placeholder"></aside>
+        <aside class="sidebar" id="sidebar-placeholder">
+<div class="sidebar-header">
+    <span class="course-category">Курс: Основы Python</span>
+    <h4>Содержание</h4>
+    <button class="sidebar-toggle" type="button" id="sidebar-toggle" aria-expanded="false" aria-controls="course-lessons">
+        Все уроки курса ▾
+    </button>
+</div>
+<nav class="sidebar-links sidebar-course-links" id="course-lessons" aria-label="Уроки курса">
+    <a href="lesson1.html" class="nav-item"><span class="num">01</span> Установка VS Code</a>
+    <a href="lesson2.html" class="nav-item"><span class="num">02</span> Переменные и типы данных</a>
+    <a href="lesson3.html" class="nav-item"><span class="num">03</span> Условные операторы</a>
+    <a href="lesson4.html" class="nav-item"><span class="num">04</span> Циклы for и while</a>
+    <a href="lesson5.html" class="nav-item"><span class="num">05</span> Списки</a>
+    <a href="lesson6.html" class="nav-item"><span class="num">06</span> Кортежи и множества</a>
+    <a href="lesson7.html" class="nav-item"><span class="num">07</span> Словари</a>
+    <a href="lesson8.html" class="nav-item active" aria-current="page"><span class="num">08</span> Функции</a>
+    <a href="lesson9.html" class="nav-item"><span class="num">09</span> Работа с файлами</a>
+    <a href="lesson10.html" class="nav-item"><span class="num">10</span> Обработка исключений</a>
+    <a href="lesson11.html" class="nav-item"><span class="num">11</span> Модули и импорт</a>
+</nav>
+<div class="sidebar-header sidebar-header-top">
+    <h4>Другие разделы</h4>
+</div>
+<nav class="sidebar-links" aria-label="Другие разделы">
+    <a href="../advanced/index.html" class="nav-item nav-item-accent"><span class="num">➜</span> Продвинутый курс</a>
+    <a href="../practices/index.html" class="nav-item nav-item-accent"><span class="num">📝</span> Практикум</a>
+    <a href="completion.html" class="nav-item nav-item-accent"><span class="num">🏆</span> Курс завершён</a>
+</nav>
+</aside>
         <main class="content">
-            <nav class="breadcrumb">Основы / Урок 8</nav>
+            <nav class="breadcrumb" aria-label="Хлебные крошки"><a href="../index.html">Главная</a><span class="sep">/</span><a href="index.html">Основы</a><span class="sep">/</span><span class="current">Урок 8</span></nav>
             <div class="progress-container">
                 <div class="progress-labels"><span>Прогресс курса</span><span id="progress-percent">0%</span></div>
                 <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width: 0%"></div></div>
@@ -266,13 +322,42 @@ print(x)  # Можно
                 </div>
             </section>
 
+            <aside class="practice-cta">
+                <div>
+                    <strong>Закрепите тему на практике</strong>
+                    <p>Задачи с готовыми решениями: «Функции».</p>
+                </div>
+                <a href="../practices/practice-functions.html">К задачам →</a>
+            </aside>
+
             <div class="lesson-nav">
-                <a href="lesson7.html" class="btn-prev">← Назад</a>
+                <a href="lesson7.html" class="btn-prev">← Предыдущий урок</a>
                 <a href="lesson9.html" class="btn-next">Следующий урок →</a>
             </div>
         </main>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<!-- NAV-FOOTER:START -->
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <div class="footer-about">
+            <a href="../index.html" class="logo">Prosto<span>Python</span></a>
+            <p>Понятные уроки Python: основы, продвинутый курс и практикум с задачами.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Навигация в подвале">
+            <a href="../index.html">Главная</a>
+            <a href="../lessons/index.html">Основы Python</a>
+            <a href="../advanced/index.html">Продвинутый курс</a>
+            <a href="../practices/index.html">Практикум</a>
+        </nav>
+    </div>
+    <div class="container footer-bottom">
+        <span>© 2026 ProstoPython</span>
+        <span>Учись программировать просто.</span>
+    </div>
+</footer>
+<!-- NAV-FOOTER:END -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
     <script src="../js/app.js"></script>
 </body>

@@ -127,13 +127,64 @@
 </head>
 <body class="lesson-page">
 
-    <div id="header-placeholder"></div>
+    <!-- NAV-HEADER:START -->
+<header class="main-header">
+    <div class="container flex-header">
+        <a href="../index.html" class="logo">Prosto<span>Python</span></a>
+        <nav class="nav-menu" aria-label="Основная навигация">
+            <a href="../index.html">Главная</a>
+            <a href="../lessons/index.html">Основы</a>
+            <a href="../advanced/index.html" class="active" aria-current="page">Продвинутый</a>
+            <a href="../practices/index.html">Практикум</a>
+            <a href="../lessons/lesson1.html" class="btn-contact">Начать обучение</a>
+        </nav>
+        <button class="burger-menu" id="burger-menu" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu">
+            <span class="burger-line"></span>
+            <span class="burger-line"></span>
+            <span class="burger-line"></span>
+        </button>
+    </div>
+</header>
+<div class="mobile-menu-overlay" id="mobile-menu">
+    <nav class="mobile-nav" aria-label="Мобильная навигация">
+        <a href="../index.html">Главная</a>
+        <a href="../lessons/index.html">Основы</a>
+        <a href="../advanced/index.html" class="active" aria-current="page">Продвинутый</a>
+        <a href="../practices/index.html">Практикум</a>
+        <a href="../lessons/lesson1.html" class="btn-contact-mobile">Начать обучение</a>
+    </nav>
+</div>
+<!-- NAV-HEADER:END -->
 
     <div class="container lesson-layout">
-        <aside class="sidebar" id="sidebar-placeholder"></aside>
+        <aside class="sidebar" id="sidebar-placeholder">
+<div class="sidebar-header">
+    <span class="course-category">Курс: Продвинутый Python</span>
+    <h4>Содержание</h4>
+    <button class="sidebar-toggle" type="button" id="sidebar-toggle" aria-expanded="false" aria-controls="course-lessons">
+        Все уроки курса ▾
+    </button>
+</div>
+<nav class="sidebar-links sidebar-course-links" id="course-lessons" aria-label="Уроки курса">
+    <a href="lesson1.html" class="nav-item"><span class="num">01</span> ООП — Классы и объекты</a>
+    <a href="lesson2.html" class="nav-item active" aria-current="page"><span class="num">02</span> Работа с API и JSON</a>
+    <a href="lesson3.html" class="nav-item"><span class="num">03</span> Обработка CSV таблиц</a>
+    <a href="lesson4.html" class="nav-item"><span class="num">04</span> Визуализация в Matplotlib</a>
+    <a href="lesson5.html" class="nav-item"><span class="num">05</span> Pandas и Numpy</a>
+    <a href="lesson6.html" class="nav-item"><span class="num">06</span> SQLite базы данных</a>
+</nav>
+<div class="sidebar-header sidebar-header-top">
+    <h4>Другие разделы</h4>
+</div>
+<nav class="sidebar-links" aria-label="Другие разделы">
+    <a href="../lessons/index.html" class="nav-item nav-item-accent"><span class="num">⬅</span> Основы Python</a>
+    <a href="../practices/index.html" class="nav-item nav-item-accent"><span class="num">📝</span> Практикум</a>
+    <a href="completion.html" class="nav-item nav-item-accent"><span class="num">🏆</span> Курс завершён</a>
+</nav>
+</aside>
 
         <main class="content">
-            <nav class="breadcrumb">Продвинутый курс / Урок 2</nav>
+            <nav class="breadcrumb" aria-label="Хлебные крошки"><a href="../index.html">Главная</a><span class="sep">/</span><a href="index.html">Продвинутый курс</a><span class="sep">/</span><span class="current">Урок 2</span></nav>
 
             <div class="progress-container">
                 <div class="progress-labels">
@@ -664,14 +715,42 @@ get_weather("New York")</code></pre>
                 </div>
             </section>
 
+            <aside class="practice-cta">
+                <div>
+                    <strong>Закрепите тему на практике</strong>
+                    <p>Задачи с готовыми решениями: «API и JSON».</p>
+                </div>
+                <a href="../practices/practice-api-json.html">К задачам →</a>
+            </aside>
+
             <div class="lesson-nav">
                 <a href="lesson1.html" class="btn-prev">← Предыдущий урок</a>
                 <a href="lesson3.html" class="btn-next">Следующий урок →</a>
             </div>
         </main>
     </div>
+<!-- NAV-FOOTER:START -->
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <div class="footer-about">
+            <a href="../index.html" class="logo">Prosto<span>Python</span></a>
+            <p>Понятные уроки Python: основы, продвинутый курс и практикум с задачами.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Навигация в подвале">
+            <a href="../index.html">Главная</a>
+            <a href="../lessons/index.html">Основы Python</a>
+            <a href="../advanced/index.html">Продвинутый курс</a>
+            <a href="../practices/index.html">Практикум</a>
+        </nav>
+    </div>
+    <div class="container footer-bottom">
+        <span>© 2026 ProstoPython</span>
+        <span>Учись программировать просто.</span>
+    </div>
+</footer>
+<!-- NAV-FOOTER:END -->
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
     <script src="../js/app.js"></script>
 </body>

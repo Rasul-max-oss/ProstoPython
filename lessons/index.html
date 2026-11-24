@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Основы Python — программа курса из 11 уроков | ProstoPython</title>
+    <meta name="description" content="Программа курса «Основы Python»: 11 уроков от установки VS Code до модулей и импорта. Переходите к любому уроку и отслеживайте прогресс.">
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- NAV-HEADER:START -->
+<header class="main-header">
+    <div class="container flex-header">
+        <a href="../index.html" class="logo">Prosto<span>Python</span></a>
+        <nav class="nav-menu" aria-label="Основная навигация">
+            <a href="../index.html">Главная</a>
+            <a href="../lessons/index.html" class="active" aria-current="page">Основы</a>
+            <a href="../advanced/index.html">Продвинутый</a>
+            <a href="../practices/index.html">Практикум</a>
+            <a href="../lessons/lesson1.html" class="btn-contact">Начать обучение</a>
+        </nav>
+        <button class="burger-menu" id="burger-menu" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu">
+            <span class="burger-line"></span>
+            <span class="burger-line"></span>
+            <span class="burger-line"></span>
+        </button>
+    </div>
+</header>
+<div class="mobile-menu-overlay" id="mobile-menu">
+    <nav class="mobile-nav" aria-label="Мобильная навигация">
+        <a href="../index.html">Главная</a>
+        <a href="../lessons/index.html" class="active" aria-current="page">Основы</a>
+        <a href="../advanced/index.html">Продвинутый</a>
+        <a href="../practices/index.html">Практикум</a>
+        <a href="../lessons/lesson1.html" class="btn-contact-mobile">Начать обучение</a>
+    </nav>
+</div>
+<!-- NAV-HEADER:END -->
+
+<main>
+    <section class="courses-hero container">
+        <h1 class="gradient-text">Основы Python</h1>
+        <p>11 уроков с нуля: от установки редактора до собственных модулей. Проходите уроки по порядку — прогресс сохраняется в браузере.</p>
+    </section>
+
+    <section class="program-section container">
+        <div class="program-card">
+            <div class="program-card-head">
+                <h2>Программа курса</h2>
+                <span class="level-tag beginner">Начальный уровень</span>
+            </div>
+            <p class="program-desc">Каждый урок — короткая теория, примеры кода и практическое задание. В конце урока кнопка «Следующий урок» ведёт дальше по программе.</p>
+
+            <div class="program-list" data-course="basics">
+                <a href="lesson1.html" class="program-item"><span class="program-num">01</span><span class="program-title">Установка VS Code</span><span class="program-check">✓</span></a>
+                <a href="lesson2.html" class="program-item"><span class="program-num">02</span><span class="program-title">Переменные и типы данных</span><span class="program-check">✓</span></a>
+                <a href="lesson3.html" class="program-item"><span class="program-num">03</span><span class="program-title">Условные операторы</span><span class="program-check">✓</span></a>
+                <a href="lesson4.html" class="program-item"><span class="program-num">04</span><span class="program-title">Циклы for и while</span><span class="program-check">✓</span></a>
+                <a href="lesson5.html" class="program-item"><span class="program-num">05</span><span class="program-title">Списки</span><span class="program-check">✓</span></a>
+                <a href="lesson6.html" class="program-item"><span class="program-num">06</span><span class="program-title">Кортежи и множества</span><span class="program-check">✓</span></a>
+                <a href="lesson7.html" class="program-item"><span class="program-num">07</span><span class="program-title">Словари</span><span class="program-check">✓</span></a>
+                <a href="lesson8.html" class="program-item"><span class="program-num">08</span><span class="program-title">Функции</span><span class="program-check">✓</span></a>
+                <a href="lesson9.html" class="program-item"><span class="program-num">09</span><span class="program-title">Работа с файлами</span><span class="program-check">✓</span></a>
+                <a href="lesson10.html" class="program-item"><span class="program-num">10</span><span class="program-title">Обработка исключений</span><span class="program-check">✓</span></a>
+                <a href="lesson11.html" class="program-item"><span class="program-num">11</span><span class="program-title">Модули и импорт</span><span class="program-check">✓</span></a>
+            </div>
+
+            <div class="program-actions">
+                <a href="lesson1.html" class="btn-course">Начать с урока 1</a>
+                <a href="completion.html" class="btn-course-outline">Страница завершения курса</a>
+            </div>
+        </div>
+
+        <div class="program-card">
+            <div class="program-card-head">
+                <h2>Практика к курсу</h2>
+                <span class="level-tag beginner">8 тем · 102 задачи</span>
+            </div>
+            <p class="program-desc">Задачи к каждой теме основ: переменные, условия, циклы, списки, словари, функции, файлы и модули. У каждой задачи есть готовое решение.</p>
+            <div class="program-actions" style="margin-top: 0;">
+                <a href="../practices/index.html" class="btn-course">Перейти в практикум</a>
+            </div>
+        </div>
+
+        <div class="program-card">
+            <div class="program-card-head">
+                <h2>Что дальше</h2>
+                <span class="level-tag intermediate">Следующий шаг</span>
+            </div>
+            <p class="program-desc">Когда основы пройдены, переходите к продвинутому курсу: ООП, API и JSON, CSV, Matplotlib, Pandas и Numpy, SQLite.</p>
+            <div class="program-actions" style="margin-top: 0;">
+                <a href="../advanced/index.html" class="btn-course-outline">Продвинутый курс →</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <div class="footer-about">
+            <a href="../index.html" class="logo">Prosto<span>Python</span></a>
+            <p>Понятные уроки Python: основы, продвинутый курс и практикум с задачами.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Навигация в подвале">
+            <a href="../index.html">Главная</a>
+            <a href="index.html">Основы Python</a>
+            <a href="../advanced/index.html">Продвинутый курс</a>
+            <a href="../practices/index.html">Практикум</a>
+        </nav>
+    </div>
+    <div class="container footer-bottom">
+        <span>© 2026 ProstoPython</span>
+        <span>Учись программировать просто.</span>
+    </div>
+</footer>
+<!-- NAV-FOOTER:START -->
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <div class="footer-about">
+            <a href="../index.html" class="logo">Prosto<span>Python</span></a>
+            <p>Понятные уроки Python: основы, продвинутый курс и практикум с задачами.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Навигация в подвале">
+            <a href="../index.html">Главная</a>
+            <a href="../lessons/index.html">Основы Python</a>
+            <a href="../advanced/index.html">Продвинутый курс</a>
+            <a href="../practices/index.html">Практикум</a>
+        </nav>
+    </div>
+    <div class="container footer-bottom">
+        <span>© 2026 ProstoPython</span>
+        <span>Учись программировать просто.</span>
+    </div>
+</footer>
+<!-- NAV-FOOTER:END -->
+
+<script src="../js/app.js"></script>
+</body>
+</html>

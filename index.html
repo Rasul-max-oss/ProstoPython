@@ -3,137 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>ProstoPython — Бесплатный курс Python для начинающих: от основ до Web и игр</title>
-    <meta name="description" content="Изучай Python просто! Пошаговые уроки по основам программирования, разработке игр и веб-сервисов для новичков. Установка VS Code, переменные, циклы и функции.">
-    <meta name="keywords" content="Python для начинающих, уроки python, разработка игр на python, веб сервисы на python, обучение программированию с нуля">
-    
-    <meta property="og:title" content="ProstoPython — Твой путь в мир кода">
-    <meta property="og:description" content="Понятные уроки программирования на Python. Начни с нуля и создай свой первый проект.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://prostopython.ru">
-    <meta property="og:image" content="img/preview.jpg">
-
+    <title>ProstoPython — бесплатный курс Python: основы, продвинутый уровень и практикум</title>
+    <meta name="description" content="Бесплатный курс Python для начинающих: 11 уроков основ, продвинутый курс по ООП, API, данным и SQL, а также практикум с задачами и решениями.">
     <link rel="stylesheet" href="css/style.css">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Course",
-      "name": "Основы Python для начинающих",
-      "description": "Бесплатный курс по программированию на Python, охватывающий основы, веб-разработку и создание игр.",
-      "provider": {
-        "@type": "Organization",
-        "name": "ProstoPython",
-        "sameAs": "https://prostopython.ru"
-      }
-    }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
+<!-- NAV-HEADER:START -->
+<header class="main-header">
+    <div class="container flex-header">
+        <a href="index.html" class="logo" aria-current="page">Prosto<span>Python</span></a>
+        <nav class="nav-menu" aria-label="Основная навигация">
+            <a href="index.html" class="active" aria-current="page">Главная</a>
+            <a href="lessons/index.html">Основы</a>
+            <a href="advanced/index.html">Продвинутый</a>
+            <a href="practices/index.html">Практикум</a>
+            <a href="lessons/lesson1.html" class="btn-contact">Начать обучение</a>
+        </nav>
+        <button class="burger-menu" id="burger-menu" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu">
+            <span class="burger-line"></span>
+            <span class="burger-line"></span>
+            <span class="burger-line"></span>
+        </button>
+    </div>
+</header>
+<div class="mobile-menu-overlay" id="mobile-menu">
+    <nav class="mobile-nav" aria-label="Мобильная навигация">
+        <a href="index.html" class="active" aria-current="page">Главная</a>
+        <a href="lessons/index.html">Основы</a>
+        <a href="advanced/index.html">Продвинутый</a>
+        <a href="practices/index.html">Практикум</a>
+        <a href="lessons/lesson1.html" class="btn-contact-mobile">Начать обучение</a>
+    </nav>
+</div>
+<!-- NAV-HEADER:END -->
 
-    <header class="main-header">
-        <div class="container flex-header">
-            <div class="logo">Prosto<span>Python</span></div>
-            <nav class="nav-menu">
-                <a href="basics.html">Основы</a>
-                <a href="#">Web</a>
-                <a href="#">Игры</a>
-                <a href="#" class="btn-contact">Начать обучение</a>
-            </nav>
+<main>
+    <section class="hero container">
+        <h1 class="gradient-text">Python — это просто.</h1>
+        <p>Три понятных шага: основы языка, продвинутый курс с ООП и данными, практикум с задачами. Начни с нуля и дойди до собственных проектов.</p>
+        <div class="hero-actions">
+            <a href="lessons/lesson1.html" class="btn-hero primary">Начать с основ →</a>
+            <a href="practices/index.html" class="btn-hero secondary">Перейти к практике</a>
         </div>
-    </header>
+    </section>
 
-    <main class="container">
-        <section class="hero">
-            <h1 class="gradient-text">Python — это просто.</h1>
-            <p>От первой переменной до полноценного веб-сервиса или игры. <br>Начни здесь и сейчас.</p>
-        </section>
+    <section class="paths-section container">
+        <h2 class="section-title">Два курса и <span>практикум</span></h2>
+        <p class="section-subtitle">Материалы идут по порядку: сначала база, затем продвинутые темы, а задачи закрепляют каждую тему.</p>
 
-        <section class="capabilities">
-            <h2 class="section-title">Что создают на Python? <br><span>4 главных направления</span></h2>
-
-            <div class="presentation-slide">
-                <div class="slide-image">
-                    <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=600&auto=format&fit=crop" alt="Веб-разработка на Python">
+        <div class="paths-grid">
+            <a href="lessons/index.html" class="path-card">
+                <span class="path-step">Шаг 1 · Начальный уровень</span>
+                <h3>Основы Python</h3>
+                <p>Установка VS Code, переменные, условия, циклы, коллекции, функции, файлы, исключения и модули. Фундамент для всего остального.</p>
+                <div class="path-meta">
+                    <span>📚 11 уроков</span>
+                    <span>⏱ 2–3 недели</span>
                 </div>
-                <div class="slide-content">
-                    <h3>01. Мощные веб-сервисы</h3>
-                    <p>Python — это «невидимая» часть огромных сайтов. Он обрабатывает запросы пользователей, работает с базами данных и заставляет сайты летать. Это быстро, надежно и масштабируемо.</p>
-                    <ul class="tech-tags">
-                        <li>Django</li>
-                        <li>Flask</li>
-                        <li>FastAPI</li>
-                    </ul>
-                </div>
-            </div>
+                <span class="path-link">Открыть программу →</span>
+            </a>
 
-            <div class="presentation-slide reverse">
-                <div class="slide-image">
-                    <img src="https://images.unsplash.com/photo-1580894908321-96bc4ac59622?q=80&w=600&auto=format&fit=crop" alt="Разработка игр на Python">
+            <a href="advanced/index.html" class="path-card blue">
+                <span class="path-step">Шаг 2 · Продвинутый уровень</span>
+                <h3>Продвинутый курс</h3>
+                <p>ООП, API и JSON, CSV, Matplotlib, Pandas и Numpy, SQLite. Переход от учебных примеров к настоящим инструментам разработчика.</p>
+                <div class="path-meta">
+                    <span>📚 6 уроков</span>
+                    <span>⏱ 3–4 недели</span>
                 </div>
-                <div class="slide-content">
-                    <h3>02. Создание игр (GameDev)</h3>
-                    <p>Хотя "тяжелые" AAA-игры пишут на C++, Python идеален для прототипов, инди-проектов, логики серверной части и визуальных новелл. Это отличный способ увидеть результат своего кода сразу.</p>
-                    <ul class="tech-tags">
-                        <li>Pygame</li>
-                        <li>Godot (PythonScript)</li>
-                        <li>Kivy</li>
-                    </ul>
-                </div>
-            </div>
+                <span class="path-link">Открыть программу →</span>
+            </a>
 
-            <div class="presentation-slide">
-                <div class="slide-image">
-                    <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=600&auto=format&fit=crop" alt="Искусственный интеллект и Python">
+            <a href="practices/index.html" class="path-card">
+                <span class="path-step">Шаг 3 · Практика</span>
+                <h3>Практикум</h3>
+                <p>14 тем с задачами трёх уровней сложности и готовыми решениями — от переменных до SQLite. Практикуйся параллельно с уроками.</p>
+                <div class="path-meta">
+                    <span>📝 14 тем</span>
+                    <span>🧩 183 задачи</span>
                 </div>
-                <div class="slide-content">
-                    <h3>03. Искусственный интеллект & ИИ</h3>
-                    <p>Python — король Data Science. На нем пишут нейросети, которые распознают лица, управляют беспилотниками, генерируют тексты и анализируют огромные массивы данных. Если вы хотите работать с ИИ, Python обязателен.</p>
-                    <ul class="tech-tags">
-                        <li>TensorFlow</li>
-                        <li>PyTorch</li>
-                        <li>Pandas</li>
-                    </ul>
-                </div>
-            </div>
+                <span class="path-link">Выбрать тему →</span>
+            </a>
+        </div>
+    </section>
 
-            <div class="presentation-slide reverse">
-                <div class="slide-image">
-                    <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=600&auto=format&fit=crop" alt="Автоматизация и роботы на Python">
-                </div>
-                <div class="slide-content">
-                    <h3>04. Автоматизация и Роботы</h3>
-                    <p>Зачем делать рутину вручную? Python может собирать данные с сайтов, рассылать письма, управлять файлами на компьютере и даже контролировать роботов и "умный дом" (через Raspberry Pi).</p>
-                    <ul class="tech-tags">
-                        <li>Selenium</li>
-                        <li>OpenCV</li>
-                        <li>Raspberry Pi</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section class="brands-section card">
-            <h2>Кто уже использует Python?</h2>
-            <p class="subtitle">Мировые гиганты доверяют этому языку свои самые важные проекты.</p>
-            <div class="brands-grid">
-                <div class="brand-item"><strong>Google</strong> (Поисковая система, YouTube)</div>
-                <div class="brand-item"><strong>Netflix</strong> (Рекомендательные системы)</div>
-                <div class="brand-item"><strong>NASA</strong> (Обработка данных телескопов)</div>
-                <div class="brand-item"><strong>Spotify</strong> (Музыкальные рекомендации)</div>
-                <div class="brand-item"><strong>Instagram</strong> (Бэкенд приложения)</div>
-                <div class="brand-item"><strong>Uber</strong> (Расчет маршрутов)</div>
-            </div>
-        </section>
-
-
-        <section class="roadmap-section">
-    <div class="container">
-        <h2 class="section-title">Твой путь: <span>Roadmap 2026</span></h2>
-    
+    <section class="roadmap-section container">
+        <h2 class="section-title">Твой путь: <span>Roadmap</span></h2>
+        <p class="section-subtitle">Ориентир по темам сайта и по тому, что учить дальше после курса.</p>
 
         <div class="roadmap-container">
             <div class="roadmap-step">
@@ -141,16 +98,18 @@
                 <div class="step-content">
                     <h3>Базовый синтаксис</h3>
                     <p>Установка окружения, типы данных, переменные, условия и циклы. Фундамент, на котором держится всё.</p>
-                    <span class="step-time">1-2 недели</span>
+                    <span class="step-time">1–2 недели</span>
+                    <p style="margin-top: 14px;"><a href="lessons/index.html" class="step-link">Основы Python →</a></p>
                 </div>
             </div>
 
             <div class="roadmap-step">
                 <div class="step-number">02</div>
                 <div class="step-content">
-                    <h3>Функции и ООП</h3>
-                    <p>Учимся писать чистый код. Понимаем классы, объекты, декораторы и работу с файлами.</p>
-                    <span class="step-time">3-4 недели</span>
+                    <h3>Функции и коллекции</h3>
+                    <p>Списки, словари, множества, функции, работа с файлами и исключениями — учимся писать аккуратный код.</p>
+                    <span class="step-time">2 недели</span>
+                    <p style="margin-top: 14px;"><a href="practices/index.html" class="step-link">Закрепить в практикуме →</a></p>
                 </div>
             </div>
 
@@ -159,49 +118,91 @@
                 <div class="step-content">
                     <h3>Выбор направления</h3>
                     <p>Тут пути расходятся: создание сайтов на <strong>Django/FastAPI</strong>, разработка игр на <strong>Pygame</strong> или анализ данных.</p>
-        
                 </div>
             </div>
 
             <div class="roadmap-step">
                 <div class="step-number">04</div>
                 <div class="step-content">
-                    <h3>Работа с БД и API</h3>
-                    <p>Учимся сохранять данные (SQL/NoSQL) и соединять свои приложения с внешним миром.</p>
-                    <span class="step-time">2-3 месяца</span>
+                    <h3>Работа с данными и API</h3>
+                    <p>ООП, JSON, CSV, визуализация, Pandas и SQLite — темы продвинутого курса.</p>
+                    <span class="step-time">3–4 недели</span>
+                    <p style="margin-top: 14px;"><a href="advanced/index.html" class="step-link">Продвинутый курс →</a></p>
                 </div>
             </div>
 
             <div class="roadmap-step final">
                 <div class="step-number">05</div>
                 <div class="step-content">
-                    <h3>Middle Developer</h3>
-                    <p>Тестирование кода, Docker, архитектура систем и командная работа над реальными проектами.</p>
-                    <span class="step-status">Цель достигнута!</span>
+                    <h3>Собственные проекты</h3>
+                    <p>Боты, парсеры, веб-приложения, анализ данных. Тестирование, Docker и командная работа приходят с первыми проектами.</p>
+                    <span class="step-status">Цель: Junior+</span>
                 </div>
             </div>
         </div>
+    </section>
+
+    <section class="roadmap-section container" style="padding-top: 20px;">
+        <h2 class="section-title">С чего начать <span>прямо сейчас</span></h2>
+        <div class="hero-actions" style="margin-top: 10px;">
+            <a href="lessons/lesson1.html" class="btn-hero primary">Урок 1: Установка VS Code →</a>
+            <a href="practices/practice-variables.html" class="btn-hero secondary">Первые задачи</a>
+        </div>
+    </section>
+
+    <section class="brands-section card container">
+        <h2>Кто уже использует Python?</h2>
+        <p class="subtitle">Мировые гиганты доверяют этому языку свои самые важные проекты.</p>
+        <div class="brands-grid">
+            <div class="brand-item"><strong>Google</strong> (Поисковая система, YouTube)</div>
+            <div class="brand-item"><strong>Netflix</strong> (Рекомендательные системы)</div>
+            <div class="brand-item"><strong>NASA</strong> (Обработка данных телескопов)</div>
+            <div class="brand-item"><strong>Spotify</strong> (Музыкальные рекомендации)</div>
+            <div class="brand-item"><strong>Instagram</strong> (Бэкенд приложения)</div>
+            <div class="brand-item"><strong>Uber</strong> (Расчет маршрутов)</div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <div class="footer-about">
+            <a href="index.html" class="logo">Prosto<span>Python</span></a>
+            <p>Понятные уроки Python: основы, продвинутый курс и практикум с задачами.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Навигация в подвале">
+            <a href="index.html">Главная</a>
+            <a href="lessons/index.html">Основы Python</a>
+            <a href="advanced/index.html">Продвинутый курс</a>
+            <a href="practices/index.html">Практикум</a>
+        </nav>
     </div>
-</section>
+    <div class="container footer-bottom">
+        <span>© 2026 ProstoPython</span>
+        <span>Учись программировать просто.</span>
+    </div>
+</footer>
+<!-- NAV-FOOTER:START -->
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <div class="footer-about">
+            <a href="index.html" class="logo">Prosto<span>Python</span></a>
+            <p>Понятные уроки Python: основы, продвинутый курс и практикум с задачами.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Навигация в подвале">
+            <a href="index.html">Главная</a>
+            <a href="lessons/index.html">Основы Python</a>
+            <a href="advanced/index.html">Продвинутый курс</a>
+            <a href="practices/index.html">Практикум</a>
+        </nav>
+    </div>
+    <div class="container footer-bottom">
+        <span>© 2026 ProstoPython</span>
+        <span>Учись программировать просто.</span>
+    </div>
+</footer>
+<!-- NAV-FOOTER:END -->
 
-
-        <section class="card">
-            <div class="card-badge">01</div>
-            <h2>Введение в язык</h2>
-            <div class="content">
-                <p>Python — это язык с «человеческим лицом». Его синтаксис настолько чист, что его называют <strong>исполняемым псевдокодом</strong>. Если вы можете описать задачу на английском, вы почти написали программу на Python.</p>
-                
-                <div class="highlight-box">
-                    <p><strong>Почему Python идеален для старта?</strong></p>
-                    <ul>
-                        <li>Никаких лишних скобок и точек с запятой.</li>
-                        <li>Огромная библиотека готовых решений.</li>
-                        <li>Поддержка крупнейших компаний мира (Google, NASA, Netflix).</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-    </main>
-
+<script src="js/app.js"></script>
 </body>
 </html>
